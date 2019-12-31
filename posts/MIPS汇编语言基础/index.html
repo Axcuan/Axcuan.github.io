@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>MIPS汇编语言基础 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        MIPS汇编语言基础</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                MIPS汇编语言基础</h1>
+                <div class="stuff">
+                    
+                    <span>December 14, 2019</span>
+                    <span>字数 2369</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="寄存器">寄存器</h1>
+
+<p>​      RISC的一个显著特点就是大量使用寄存器。因为寄存器的存取可以在一个时钟周期内完成，同时简化寻址方式，所以MIPS32的指令中除了加载/储存指令以外，都是用寄存器或者立即数作为操作数，以便让编译器通过保持对寄存器内数据的频繁存取进一步优化代码的生成性能。MIPS32中的寄存器分为2类：通用寄存器(GPR)和特殊寄存器。</p>
+
+<h2 id="通用寄存器">通用寄存器</h2>
+
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>寄存器名称</th>
+<th>寄存器描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>0</td>
+<td>zero</td>
+<td>第0号寄存器，其值始终为0</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>$at</td>
+<td>保留寄存器</td>
+</tr>
+
+<tr>
+<td>2~3</td>
+<td>$v0 ~ $v1</td>
+<td>values,保存表达式或函数返回结果</td>
+</tr>
+
+<tr>
+<td>4~7</td>
+<td>$a0~$3</td>
+<td>aruments,作为函数的前4个参数</td>
+</tr>
+
+<tr>
+<td>8~15</td>
+<td>$t0~$7</td>
+<td>temporaries, 供汇编程序使用的临时寄存器</td>
+</tr>
+
+<tr>
+<td>16~23</td>
+<td>$s0~$7</td>
+<td>saved values, 子函数使用时需要先保存原寄存器的值</td>
+</tr>
+
+<tr>
+<td>24~25</td>
+<td>$t8 ~ $t9</td>
+<td>temporaries, 供汇编程序使用的临时寄存器,补充 $t0~$t7</td>
+</tr>
+
+<tr>
+<td>26~27</td>
+<td>$k0 ~ $k1</td>
+<td>保留，中断处理函数使用</td>
+</tr>
+
+<tr>
+<td>28</td>
+<td>$gp</td>
+<td>global pointer,全局指针</td>
+</tr>
+
+<tr>
+<td>29</td>
+<td>$sp</td>
+<td>stack pointer,堆栈指针，指向堆栈的栈顶</td>
+</tr>
+
+<tr>
+<td>30</td>
+<td>$fp</td>
+<td>frame pointer,保存栈指针</td>
+</tr>
+
+<tr>
+<td>31</td>
+<td>$ra</td>
+<td>return address,返回地址</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>$0: 即$zero,该寄存器总是返回0，为0这个有用常数提供了一个简介的编码形式。
+
+<ul>
+<li>在MIPS处理上的通用寄存器中，没有任何帮助运算判断的标志寄存器，要实现相应的功能是，都是通过测试2个寄存器是否相等完成的。MIPS编译器常常会使用 slt, beq, bne 等指令和寄存器 $0 获得的0值产生所有的比较条件，如相等,不等,小于，小于等于,大于,大于等于。还可以用 add 指令创建 move 伪指令，如<code>move $t0,$t1;$t0=$t1</code>实际为<code>add $t0,$0,$t1;$t0 = $t1+0</code>。使用MIPS伪指令可以简化任务。汇编程序提供了比硬件更丰富的指令集。</li>
+</ul></li>
+<li>$1( $at ): 该寄存器为汇编保留，用作汇编器的暂时变量。</li>
+<li>$2 ~ $3( $v0 ~ $v1 ): 用于存放子程序的返回值或非浮点结果。当这2个寄存器不够存放返回值时，编译器通过内存来完成。</li>
+<li>$4 ~ $7( $a0 ~ $a3 ): 用于将前4个参数传递给子程序，不够的用堆栈处理。$a0 ~ $a3,$v0 ~ $v1和$ra 一起完成子程序函数调用过程，分别用以传递参数，返回结果和存放返回地址。当需要使用跟多的寄存器时就需要堆栈了。MIPS编译器总是为参数在堆栈中留有空间，以防有参数需要存储。</li>
+<li>$8 ~ $15( $t0 ~ $7 ): 依照约定，一个函数可以不用保存并随意使用这些寄存器。在进行表达式计算时，这些寄存器时非常号的临时变量。在使用时需要注意，当调用一个子函数时，这些寄存器中的值有可能被子函数破坏。</li>
+<li>$16 ~ $23( $s0 ~ $s7 ): 依照约定，子函数必须保证当函数返回时这些寄存器的内容将恢复到函数调用以前的值，或者在子函数里不适用这些寄存器或吧它们保存在堆栈上并在函数退出时恢复。这种约定使这些寄存器非常适合作为寄存器变量，或者用于存放一些函数调用期间必须保存的原值。</li>
+<li>$24 ~ $25( $t8 ~ $t9 ): 同$t0 ~ $t7,作为$t0 ~ $t7寄存器的补充。</li>
+<li>$26 ~ $27( $k0 ~ $k1 ): 通常被中断或者一场处理程序使用，以保存一些系统参数。</li>
+<li>$28( $gp ): C语言中有2中存储类型，分别是自动型和静态型。自动变量是一个韩式中的局部变量。静态变量在进入和退出一个函数时都是存在的。为了简化静态数据的访问，MIPS保留了一个寄存器作为全局指针gp(Global Pointer , $gp)。在编译时，数据需要在以gp为基础指针的64KM范围内。</li>
+<li>$29($sp)：<font color=red>堆栈寄存器</font>。MIPS硬件并不直接支持堆栈， x86有单独的 PUSH 和 POP 指令，而MIPS 没有单独的栈操作指令，所有对栈的操作都是统一的内存表访问方式，但这并不影响MIPS使用堆栈。在发生函数调用时，调用者把函数调用之后要用的寄存器压入堆栈，被调用者把返回地址寄存器$ra(并给任何时候都保存$ra) 和保留寄存器压入堆栈。同时，调整堆栈指针，并在返回时从堆栈中恢复寄存器。</li>
+<li>$30($fp ): 不同的编译器可能对改寄存器的使用方法不同。GUN MIPS C 编译器使用了栈指针(Frame Pointer)。SGI的C 编译器则没有使用栈指针，只是把这个寄存器当成保存寄存器使用($s8),者虽然节省了调用和返回开销，但增加了代码生成的复杂性。</li>
+<li>$31($ra): 存放返回地址。MIPS 有一个 <code>jal(jump-and-link,跳转并链接)</code>指针，在跳转到某个地址时可把下一跳指令的地址放到<code>$ra</code>中，用于支持子程序。例如，调用程序把参数放到<code>$a0~$a3</code>中，jal X指令跳到X过程，被调用时需要保存的寄存器为<code>$a0~$a3,$s0~$s7,$gp,$sp,$fp,$ra</code>。</li>
+</ul>
+
+<h1 id="特殊寄存器">特殊寄存器</h1>
+
+<p>MIPS32架构定义了3个特殊的寄存器，分别是 PC(程序计数器,是专门用于在CPU取指令期间寻址程序存储器。<font color=red>PC总是保存着下一条要执行的指令的地址</font>)，HI(乘除结果高位寄存器)和 LO(乘除结果低位寄存器)。在进行乘法运算时，HI 和 LO 保存乘法的运算结果，其中HI 存储高32位，LO存储低32位；而在进行除法运算时，HI 保存余数， LO存储商。</p>
+
+<h1 id="字节序">字节序</h1>
+
+<p>数据在存储器中是按照字节存放的，处理器也是按照字节访问存储器中的指令或数据。但是如果需要读出一个字，也就是4字节，如 mem[n], mem[n+1], mem[m+2], mem[n+3] 者4个字节，那么最终交给处理器的结果有2种：</p>
+
+<pre><code class="language-bash">//大端模式(Big-Endian)，也称MSB(Most Significant Byte)
+{ mem[n], mem[n+1], mem[n+2], mem[n+3] }
+</code></pre>
+
+<pre><code class="language-bash">小端模式(Little-Endian)，也称LSB(Least Significant Byte)
+{ mem[n+3]，mem[n+2]，mem[n+1]，mem[n]}
+</code></pre>
+
+<p>使用<code>file</code>命令可以查看MSB格式和LSB格式的程序。
+在大端模式下，数据的高位保存在储存器的低地址中，而数据的低位保存在储存器的高地址中。小端模式正好相反。</p>
+
+<h1 id="mips寻址方式">MIPS寻址方式</h1>
+
+<p>MIPS32 架构的寻址模式有 寄存器寻址，立即数寻址，寄存器相对寻址 和 PC相对寻址 4种。</p>
+
+<ul>
+<li>寄存器相对寻址：这种寻址模式主要被加载/存储指令使用，其中一个16位的立即数进行符号扩展，然后与指定通用寄存器的值相加，从而得到有效地址，如下所示：
+<img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20191117135952.png" alt="" /></li>
+<li>PC 相对寻址：这种寻址模式主要被转移指令使用。在转移指令中有一个16位的立即数，将其左移2位并进行符号扩展，然后与程序计数寄存器 PC 的值相加，即可得到有效地址，如下所示：
+<img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20191117140222.png" alt="" /></li>
+</ul>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/MIPS%E6%8C%87%E4%BB%A4%E9%9B%86/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

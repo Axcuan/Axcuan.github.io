@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>MIPS指令集 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        MIPS指令集</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                MIPS指令集</h1>
+                <div class="stuff">
+                    
+                    <span>December 15, 2019</span>
+                    <span>字数 2661</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="mips汇编语言基础">MIPS汇编语言基础</h1>
+
+<p>MIPS指令特点</p>
+
+<ul>
+<li>MIPS 固定4字节指令长度</li>
+<li>内存中的数据访问 (load/store) 必须严格对齐（至少4字节对齐）</li>
+<li>跳转指令只有 26 位目标地址，加上 2 位对齐位，可寻址 28 位的空间，即 256MB</li>
+<li>条件分支指令只有 16 位跳转地址，加上 2 位对齐位，同 18 位寻址空间，即 256KM</li>
+<li>MIPS 默认不把子函数的返回地址（就是调用函数的受害指令地址）存放到栈中，而是存放到 $31($ra) 寄存器中，这对那些叶子函数有利。如果遇到齐奥淘函数，有其他机制来处理</li>
+<li>流水线效应。 Mips 采用高度的流水线，其中一个最重要的效应就是 分支延时效应。在 分支跳转语句 后面的那条语句就做 分支延时槽 。实际上，在程序执行到分支语句时，当它刚把要跳转的地址填充号 (填充到代码计数器里)，还没有完成本条指令时，分支语句后面的指令就已经执行了。前原因就是流水线效应 — 几条指令同时执行，只是处于不同的阶段。</li>
+</ul>
+
+<p>流水线效应：</p>
+
+<pre><code class="language-bash">mov $a0,$s2
+jalr strchr
+move $a0,$s0
+</code></pre>
+
+<p>在执行第二行跳转分支时，第三行的 move 指令已经执行完了。因此在上面的指令序列中，strchr 函数的参数来自第三行的 $s0,而不是第一行的 $s2。</p>
+
+<h2 id="指令格式">指令格式</h2>
+
+<p>所有 MIPS 指令的长度相同，都是 32 位。为了让指令的格式刚好适合，开发者做了折衷：将所有的指令定长。但是不同的指令有不同的格式。在MIPS架构中没治了的最高 6 位均为 6 位的Opcode码，身下的 24 位可以将指令分成3中类型：R型，I型和 J型 。</p>
+
+<ul>
+<li>R型指令用连续的3个5位二进制码表示3个寄存器的地址，然后用1个5位二进制码表示移位的位数(如果未使用移位操作，则全为0)，最后是6位的 Function码(它与 Opcode码共同决定 R型指令的具体操作方式)</li>
+<li>I型指令则用连续的2个5位二进制码表示2个寄存器的地址，然后是1个16位的二进制码表示的1个立即数二进制码。</li>
+<li>J型指令用26位二进制码表示跳转目标的指令地址(实际的指令地址应为32位，其中最低2位为&rdquo;00&rdquo;,最高4位为由 PC当前地址决定)
+<img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20191107234215.jpg" alt="" />
+字段含义如下：</li>
+<li>Opcode：质量基本操作，称为操作码</li>
+<li>Rs：第一个源操作数寄存器</li>
+<li>Rt：第二个源操作数寄存器</li>
+<li>Rd：存放操作结果的目的操作数</li>
+<li>Shamt：位移量</li>
+<li>Funct：函数，这个字段选择 Opcode操作的某个特定变体。</li>
+</ul>
+
+<h2 id="汇编常用指令">汇编常用指令</h2>
+
+<p>寄存器前面都是用 &ldquo;$&rdquo; 符号进行标注(如：$Rd表示目的寄存器，$Rs表示源寄存器，$Rt表示作为中间缓存的寄存器)，&rdquo;imm&rdquo; 表示立即数， &ldquo;MEM[]&rdquo; 表示 RAM 中的一段内容，&rdquo;offset&rdquo; 表示偏移量</p>
+
+<h3 id="load-store指令">LOAD/STORE指令</h3>
+
+<p>LOAD/STORE 指令有14条，分别是 lb，lbu，lh，lhu，ll，lw，lwl，lwr，sb，sc，sh，sw，swl 和 swr。以 &ldquo;l&rdquo;开头的都是加载指令，以 &ldquo;s&rdquo; 开头的都是存储指令，这些指令用于从存储器中读取数据，或者将数据保存在存储器中。</p>
+
+<ul>
+<li>LA(Load Address)指令用于将一个地址或标签存入一个寄存器</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>la $Rd,Label</td>
+<td>la $t0,val_1</td>
+<td>复制val_1表示的地址到$t0寄存器中，其中val_1是一个Label</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>LI(Load Immediate)指令用于将一个 立即数 存入一个通用寄存器</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>li $Rd,imm</td>
+<td>li $t1,40</td>
+<td>让寄存器$t1赋值为40，相当于&rdquo;addi $t1,$zero,40;&rdquo;</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>LW(Load Word)指令用于从一个指定的地址加载一个 word 类型的值到一个寄存器中</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>lw $Rt,offset($Rs)</td>
+<td>lw $s0,0($sp)</td>
+<td>&rdquo;$s0=MEM[$sp+0];&ldquo;，相当于去堆栈地址便宜0内存长度的值到$s0中</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>SW(Store Word)用于将 源寄存器 中的值存入指定地址</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>sw $Rt,offset($Rs)</td>
+<td>sw $ta0,0($sp)</td>
+<td>&ldquo;MEM[$sp+0]=$a0;&ldquo;,相当于将$a0寄存器中一个word大小的值存入堆栈，且$sp自动抬栈</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>MOVE 指令用于寄存器之间值的传递</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>move $Rt,$Rs</td>
+<td>move $t5,$t1</td>
+<td>$t5=$t1;</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="算数运算指令">算数运算指令</h3>
+
+<p>MIPS汇编指令的算数运算特点如下：</p>
+
+<ul>
+<li>算数运算指令的所有操作数都是寄存器，不能直接使用RAM地址或间接寻址</li>
+<li>操作数的大小都为word (4 Byte)</li>
+</ul>
+
+<p>算数运算指令有21条，分别为：add，addi，addiu，addu，sub，subu，clo，clz，slt，slti，sltiu，sltu，mul，mult，multu，madd，maddu，msub，msubu，div 和 divu。实现了加减乘除，比较，乘累加等等运算</p>
+
+<table>
+<thead>
+<tr>
+<th>指令格式与实例</th>
+<th>注释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>add     $t0,$t1,$t2</td>
+<td>&rdquo;$t0=$t1+$t2;&ldquo;，带符号数相加</td>
+</tr>
+
+<tr>
+<td>sub     $t0,$t1,$t2</td>
+<td>&rdquo;$t0=$t1-$t2;&ldquo;，带符号数相减</td>
+</tr>
+
+<tr>
+<td>addi    $t0,$t1,5</td>
+<td>$t0=$t1+5;</td>
+</tr>
+
+<tr>
+<td>addu    $t0,$t1,$t2</td>
+<td>&rdquo;$t0=$t1+$t2;&ldquo;，无符号数相加</td>
+</tr>
+
+<tr>
+<td>subu    $t0,$t1,$t2</td>
+<td>&rdquo;$t0=$t1-$t2;&ldquo;，无符号数相减</td>
+</tr>
+
+<tr>
+<td>mult    $t3,$t4</td>
+<td>&rdquo;$t3 * $t4&rdquo;，把64 Bits的积存储到 &ldquo;Lo,Hi&rdquo; 中，即 &ldquo;(Hi,Lo)=$t3 * $t4;&rdquo;</td>
+</tr>
+
+<tr>
+<td>div    $t5,$t6</td>
+<td>&rdquo;$LO=$t5/$t6&rdquo;，$LO为商的整数部分；&rdquo;$HI=$t5 mod $t6&rdquo;,$HI为余数</td>
+</tr>
+
+<tr>
+<td>mfhi    $t0</td>
+<td>$t0 = $HI</td>
+</tr>
+
+<tr>
+<td>mflo    $t1</td>
+<td>$t1 = $LO</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="类比较指令集">类比较指令集</h3>
+
+<p>在 MIPS 寄存器中没有表示寄存器，但是在 MIPS 指令中有一种指令 - SLT 系列指令，可以通过比较设置某个寄存器后与 分支跳转指令 联合使用。这种用啊类似 x86 的比较指令。</p>
+
+<ul>
+<li>SLT(Set on Less Than)指令在 $Rs 小于（有符号比较）$Rt 时设置寄存器 $Rd 为1，否则设置 $Rd 为 0.</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>slt $Rd,$Rs,$Rt</td>
+<td>slt $v0,$a0,$s0</td>
+<td>如果 $a0 小于（有符号比较）$s0，设置$v0为1，否则为0</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>SLTI(Set on Less Than Immediate) 指令在$Rs小于（有符号比较）立即数 imm 时设置寄存器 $Rt 为 1，否则为0</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>slti $Rt,$Rs,imm</td>
+<td>slti $v0,$a0,255</td>
+<td>如果 $a0 小于（有符号比较）255，设置$v0为1，否则为0</td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>SLTIU（Set on Less Than Immediate Unsigned）指令在 $Rs 小于（无符号比较）$Rt 时设置寄存器为 $Rd 为1，否则为0</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>实例</th>
+<th>备注</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>sltiu $Rt,$Rs,imm</td>
+<td>sltiu $v0,$a0,255</td>
+<td>如果 $a0 小于（有符号比较）255，设置$v0为1，否则为0</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="syscall-system-call">SYSCALL（SYStem CALL）</h3>
+
+<p>SYSCALL 可以产生一个 软中断 ，从而实现系统调用。系统调用号 存放在 $v0 中，参数存放在 $a0~$a3 中。如果参数过多，会有另一套机制处理。系统调用的返回值通常存放在 $v0 中。如果系统调用出错，则会在 $a3 中返回一个错误号。在边下 MIPS 汇编语言的 Shellcode 时，需要使用该指令
+<img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20191108205911.png" alt="" /></p>
+
+<h3 id="分支跳转指令">分支跳转指令</h3>
+
+<table>
+<thead>
+<tr>
+<th>指令格式与实例</th>
+<th>注释</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>j target</td>
+<td>无条件跳转，将跳转到 target 标签处</td>
+</tr>
+
+<tr>
+<td>jr $r3</td>
+<td>跳转到 $t3 寄存器指向的地址处 (Jump Register)</td>
+</tr>
+
+<tr>
+<td>jal target</td>
+<td>跳转到 target 标签处，并保存返回地址到 $ra 中</td>
+</tr>
+</tbody>
+</table>
+
+<p>在跳转指令中，需要对 子函数 调用指令进行特别说明，其函数调用和返回过程如下</p>
+
+<ul>
+<li>子函数的调用：jal sub_routine_label
+
+<ul>
+<li>复制当前的 PC 值到 $ra 寄存器中（当前的 PC 值就是子函数执行完毕后的返回地址）</li>
+<li>程序跳转到程序标签 sub_routine_label 处</li>
+</ul></li>
+<li>子函数的返回： jr $ra
+
+<ul>
+<li>如果子函数内又调用了其他子函数，那么 $ra 的值应该被保存到堆栈中（因为 $ra 的值总是对应者当前执行的子函数的返回地址）</li>
+</ul></li>
+</ul>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/MIPS%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/MIPS32%E6%9E%B6%E6%9E%84%E5%A0%86%E6%A0%88/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

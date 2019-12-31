@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang字符串 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang字符串</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang字符串</h1>
+                <div class="stuff">
+                    
+                    <span>December 31, 2019</span>
+                    <span>字数 1123</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p><font color="red">gcc 好像不能成功编译utf-8编码格式的c语言文件。</font></p>
+
+<p><font color="red">只要把c语言文件编码方式更改为ANSI即可。</font></p>
+
+<h1 id="字符串">字符串</h1>
+
+<p>其实在C语言中没有专门的字符串类型，我们只能使用<a href="http://c.biancheng.net/cpp/u/c7/">数组</a>或者<a href="http://c.biancheng.net/cpp/u/c10/">指针</a>来间接地存储字符串。</p>
+
+<p>只需要记下两种表示形式即可：</p>
+
+<pre><code class="language-c">char str1[] = &quot;http://c.biancheng.net&quot;;
+char *str2 = &quot;C语言中文网&quot;;
+</code></pre>
+
+<p>str1 和 str2 是字符串的名字，后边的<code>[ ]</code>和前边的<code>*</code>是固定的写法。初学者暂时可以认为这两种存储方式是等价的，它们都可以通过专用的 puts 函数和通用的 printf 函数输出。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    char web_url[] = &quot;http://c.biancheng.net&quot;;
+    char *web_name = &quot;C语言中文网&quot;;
+
+    puts(web_url);
+    puts(web_name);
+    printf(&quot;%s\n%s\n&quot;, web_url, web_name);
+
+    return 0;
+}
+</code></pre>
+
+<h1 id="c语言中使用中文字符">C语言中使用中文字符</h1>
+
+<p>正确地存储中文字符需要解决两个问题。</p>
+
+<ul>
+<li>足够长的数据类型
+
+<ul>
+<li>char 只能处理 ASCII 编码中的英文字符，是因为 char 类型太短，只有一个字节，容纳不下几万个汉字，要想处理中文字符，必须得使用更长的数据类型。</li>
+</ul></li>
+<li>选择包含中文的字符集
+
+<ul>
+<li>C语言规定，对于汉语、日语、韩语等 ASCII 编码之外的单个字符，也就是专门的字符类型，要使用宽字符的编码方式。常见的宽字符编码有 UTF-16 和 UTF-32，它们都是基于 Unicode 字符集的，能够支持全球的语言文化。</li>
+</ul></li>
+</ul>
+
+<p>在真正实现时，微软编译器（内嵌于 Visual Studio 或者 Visual C++ 中）采用 UTF-16 编码，使用 2
+个字节存储一个字符，用 unsigned short 类型就可以容纳。GCC、LLVM/Clang（内嵌于 Xcode 中）采用 UTF-32
+编码，使用 4 个字节存储字符，用 unsigned int 类型就可以容纳。</p>
+
+<p>为了解决这个问题，C语言推出了一种新的类型，叫做 <strong>wchar_t</strong></p>
+
+<ul>
+<li>在微软编译器下，它的长度是 2，等价于 unsigned short；</li>
+<li>在GCC、LLVM/Clang 下，它的长度是 4，等价于 unsigned int。</li>
+</ul>
+
+<p><font color="red">wchar_t 类型位于 <wchar.h> 头文件中，它使得代码在具有良好移植性的同时，也节省了不少内存，以后我们就用它来存储宽字符。</font></p>
+
+<p>单独的字符由单引号<code>' '</code>包围，例如<code>'B'</code>、<code>'@'</code>、<code>'9'</code>等；但是，这样的字符只能使用 ASCII 编码，要想使用宽字符的编码方式，就得加上<code>L</code>前缀，例如<code>L'A'</code>、<code>L'9'</code>、<code>L'中'</code>、<code>L'国'</code>、<code>L'。'。</code></p>
+
+<p>注意，加上<code>L</code>前缀后，所有的字符都将成为宽字符，占用 2 个字节或者 4 个字节的内存，包括 ASCII 中的英文字符。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;wchar.h&gt;
+#include &lt;locale.h&gt;
+int main()
+{
+	char web_url[] = &quot;http://c.biancheng.net&quot;;
+	char* web_name = &quot;Clang中文网&quot;;
+	puts(web_url);
+	puts(web_name);
+	printf(&quot;%s\n%s\n&quot;, web_url, web_name);
+
+
+	wchar_t a = L'A';
+	wchar_t b = L'9';
+	wchar_t c = L'中';
+	wchar_t d = L'国';
+	wchar_t e = L'。';
+	wchar_t f = L'ヅ';
+	wchar_t g = L'℉';
+	//设置本地环境位中文
+	setlocale(LC_ALL, &quot;zh_CN&quot;);
+	//使用专门的 putwchar 输出j宽字节符
+	putwchar(a);
+	putwchar(b);
+	putwchar(c);
+	putwchar(d);
+	putwchar(e);
+	putwchar(f);
+	putwchar(g);
+	putwchar(L'\n');//只能使用宽字节符
+	//使用通用 wprintf 输出宽字节符
+	wprintf(L&quot;Wide chars:%lc %lc %lc %lc %lc %lc %lc\n&quot;,//必须使用宽字符串
+		a, b, c, d, e, f, g);
+	return 0;
+}
+
+</code></pre>
+
+<p>输出：（注意，windows gcc下不能编译）</p>
+
+<pre><code class="language-bash">http://c.biancheng.net
+Clang中文网
+http://c.biancheng.net
+Clang中文网
+A9中国。ヅ℉
+Wide chars:A 9 中 国 。 ヅ ℉
+</code></pre>
+
+<h1 id="转义字符">转义字符</h1>
+
+<p>参考：<a href="http://c.biancheng.net/view/1769.html">http://c.biancheng.net/view/1769.html</a></p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E8%BE%93%E5%87%BA%E6%B1%87%E6%80%BB/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E8%AF%BB%E5%8F%96%E4%BB%8E%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E7%9A%84%E6%95%B0%E6%8D%AE/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

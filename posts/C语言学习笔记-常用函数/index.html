@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>C语言学习笔记 常用函数 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        C语言学习笔记 常用函数</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                C语言学习笔记 常用函数</h1>
+                <div class="stuff">
+                    
+                    <span>December 15, 2019</span>
+                    <span>字数 296</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h2 id="scanf函数">Scanf函数</h2>
+
+<p>C函数库包含了多个输入函数，scanf是最通用的一个，可以读取不同格式的数据</p>
+
+<h3 id="基本用法">基本用法</h3>
+
+<p>VS中<code>scanf()</code>会被警告不安全，需要用<code>scanf_s</code>代替<code>scanf</code></p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+void main()
+{
+	int num1,num2;
+	printf(&quot;Please input a number1:&quot;);
+	scanf_s(&quot;%d&quot;, &amp;num1);
+	fflush(stdin);//清空缓冲区
+	printf(&quot;The num is: %d\n&quot;,num1);
+	printf(&quot;Please input a number1:&quot;);
+	scanf_s(&quot;%d&quot;, &amp;num2);
+	printf(&quot;The num is: %d\n&quot;, num2);
+	char ch;
+	printf(&quot;Please input char: &quot;);
+	ch = getchar();
+	//scanf_s(&quot;%c&quot;, &amp;ch);
+	printf(&quot;Input char is: %c\n&quot;,ch);
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-cmd">Please input a number1:1
+The num is: 1
+Please input a number1:2
+The num is: 2
+Please input char: Input char is:
+</code></pre>
+
+<p>从结果上看，字符串没有输出(其实可以连续输入达到输出字符串)，C处理字符比较复杂，这个问题以后再讲。</p>
+
+<p>转义序列</p>
+
+<table>
+<thead>
+<tr>
+<th>转换字符串</th>
+<th>含义</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>%d</td>
+<td>把输入解释成有符号整型</td>
+</tr>
+
+<tr>
+<td>%c</td>
+<td>把输入解释成字符型</td>
+</tr>
+
+<tr>
+<td>%s</td>
+<td>把输入解释成字符串</td>
+</tr>
+
+<tr>
+<td>%f</td>
+<td>把输入解释成单精度浮点数</td>
+</tr>
+
+<tr>
+<td>%lf</td>
+<td>把输入解释成双精度浮点数</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="getchar-putchar">getchar&amp;putchar</h2>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/GCC%E5%92%8CGDB/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

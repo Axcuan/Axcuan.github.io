@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang读取从键盘输入的数据 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang读取从键盘输入的数据</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang读取从键盘输入的数据</h1>
+                <div class="stuff">
+                    
+                    <span>December 31, 2019</span>
+                    <span>字数 2081</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p>在C语言中，有多个函数可以从键盘获得用户输入：</p>
+
+<ul>
+<li>scanf()：和 printf() 类似，scanf() 可以输入多种类型的数据。</li>
+<li>getchar()、getche()、getch()：这三个函数都用于输入单个字符。</li>
+<li>gets()：获取一行数据，并作为字符串处理。</li>
+</ul>
+
+<h1 id="scanf-函数">scanf()函数</h1>
+
+<p>scanf() 是最灵活、最复杂、最常用的输入函数，但它不能完全取代其他函数</p>
+
+<p>scanf 是 scan format 的缩写，意思是格式化扫描，也就是从键盘获得用户输入，和 printf 的功能正好相反。</p>
+
+<p>示例：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int a = 0, b = 0, c = 0, d = 0;
+    scanf(&quot;%d&quot;, &amp;a);
+    scanf(&quot;%d&quot;, &amp;b);
+    printf(&quot;a+b=%d\n&quot;, a+b);
+    scanf(&quot;%d %d&quot;, &amp;c, &amp;d);		//对于 scanf()，输入数据的格式要和控制字符串的格式保持一致。
+    printf(&quot;c*d=%d\n&quot;, c*d);
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+10↙
+20↙
+a+b=30
+100 50↙			//对于 scanf()，输入数据的格式要和控制字符串的格式保持一致。
+c*d=5000
+</code></pre>
+
+<p>如果一次性输入4个数字：</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+10 20 30 40↙
+a+b=30
+c*d=1200
+</code></pre>
+
+<p>如果一次性输入5个数字：（多输入一个数字）</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+10 20 30 40 50↙
+a+b=30
+c*d=1200
+</code></pre>
+
+<p>如果一次性输入3个数字：（少输入一个数字）</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+10 20 30↙
+a+b=30
+				//此时程序卡在这里，需要在输入一个数字
+40				//继续输入40，程序继续运行
+c*d=1200
+</code></pre>
+
+<p>造成这样的结果是因为：从本质上讲，我们从键盘输入的数据并没有直接交给 scanf()，而是放入了缓冲区中，直到我们按下回车键，scanf() 才到缓冲区中读取数据。如果缓冲区中的数据符合 scanf() 的要求，那么就读取结束；如果不符合要求，那么就继续等待用户输入，或者干脆读取失败</p>
+
+<p>再看如下实例：</p>
+
+<pre><code class="language-c">    #include &lt;stdio.h&gt;
+    int main()
+    {
+        int a, b, c;
+        scanf(&quot;%d %d&quot;, &amp;a, &amp;b);         //1个空格
+        printf(&quot;a+b=%d\n&quot;, a+b);
+        scanf(&quot;%d   %d&quot;, &amp;a, &amp;b);       //2个空格
+        printf(&quot;a+b=%d\n&quot;, a+b);
+        scanf(&quot;%d, %d, %d&quot;, &amp;a, &amp;b, &amp;c);    //以&quot;,&quot;分隔
+        printf(&quot;a+b+c=%d\n&quot;, a+b+c);
+       
+        scanf(&quot;%d is bigger than %d&quot;, &amp;a, &amp;b);  //以&quot; is bigger than &quot;分隔
+        printf(&quot;a-b=%d\n&quot;, a-b);
+        return 0;
+    }
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\test\&gt;1.exe
+10 20↙
+a+b=30
+30 40↙					
+a+b=70
+50,60,70↙				//中间以逗号分隔，所以输入的整数也要以逗号分隔。
+a+b+c=180
+90is bigger than80↙		//以is bigger than分隔；注意空格
+a-b=10
+
+C:\test\&gt;1.exe
+10 20↙
+a+b=30
+30 40↙
+a+b=70
+50,60,70↙
+a+b+c=180
+90 is bigger than 80↙	//以is bigger than分隔；注意空格
+a-b=10
+
+C:\test\&gt;1.exe
+10 20↙
+a+b=30
+30 40↙
+a+b=70
+50,60,70↙
+a+b+c=180
+90isbiggerthan80↙		//以is bigger than分隔；注意空格
+a-b=10
+</code></pre>
+
+<p>以上结果说明 scanf() 对输入数据之间的空格的处理比较宽松，并不要求空格数严格对应，多几个少几个无所谓，只要有空格就行。</p>
+
+<h2 id="连续输入">连续输入</h2>
+
+<p>上面讲到我们从键盘输入的数据并没有直接交给 scanf()，而是放入了缓冲区中，如果缓冲区中的数据不符合 scanf() 的要求，要么继续等待用户输入，要么就干脆读取失败</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int a = 1, b = 2, c = 3, d = 4;  //修改处：给变量赋予不同的初始值
+    scanf(&quot;%d&quot;, &amp;a);
+    scanf(&quot;%d&quot;, &amp;b);
+    printf(&quot;a=%d, b=%d\n&quot;, a, b);
+    scanf(&quot;%d %d&quot;, &amp;c, &amp;d);
+    printf(&quot;c=%d, d=%d\n&quot;, c, d);
+    
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+10 20 a 40↙
+a=10, b=20
+c=3, d=4			//c 和 d 的值并没有被改变
+</code></pre>
+
+<p>前两个整数被正确读取后，剩下了 a 40，而第三个 scanf() 要求输入两个十进制的整数，a40无论如何也不符合要求，所以只能读取失败。输出结果也证明了这一点，c 和 d 的值并没有被改变。</p>
+
+<p>这说明 scanf() 不会跳过不符合要求的数据，遇到不符合要求的数据会读取失败，而不是再继续等待用户输入。</p>
+
+<p>然而，缓冲区也带来了一定的负面影响，甚至会导致很奇怪的行为</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int a = 1, b = 2;
+    scanf(&quot;a=%d&quot;, &amp;a);
+    scanf(&quot;b=%d&quot;, &amp;b);
+    printf(&quot;a=%d, b=%d\n&quot;, a, b);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+a=10↙		//回车键，程序竟然运行结束了，只有第一个 scanf() 成功读取了数据
+a=10, b=2
+
+C:\&gt;1.exe
+a=10b=20↙	//a 和 b 都能够正确读取了（a=10b=20中间是没有任何空格的）
+a=10, b=20
+
+C:\&gt;1.exe
+a=10 b=20↙	//（a=10 b=20）中间是有空格，只有第一个 scanf() 成功读取了数据
+a=10, b=2
+</code></pre>
+
+<p>这个是跟缓冲区有关系，再<code>结合C语言缓冲区谈scanf()函数</code>详细说明</p>
+
+<h2 id="输入其它数据">输入其它数据</h2>
+
+<p>除了输入整数，scanf() 还可以输入单个字符、字符串、小数等，</p>
+
+<p>在<a href="https://axcuan.github.io/posts/Clang字符串/">Clang字符串</a>中讲到了字符串的两种定义形式：</p>
+
+<pre><code class="language-c">char str1[] = &quot;http://c.biancheng.net&quot;;		//字符串所在的内存既有读取权限又有写入权限
+char *str2 = &quot;C语言中文网&quot;;					//字符串所在的内存只有读取权限，没有写入权限
+</code></pre>
+
+<p>printf()、puts() 等字符串输出函数只要求字符串有读取权限，而 scanf()、gets() 等字符串输入函数要求字符串有写入权限，所以，第一种形式的字符串既可以用于输出函数又可以用于输入函数，而第二种形式的字符串只能用于输出函数。</p>
+
+<p><font color="red">scanf() 读取字符串时以空格为分隔，遇到空格就认为当前字符串结束了，所以无法读取含有空格的字符串。</font></p>
+
+<h2 id="scanf-格式控制符汇总">scanf() 格式控制符汇总</h2>
+
+<table>
+<thead>
+<tr>
+<th>格式控制符</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>%c</td>
+<td>读取一个单一的字符</td>
+</tr>
+
+<tr>
+<td>%hd、%d、%ld</td>
+<td>读取一个十进制整数，并分别赋值给 short、int、long 类型</td>
+</tr>
+
+<tr>
+<td>%ho、%o、%lo</td>
+<td>读取一个八进制整数（可带前缀也可不带），并分别赋值给 short、int、long 类型</td>
+</tr>
+
+<tr>
+<td>%hx、%x、%lx</td>
+<td>读取一个十六进制整数（可带前缀也可不带），并分别赋值给 short、int、long 类型</td>
+</tr>
+
+<tr>
+<td>%hu、%u、%lu</td>
+<td>读取一个无符号整数，并分别赋值给 unsigned short、unsigned int、unsigned long 类型</td>
+</tr>
+
+<tr>
+<td>%f、%lf</td>
+<td>读取一个十进制形式的小数，并分别赋值给 float、double 类型</td>
+</tr>
+
+<tr>
+<td>%e、%le</td>
+<td>读取一个指数形式的小数，并分别赋值给 float、double 类型</td>
+</tr>
+
+<tr>
+<td>%g、%lg</td>
+<td>既可以读取一个十进制形式的小数，也可以读取一个指数形式的小数，并分别赋值给 float、double 类型</td>
+</tr>
+
+<tr>
+<td>%s</td>
+<td>读取一个字符串（以空白符为结束）</td>
+</tr>
+</tbody>
+</table>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2/" rel="prev">上一篇</a>
+                    
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,98 @@
+[
+    {
+        "uri": "/posts/Clang字符串",
+        "title": "Clang字符串",
+        "content": "\r\ngcc 好像不能成功编译utf-8编码格式的c语言文件。\r\n\r\n只要把c语言文件编码方式更改为ANSI即可。\r\n\r\n# 字符串\r\n\r\n其实在C语言中没有专门的字符串类型，我们只能使用[数组](ht",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang读取从键盘输入的数据",
+        "title": "Clang读取从键盘输入的数据",
+        "content": "\r\n在C语言中，有多个函数可以从键盘获得用户输入：\r\n\r\n-  scanf()：和 printf() 类似，scanf() 可以输入多种类型的数据。\r\n-  getchar()、getche()、getch()：这三个函数都用于输入单个字符。\r\n-  gets()：获取一行数据，并作为字符串处理。\r",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang输出汇总",
+        "title": "Clang输出汇总",
+        "content": "\n# 输出汇总\n\n`printf`格式控制符：\n\n| 格式控制符                       | 说明                                                         |\n| ------------------------------",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/postsC语言学习",
+        "title": "C语言学习",
+        "content": "\n## 示例\n\n```c\n#include \t\t\t//包含标准输入输出头文件\n//standared input output header   标准输入输出头文件\nvoid main()\n{\n\tchar ch = 'a';\n\tprintf(\"ASCII码：%d\\n 字符: %c\\",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/postsC语言学习笔记常用函数",
+        "title": "C语言学习笔记 常用函数",
+        "content": "\n## Scanf函数\n\nC函数库包含了多个输入函数，scanf是最通用的一个，可以读取不同格式的数据\n\n### 基本用法\n\nVS中`scanf()`会被警告不安全，需要用`scanf_s`代替`scanf`\n\n```c\n#include \nvoid main()\n{\n\tint n",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/postsC语言符号与进制",
+        "title": "C语言符号与进制",
+        "content": "\n# 内存\n\n  内存中存取数据要明确3件事：\n\n- 数据存储在哪里\n- 数据的长度\n- 数据的处理方式\n\n\n\n在32位环境中，各种数据类型的长度一般如下：\n\n| 说  明   | 字符型 | 短整型 | 整型 | 长整型 | 单精度浮点型 | 双精度浮点型 |\n| -------- | -----",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/GCC和GDB",
+        "title": "GCC和GDB",
+        "content": "\n# GCC\n\n GCC提供了大量的编译选项，大约有100个，其中最基本，最常用的参数如下：\n\n|选项|说明|\n-|-|-\n-o |\t使用指定的文件名保存编译后的二进制文件\n-O |\t对程序进行优化编译，链接；编译链接时的速度慢\n-O2 |\t提供比 -O 更好的优化编译；编译链接时比 -O 速度慢\n",
+        "tags": [
+            "MIPS"
+        ]
+    },
+    {
+        "uri": "/posts/IOT安全资料整合",
+        "title": "IOT安全资料整合",
+        "content": "\n# OT安全资料整合\n\n十一月 07, 2019\n\n- [build](/tags/build/)\n\n# [](#IOT-安全资料整合（主要是路由器） \"IOT 安全资料整合（主要是路由器）\")IOT 安全资料整合（主要是路由器）\n\n## [](#适合入门的资料 \"适合入门的资料\")适合入门的资料",
+        "tags": [
+            "MIPS"
+        ]
+    },
+    {
+        "uri": "/posts/MIPS32架构堆栈",
+        "title": "MIPS32架构堆栈",
+        "content": "\n# MIPS堆栈原理\n\n 在计算机科学中，栈是一种具有 先进后出(FILO) 队列特性的数据结构。调用栈(Call Stack) 是指存放某个程序正在运行的函数的信息的栈。调用栈由栈帧(Stack Fram",
+        "tags": [
+            "MIPS"
+        ]
+    },
+    {
+        "uri": "/posts/MIPS指令集",
+        "title": "MIPS指令集",
+        "content": "\n# MIPS汇编语言基础\n\nMIPS指令特点\n\n- MIPS 固定4字节指令长度\n- 内存中的数据访问 (load/store) 必须严格对齐（至少4字节对齐）\n- 跳转指令只有 26 位目标地址，加上 2 位对齐位，可寻址 28 位的空间，即 256MB\n- 条件分支指令只有 16 位跳转地址，",
+        "tags": [
+            "MIPS"
+        ]
+    },
+    {
+        "uri": "/postsMIPS汇编语言基础",
+        "title": "MIPS汇编语言基础",
+        "content": "\n# 寄存器\n\n​      RISC的一个显著特点就是大量使用寄存器。因为寄存器的存取可以在一个时钟周期内完成，同时简化寻址方式，所以MIPS32的指令中除了加载/储存指令以外，都是用寄存器或者立即数作为操作数，以便让编译器通过保持对寄存器内数据的频繁存取进一步优化代码的生成性能。MIPS32中的",
+        "tags": [
+            "MIPS"
+        ]
+    },
+    {
+        "uri": "/posts/环境安装",
+        "title": "环境安装",
+        "content": "\n## 安装pwntools\n\n安装依赖\n\n```bash\ngit clone https://github.com/aquynh/capstone\ncd capstone\nmake\nmake install\n```\n\n安装pwntools(需要联网，简易使用国内源)\n\n```bash\nsudo a",
+        "tags": [
+            "MIPS"
+        ]
+    }
+]

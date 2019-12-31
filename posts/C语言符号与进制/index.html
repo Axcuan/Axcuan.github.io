@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>C语言符号与进制 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        C语言符号与进制</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                C语言符号与进制</h1>
+                <div class="stuff">
+                    
+                    <span>December 26, 2019</span>
+                    <span>字数 4440</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="内存">内存</h1>
+
+<p>内存中存取数据要明确3件事：</p>
+
+<ul>
+<li>数据存储在哪里</li>
+<li>数据的长度</li>
+<li>数据的处理方式</li>
+</ul>
+
+<p>在32位环境中，各种数据类型的长度一般如下：</p>
+
+<table>
+<thead>
+<tr>
+<th>说  明</th>
+<th>字符型</th>
+<th>短整型</th>
+<th>整型</th>
+<th>长整型</th>
+<th>单精度浮点型</th>
+<th>双精度浮点型</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>数据类型</td>
+<td>char</td>
+<td>short</td>
+<td>int</td>
+<td>long</td>
+<td>float</td>
+<td>double</td>
+</tr>
+
+<tr>
+<td>长  度</td>
+<td>1</td>
+<td>2</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>8</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="二进制数-八进制数和十六进制数的表示">二进制数，八进制数和十六进制数的表示</h1>
+
+<h2 id="二进制">二进制</h2>
+
+<p>二进制数由0和1组成，使用是必须以<code>0b</code>或<code>0B</code>(不区分大小写）开头，如：</p>
+
+<pre><code class="language-C">//合法的二进制
+int a = 0b101; //5
+int b = -0b110010; //-50
+int c= 0B100001;  //33
+
+//非法的二进制数
+int m =101010;	//无前缀0b，相当于十进制
+int n = 0B410;	//4不是有效的二进制
+</code></pre>
+
+<p><strong>注意：</strong><font color="red">标准的C语言并不支持上面的二进制写法，只是有些编译器自己进行了扩展，才支持二进制数字。换句话说，并不是所有的编译器都支持二进制数字，只有一部分编译器支持，并且跟编译器的版本有关系。</font></p>
+
+<p>下面是实际测试的结果：</p>
+
+<ul>
+<li>Visual <a href="http://c.biancheng.net/cplus/">C++</a> 6.0 不支持。</li>
+<li>Visual Studio 2015 支持，但是 Visual Studio 2010 不支持；可以认为，高版本的 Visual Studio 支持二进制数字，低版本的 Visual Studio 不支持。</li>
+<li><a href="http://c.biancheng.net/gcc/">GCC</a> 4.8.2 支持，但是 GCC 3.4.5 不支持；可以认为，高版本的 GCC 支持二进制数字，低版本的 GCC 不支持。</li>
+<li>LLVM/Clang 支持（内嵌于 Mac OS 下的 Xcode 中）。</li>
+</ul>
+
+<h2 id="八进制">八进制</h2>
+
+<p>八进制由 0~7 八个数字组成，使用时必须以<code>0</code>开头（注意是数字 0，不是字母 o），例如：</p>
+
+<pre><code class="language-c">//合法的八进制
+int a = 015; //13
+int b = -0101; //-65
+int c= 0177777;  //65535
+
+//非法的八进制数
+int m =256;	//无前缀0，相当于十进制
+int n = 03A2;	//A不是有效的八进制
+</code></pre>
+
+<h2 id="十六进制">十六进制</h2>
+
+<p>十六进制由数字 0~9、字母 A~F 或 a~f（不区分大小写）组成，使用时必须以<code>0x</code>或<code>0X</code>（不区分大小写）开头，例如：</p>
+
+<pre><code class="language-c">//合法的十六进制
+int a = 0x2a; //42
+int b = -0xa0; //-160
+int c= 0xffff;  //65535
+
+//非法的十六进制数
+int m =5a;	//无前缀0x，是一个无效数字
+int n = 0x3h;	//h不是有效的十六进制
+</code></pre>
+
+<h2 id="二进制数-八进制数和十六进制数的输出">二进制数、八进制数和十六进制数的输出</h2>
+
+<p>C语言中常用的整数有 <code>short</code>、<code>int</code> 和 <code>long</code> 三种类型，通过 <code>printf</code>函数，可以将它们以八进制、十进制和十六进制的形式输出。下表列出了不同类型的整数、以不同进制的形式输出时对应的格式控制符：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>short</th>
+<th>int</th>
+<th>long</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>八进制</td>
+<td>%ho</td>
+<td>%o</td>
+<td>%lo</td>
+</tr>
+
+<tr>
+<td>十进制</td>
+<td>%hd</td>
+<td>%d</td>
+<td>%ld</td>
+</tr>
+
+<tr>
+<td>十六进制</td>
+<td>%hx 或者 %hX</td>
+<td>%x 或者 %X</td>
+<td>%lx 或者 %lX</td>
+</tr>
+</tbody>
+</table>
+
+<p>十六进制数字的表示用到了英文字母，有大小写之分，要在格式控制符中体现出来：</p>
+
+<ul>
+<li>%hx、%x 和 %lx 中的<code>x</code>小写，表明以小写字母的形式输出十六进制数</li>
+<li>%hX、%X 和 %lX 中的<code>X</code>大写，表明以大写字母的形式输出十六进制数</li>
+</ul>
+
+<p><strong>注意：</strong><font color="red">部分编译器支持二进制数字的表示，但是却不能使用 printf 函数输出二进制，这一点比较遗憾</font></p>
+
+<p>一个数字不管以何种进制来表示，都能够以任意进制的形式输出。数字在内存中始终以二进制的形式存储，其它进制的数字在存储前都必须转换为二进制形式；同理，一个数字在输出时要进行逆向的转换，也就是从二进制转换为其他进制。</p>
+
+<h2 id="正负数及其输出">正负数及其输出</h2>
+
+<p>符号也是数字的一部分，也要在内存中体现出来。符号只有正负两种情况，用1位（Bit）就足以表示；</p>
+
+<p>C语言规定，把内存的最高位作为符号位。以 int 为例，它占用 32 位的内存，0~30 位表示数值，31 位表示正负号。如下图所示：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2019-12/111A25222-0.png" alt="" /></p>
+
+<p>C语言规定，<font color="red">在符号位中，用 0 表示正数，用 1 表示负数。</font>例如 int 类型的 -10 和 +16 在内存中的表示如下：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2019-12/111A22X9-1.jpg" alt="" /></p>
+
+<p>short、int 和 long 类型默认都是带符号位的，符号位以外的内存才是数值位。如果只考虑正数，那么各种类型能表示的数值范围（取值范围）就比原来小了一半。</p>
+
+<p>但是在很多情况下，我们非常确定某个数字只能是正数，比如班级学生的人数、字符串的长度、内存地址等，这个时候符号位就是多余的了，就不如删掉符号位，把所有的位都用来存储数值，这样能表示的数值范围更大（大一倍）。</p>
+
+<p>例如：</p>
+
+<pre><code class="language-c">unsigned short a = 12;
+unsigned int b = 1002;	//等价于 unsigned b = 1002;
+unsigned long c = 9892320;
+</code></pre>
+
+<p>这样，short、int、long 中就没有符号位了，所有的位都用来表示数值，正数的取值范围更大了。这也意味着，使用了 unsigned 后只能表示正数，不能再表示负数了。</p>
+
+<h3 id="无符号的输出">无符号的输出</h3>
+
+<p>无符号数可以以八进制、十进制和十六进制的形式输出，它们对应的格式控制符分别为：</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>unsigned short</th>
+<th>unsigned int</th>
+<th>unsigned long</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>八进制</td>
+<td>%ho</td>
+<td>%o</td>
+<td>%lo</td>
+</tr>
+
+<tr>
+<td>十进制</td>
+<td>%hu</td>
+<td>%u</td>
+<td>%lu</td>
+</tr>
+
+<tr>
+<td>十六进制</td>
+<td>%hx 或者 %hX</td>
+<td>%x 或者 %X</td>
+<td>%lx 或者 %lX</td>
+</tr>
+</tbody>
+</table>
+
+<p>严格来说，格式控制符和整数的符号是紧密相关的，具体就是：</p>
+
+<ul>
+<li>%d 以十进制形式输出有符号数；</li>
+<li>%u 以十进制形式输出无符号数；</li>
+<li>%o 以八进制形式输出无符号数；</li>
+<li>%x 以十六进制形式输出无符号数。</li>
+</ul>
+
+<p>那么，如何以八进制和十六进制形式输出有符号数呢？很遗憾，printf 并不支持，也没有对应的格式控制符。在实际开发中，也基本没有“输出负的八进制数或者十六进制数”这样的需求，我想可能正是因为这一点，printf 才没有提供对应的格式控制符。</p>
+
+<p>下表全面地总结了不同类型的整数，以不同进制的形式输出时对应的格式控制符（<code>--</code>表示没有对应的格式控制符）。</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>short</th>
+<th>int</th>
+<th>long</th>
+<th>unsigned short</th>
+<th>unsigned int</th>
+<th>unsigned long</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>八进制</td>
+<td>&ndash;</td>
+<td>&ndash;</td>
+<td>&ndash;</td>
+<td>%ho</td>
+<td>%o</td>
+<td>%lo</td>
+</tr>
+
+<tr>
+<td>十进制</td>
+<td>%hd</td>
+<td>%d</td>
+<td>%ld</td>
+<td>%hu</td>
+<td>%u</td>
+<td>%lu</td>
+</tr>
+
+<tr>
+<td>十六进制</td>
+<td>&ndash;</td>
+<td>&ndash;</td>
+<td>&ndash;</td>
+<td>%hx 或者 %hX</td>
+<td>%x 或者 %X</td>
+<td>%lx 或者 %lX</td>
+</tr>
+</tbody>
+</table>
+
+<p>使用 %o 和 %x 来输出有符号数，为什么没有发生错误呢？这是因为：</p>
+
+<ul>
+<li>当以有符号数的形式输出时，printf 会读取数字所占用的内存，并把最高位作为符号位，把剩下的内存作为数值位；</li>
+<li>当以无符号数的形式输出时，printf 也会读取数字所占用的内存，并把所有的内存都作为数值位对待。</li>
+</ul>
+
+<p>对于一个有符号的正数，它的符号位是 0，当按照无符号数的形式读取时，符号位就变成了数值位，但是该位恰好是 0 而不是 1，所以对数值不会产生影响，这就好比在一个数字前面加 0，有多少个 0 都不会影响数字的值。
+如果对一个有符号的负数使用 %o 或者 %x 输出，那么结果就会大相径庭</p>
+
+<p><font color="red">“有符号正数的最高位是 0”这个巧合才使得 %o 和 %x 输出有符号数时不会出错。</font></p>
+
+<p>再次强调，不管是以 %o、%u、%x 输出有符号数，还是以 %d 输出无符号数，编译器都不会报错，只是对内存的解释不同了。%o、%d、%u、%x 这些格式控制符不会关心数字在定义时到底是有符号的还是无符号的：</p>
+
+<ul>
+<li>你让我输出无符号数，那我在读取内存时就不区分符号位和数值位了，我会把所有的内存都看做数值位；</li>
+<li>你让我输出有符号数，那我在读取内存时会把最高位作为符号位，把剩下的内存作为数值位。</li>
+</ul>
+
+<p>例如：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    short a = 0100;
+    int b = -0x1;	//-1
+    long c = 720;
+
+    unsigned short m = 0xffff;	//65535
+    unsigned int n = 0x80000000;
+    unsigned long p = 100;
+
+    printf(&quot;无符号输出：a=%#ho, b=%#x, c=%#ld\n&quot;,a,b,c);
+    printf(&quot;有符号输出(只能以十进制形式输出)：m=%ho, n=%d, p=%ld\n&quot;,m,n,p);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果如下：</p>
+
+<pre><code class="language-c">无符号输出：a=0100, b=0xffffffff, c=720
+有符号输出(只能以十进制形式输出)：m=177777, n=-2147483648, p=100
+</code></pre>
+
+<p>原因是：为了使硬件电路设计更简单，计算机把符号位和数值位等同起来，让他们一起参与运算，不在加以区分。加减法和合并位一种运算，就是加法运算，因为减去一个数相当于加上这个数的相反数，例如，5 - 3 等价于 5 + (-3)，10 - (-9) 等价于 10 + 9。</p>
+
+<p>然而，简化硬件电路是有代价的，这个代价就是有符号数在存储和读取时都要进行转化。</p>
+
+<h4 id="符号数在存储和读取时时的转化">符号数在存储和读取时时的转化</h4>
+
+<p><strong>原码：</strong>将一个整数转换成二进制形式，就是其原码。</p>
+
+<p><strong>反码：</strong></p>
+
+<ul>
+<li>正数的反码：反码就是其原码（原码和反码相同）</li>
+<li>负数的反码：原码中除符号位以外的所有位（数值位）取反，也就是 0 变成 1，1 变成 0。</li>
+</ul>
+
+<p><strong>补码：</strong></p>
+
+<ul>
+<li>正数的补码：补码就是其原码（原码、反码、补码都相同）</li>
+<li>负数的补码：其反码加 1。</li>
+</ul>
+
+<p>例如<code>short a = 6;</code>，a 的原码、反码、补码都是<code>0000 0000 0000 0110</code>；更改 a 的值<code>a = -18;</code>，此时 a 的反码是<code>1111 1111 1110 1101</code>，补码是<code>1111 1111 1110 1110</code></p>
+
+<p>可以认为，补码是在反码的基础上打了一个补丁，进行了一下修正，所以叫“补码”。</p>
+
+<p>6 和 -18 从原码到补码的转换过程：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2019-12/1121446295-0.jpg" alt="" /></p>
+
+<p><font color="red">在计算机内存中，整数一律采用补码的形式来存储。这意味着，当读取整数时还要采用逆向的转换，也就是将补码转换为原码。</font>将补码转换为原码也很简单：先减去 1，再将数值位取反即可。</p>
+
+<h5 id="补码到底是如何简化硬件电路的">补码到底是如何简化硬件电路的</h5>
+
+<p>假设 6 和 18 都是 short 类型的，现在我们要计算 6 - 18 的结果，根据运算规则，它等价于 6 + (-18)。</p>
+
+<pre><code>6 - 18 = 6 + (-18)
+= [0000 0000 0000 0110]原 + [1000 0000 0001 0010]原
+= [1000 0000 0001 1000]原
+= -24
+</code></pre>
+
+<p>直接用原码表示整数，让符号位也参与运算，对于类似上面的减法来说，结果显然是不正确的。</p>
+
+<pre><code>6 - 18 = 6 + (-18)
+= [0000 0000 0000 0110]反 + [1111 1111 1110 1101]反
+= [1111 1111 1111 0011]反
+= [1000 0000 0000 1100]原
+= -12
+</code></pre>
+
+<p>这样一来，计算结果就正确了。</p>
+
+<pre><code>18 - 6 = 18 + (-6)
+= [0000 0000 0001 0010]反 + [1111 1111 1111 1001]反
+= [&lt;font color=&quot;bule&quot;&gt;**1**&lt;/font&gt; 0000 0000 0000 1011]反
+= [0000 0000 0000 1011]反
+= [0000 0000 0000 1011]原
+= 11
+</code></pre>
+
+<p>按照反码计算的结果是 11，而真实的结果应该是 12 才对，它们相差了 1。</p>
+
+<blockquote>
+<p>蓝色的 <font color="bule"><strong>1</strong></font> 是加法运算过程中的进位，它溢出了，内存容纳不了了，所以直接截掉。</p>
+</blockquote>
+
+<p>6 - 18 的结果正确，18 - 6 的结果就不正确，相差 1。按照反码来计算，是不是小数减去大数正确，大数减去小数就不对了，始终相差 1 呢？我们不妨再看两个例子，分别是 5 - 13 和 13 - 5。</p>
+
+<pre><code>5 - 13 = 5 + (-13)
+= [0000 0000 0000 0101]原 + [1000 0000 0000 1101]原
+=  [0000 0000 0000 0101]反 + [1111 1111 1111 0010]反
+= [1111 1111 1111 0111]反
+= [1000 0000 0000 1000]原
+= -8
+</code></pre>
+
+<p>13 - 5 的运算过程为：</p>
+
+<pre><code>13 - 5 = 13 + (-5)
+= [0000 0000 0000 1101]原 + [1000 0000 0000 0101]原
+= [0000 0000 0000 1101]反 + [1111 1111 1111 1010]反
+= [&lt;font color=&quot;bule&quot;&gt;**1**&lt;/font&gt; 0000 0000 0000 0111]反 
+= [0000 0000 0000 0111]反
+= [0000 0000 0000 0111]原
+= 7
+</code></pre>
+
+<p>这足以证明，刚才的猜想是正确的：小数减去大数不会有问题，而大数减去小数的就不对了，结果始终相差 1。</p>
+
+<pre><code>6 - 18 = 6 + (-18)
+= [0000 0000 0000 0110]补 + [1111 1111 1110 1110]补
+= [1111 1111 1111 0100]补
+=  [1111 1111 1111 0011]反
+= [1000 0000 0000 1100]原
+= -12
+
+18 - 6 = 18 + (-6)
+= [0000 0000 0001 0010]补 + [1111 1111 1111 1010]补
+= [&lt;font color=&quot;bule&quot;&gt;**1**&lt;/font&gt; 0000 0000 0000 1100]补
+= [0000 0000 0000 1100]补
+= [0000 0000 0000 1100]反
+= [0000 0000 0000 1100]原
+= 12
+
+5 - 13 = 5 + (-13)
+=  [0000 0000 0000 0101]补 + [1111 1111 1111 0011]补
+= [1111 1111 1111 1000]补
+= [1000 1111 1111 0111]反
+= [1000 0000 0000 1000]原
+= -8
+
+13 - 5 = 13 + (-5)
+= [0000 0000 0000 1101]补 + [1111 1111 1111 1011]补
+= [&lt;font color=&quot;bule&quot;&gt;**1**&lt;/font&gt; 0000 0000 0000 1000]补 
+= [0000 0000 0000 1000]补
+= [0000 0000 0000 1000]反
+= [0000 0000 0000 1000]原
+= 8
+</code></pre>
+
+<p>采用补码的形式正好把相差的 1 纠正过来，也没有影响到小数减去大数</p>
+
+<h5 id="实际分析">实际分析</h5>
+
+<p>回到上次的案例：</p>
+
+<pre><code class="language-c">    #include &lt;stdio.h&gt;
+    int main()
+    {
+        short a = 0100;  //八进制
+        int b = -0x1;  //十六进制
+        long c = 720;  //十进制
+      
+        unsigned short m = 0xffff;  //十六进制
+        unsigned int n = 0x80000000;  //十六进制
+        unsigned long p = 100;  //十进制
+      
+        //以无符号的形式输出有符号数
+        printf(&quot;a=%#ho, b=%#x, c=%ld\n&quot;, a, b, c);
+        //以有符号数的形式输出无符号类型（只能以十进制形式输出）
+        printf(&quot;m=%hd, n=%d, p=%ld\n&quot;, m, n, p);
+        return 0;
+    }
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code class="language-bash">无符号输出：a=0100, b=0xffffffff, c=720
+有符号输出(只能以十进制形式输出)：m=177777, n=-2147483648, p=100
+</code></pre>
+
+<p>其中，b、m、n 的输出结果看起来非常奇怪。</p>
+
+<p>b 是有符号数，它在内存中的存储形式（也就是补码）为：</p>
+
+<pre><code>b = -0x1
+= [1000 0000 …… 0000 0001]原
+= [1111 1111 …… 1111 1110]反
+= [1111 1111 …… 1111 1111]补
+= [0xffffffff]补
+</code></pre>
+
+<p><code>%#x</code>表示以无符号的形式输出，而无符号数的补码和原码相同，所以不用转换了，直接输出 0xffffffff 即可。</p>
+
+<pre><code>m = 0xffff
+= [1111 1111 1111 1111]补
+
+n = 0x80000000
+= [1000 0000 …… 0000 0000]补
+</code></pre>
+
+<p><code>%hd</code>和表示以有符号的形式输出，所以还要经过一个逆向的转换过程：  由此可见，-1 和 -2147483648 才是最终的输出值。</p>
+
+<p><font color="red">注意，<code>[1000 0000 …… 0000 0000]补</code>是一个特殊的补码，无法按照本节讲到的方法转换为原码，所以计算机直接规定这个补码对应的值就是 -231</font></p>
+
+<p>参考：<a href="http://c.biancheng.net/view/1761.html">http://c.biancheng.net/view/1761.html</a></p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E8%BE%93%E5%87%BA%E6%B1%87%E6%80%BB/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>C语言学习 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        C语言学习</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                C语言学习</h1>
+                <div class="stuff">
+                    
+                    <span>December 15, 2019</span>
+                    <span>字数 1578</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h2 id="示例">示例</h2>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;			//包含标准输入输出头文件
+//standared input output header   标准输入输出头文件
+void main()
+{
+	char ch = 'a';
+	printf(&quot;ASCII码：%d\n 字符: %c\n 大小写之分只有一个空格：%c\n大小写之分或者直接减去空格的ASCII码:%c\n&quot;,ch,ch,ch-' ',ch-32);
+	int num1 = 10;
+	int num2;
+	num2 = 8;
+	printf(&quot;%d口心思，思君思国思社稷。\n%d 目共赏，赏花赏月赏秋香。\n&quot;,num1,num2);
+	
+	float width = 2.5f;		//float类型变量赋值时需要在数值末尾加&quot;f&quot;
+	float height = 4.35f;
+	float s = width * height;
+	printf(&quot;面积是: %f\n&quot;,s);		//float类型的占位符是&quot;%f&quot;
+	printf(&quot;面积是: %.2f\n&quot;, s);		//%.2可以控制数字的显示精度，表示只显示小数点后面2位。
+
+	printf(&quot;\nHello World!%d\n&quot;,	 //C程序的语句可以跨越多行，使用分号通知编译器该语句已结束
+	3
+	);
+}
+</code></pre>
+
+<ul>
+<li>以 # 开头的语句成为预处理器指令</li>
+<li>#include 语句不是必须的，但是如果程序中有该语句，就必须将他放在程序的开始处</li>
+<li>以 .h 为后缀的文件为头文件。可以是标准库中的头文件，也可以是自定义库文件</li>
+<li>stdio.h 文件中包含了输入输出语句的函数</li>
+<li>main() 函数可以返回一个值，也可以不反悔值。如果某个函数没有返回值，那么在它前面就是关键字 void</li>
+<li>return 0  没有错误退出；非0为有错误退出</li>
+</ul>
+
+<h2 id="内存如何存放数据">内存如何存放数据</h2>
+
+<p>计算机执行程序时，组成程序的指令和程序所操作的数据都必须存放在内存中。也称为主存(main memory)或随机访问存储器(Random Access Memory,RAM)</p>
+
+<p>变量是计算机中一块特定的内存空间</p>
+
+<ul>
+<li>由一个或多个连续的字节组成</li>
+<li>通过变量名可以简单快速地找到在内存中存储的数据</li>
+<li>C语言变量命名规则
+
+<ul>
+<li>C语言规定变量名(标识符)只能由字母丶数字和下划线3种字符组成，且第一个字符必须为字母或下划线</li>
+<li>变量名不能包含除<code>_</code>以外的任何特殊字符，如：%，#，逗号，空格等</li>
+<li>不可以使用保留字(32个保留字)</li>
+</ul></li>
+</ul>
+
+<h3 id="数据类型">数据类型</h3>
+
+<p>下表列出了关于标准整数类型的存储大小和值范围的细节：</p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存储大小</th>
+<th>值范围</th>
+<th>占位符</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>char</td>
+<td>1 字节</td>
+<td>有符号 -128 到 127 或 0 到 255 实际上为ASCII码</td>
+<td>%c</td>
+</tr>
+
+<tr>
+<td>unsigned char</td>
+<td>1 字节</td>
+<td>无符号 0 到 255</td>
+<td></td>
+</tr>
+
+<tr>
+<td>signed char</td>
+<td>1 字节</td>
+<td>-128 到 127</td>
+<td></td>
+</tr>
+
+<tr>
+<td>int</td>
+<td>2 或 4 字节</td>
+<td>-32,768 到 32,767 或 -2,147,483,648 到 2,147,483,647</td>
+<td></td>
+</tr>
+
+<tr>
+<td>unsigned int</td>
+<td>2 或 4 字节</td>
+<td>0 到 65,535 或 0 到 4,294,967,295</td>
+<td></td>
+</tr>
+
+<tr>
+<td>short</td>
+<td>2 字节</td>
+<td>-32,768 到 32,767</td>
+<td></td>
+</tr>
+
+<tr>
+<td>unsigned short</td>
+<td>2 字节</td>
+<td>0 到 65,535</td>
+<td></td>
+</tr>
+
+<tr>
+<td>long</td>
+<td>4 字节</td>
+<td>-2,147,483,648 到 2,147,483,647</td>
+<td></td>
+</tr>
+
+<tr>
+<td>unsigned long</td>
+<td>4 字节</td>
+<td>0 到 4,294,967,295</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>下表列出了关于标准浮点类型的存储大小、值范围和精度的细节：</p>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>存储大小</th>
+<th>值范围</th>
+<th>精度</th>
+<th>占位符</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>float</td>
+<td>4 字节</td>
+<td>1.2E-38 到 3.4E+38</td>
+<td>6 位小数</td>
+<td>%f</td>
+</tr>
+
+<tr>
+<td>double</td>
+<td>8 字节</td>
+<td>2.3E-308 到 1.7E+308</td>
+<td>15 位小数</td>
+<td>%lf</td>
+</tr>
+
+<tr>
+<td>long double</td>
+<td>16 字节</td>
+<td>3.4E-4932 到 1.1E+4932</td>
+<td>19 位小数</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="printf函数和转换字符">printf函数和转换字符</h3>
+
+<p>整数如下表所示：</p>
+
+<table>
+<thead>
+<tr>
+<th>转化字符</th>
+<th>输出</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>%d或%i</td>
+<td>整数的参数会被转成有符号的十进制数字</td>
+</tr>
+
+<tr>
+<td>%u</td>
+<td>整数的参数会被转成无符号的十进制数字</td>
+</tr>
+
+<tr>
+<td>%o</td>
+<td>整数的参数会被转成无符号的八进制数字</td>
+</tr>
+
+<tr>
+<td>%x</td>
+<td>整数的参数会被转成无符号的十六进制数字，并以小写abcdef 表示</td>
+</tr>
+
+<tr>
+<td>%X</td>
+<td>整数的参数会被转成无符号的十六进制数字，并以大写ABCDEF 表示浮点型数</td>
+</tr>
+
+<tr>
+<td>%f</td>
+<td>double  型的参数会被转成十进制数字，并取到小数点以下六位，四舍五入</td>
+</tr>
+
+<tr>
+<td>%e</td>
+<td>double  型的参数以指数形式打印，有一个数字会在小数点前，六位数字在小数点后，而在指数部分会以小写的e 来表示</td>
+</tr>
+
+<tr>
+<td>%E</td>
+<td>与%e 作用相同，唯一区别是指数部分将以大写的E 来表示</td>
+</tr>
+
+<tr>
+<td>%g</td>
+<td>double  型的参数会自动选择以%f 或%e 的格式来打印，其标准是根据打印的数值及所设置的有效位数来决定。</td>
+</tr>
+
+<tr>
+<td>%G</td>
+<td>与%g 作用相同，唯一区别在以指数形态打印时会选择%E 格式。</td>
+</tr>
+</tbody>
+</table>
+
+<p>字符及字符串</p>
+
+<table>
+<thead>
+<tr>
+<th>转化字符</th>
+<th>输出</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>%c</td>
+<td>整型数的参数会被转成unsigned char 型打印出</td>
+</tr>
+
+<tr>
+<td>%s</td>
+<td>指向字符串的参数会被逐字输出，直到出现NULL 字符为止</td>
+</tr>
+
+<tr>
+<td>%p</td>
+<td>如果是参数是&rdquo;void *&ldquo;型指针则使用十六进制格式显示</td>
+</tr>
+
+<tr>
+<td>%%</td>
+<td>打印一个%</td>
+</tr>
+</tbody>
+</table>
+
+<p>转义序列</p>
+
+<table>
+<thead>
+<tr>
+<th>转化字符</th>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>\a</td>
+<td>蜂鸣警报</td>
+<td>在一些系统种警报不起作用</td>
+</tr>
+
+<tr>
+<td>\b</td>
+<td>退格</td>
+<td>将光标会退一格</td>
+</tr>
+
+<tr>
+<td>\f</td>
+<td>换页</td>
+<td>将光标移到下一页开始处</td>
+</tr>
+
+<tr>
+<td>\n</td>
+<td>换行</td>
+<td>将光标移到下一页开始处</td>
+</tr>
+
+<tr>
+<td>\r</td>
+<td>回车</td>
+<td>将光标移到当前行开始处</td>
+</tr>
+
+<tr>
+<td>\t</td>
+<td>水平制表</td>
+<td>将光标移到下一个水平指标位置</td>
+</tr>
+
+<tr>
+<td>\v</td>
+<td>垂直制表</td>
+<td>将光标移到下一个垂直指标位置</td>
+</tr>
+
+<tr>
+<td>\&rsquo;</td>
+<td>单引号</td>
+<td></td>
+</tr>
+
+<tr>
+<td>\&rdquo;</td>
+<td>双引号</td>
+<td></td>
+</tr>
+
+<tr>
+<td>\?</td>
+<td>问号</td>
+<td></td>
+</tr>
+
+<tr>
+<td>\</td>
+<td>反斜线</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E7%AC%A6%E5%8F%B7%E4%B8%8E%E8%BF%9B%E5%88%B6/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+
