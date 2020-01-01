@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang数组2 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang数组2</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang数组2</h1>
+                <div class="stuff">
+                    
+                    <span>January 1, 2020</span>
+                    <span>字数 3374</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="数组是静态的-不能插入或删除元素">数组是静态的，不能插入或删除元素</h1>
+
+<p>在C语言中，数组一旦被定义后，占用的内存空间就是固定的，容量就是不可改变的，既不能在任何位置插入元素，也不能在任何位置删除元素，只能读取和修改元素，我们将这样的数组称为静态数组。</p>
+
+<p>反过来说，如果数组在定义后可以改变容量，允许在任意位置插入或者删除元素，那么这样的数组称为动态数组。</p>
+
+<p>PHP、JavaScript 等解释型的脚本语言一般都支持动态数组，而 C、C++ 等编译型的语言一般不支持动态数组。</p>
+
+<p><font color="red">总之，C语言中的数组是静态的，一旦定义后长度就不能改变了，要注意这一点，不要尝试去插入或删除元素。</font></p>
+
+<p>下面的代码演示了数组元素的插入和删除操作：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void display_array(int arr[],int len){
+    int i;
+    for(i=0;i&lt;len;i++){
+        printf(&quot;%d &quot;,arr[i]);
+    }
+    printf(&quot;\n&quot;);
+}
+
+int main()
+{
+    int nums[10]={1,2,3,4,5,6,7,8,9,10};
+    int nums_new1[9];
+    int nums_new2[11];
+    int i;
+
+    //删除nums第6个元素
+    for(i=0;i&lt;10;i++){
+        if(i&lt;6){
+            nums_new1[i]=nums[i];
+        }else if(i&gt;6){
+            nums_new1[i-1]=nums[i];
+        }
+    }
+    display_array(nums_new1,9);
+
+    //在nums第6个元素后面插入一个整数 55
+    for(i=0;i&lt;10;i++){
+        if(i&lt;7){
+            nums_new2[i]=nums[i];
+        }else if(i&gt;7){
+            nums_new2[i+1]=nums[i];
+        }else{
+            nums_new2[i]=55;
+            nums_new2[i+1]=nums[i];
+        }
+    }
+    display_array(nums_new2,11);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">1 2 3 4 5 6 8 9 10 
+1 2 3 4 5 6 7 55 8 9 10 
+</code></pre>
+
+<h2 id="c语言数组为什么是静态的">C语言数组为什么是静态的</h2>
+
+<p>不能插入和删除数组元素有时候会非常麻烦，比如一个数组保存了某个班级的学生学号，现在有一名学生退学了，就得把 TA 从数组中剔除，但是C语言并不支持这么做，这就给编程带来了不小的麻烦。</p>
+
+<p>数组元素都是紧挨着排布的，中间没有空隙，不管是插入元素还是删除元素，都得移动该元素后面的内存：</p>
+
+<ul>
+<li>在第 i 个元素后面插入一个新元素时，第 i 个元素后面的所有元素都要往后移动一个元素的位置，从而给新元素腾出位置来。如果该数组后面紧跟的是其它有用数据，那么为了防止覆盖有用数据，还不敢直接往后移动元素，必须得重新开辟一块内存，把所有的元素都复制过去。</li>
+<li>删除第 i 个元素就比较简单了，不管三七二十一，把第 i 个元素后面的所有元素都向前移动即可。</li>
+</ul>
+
+<p>插入和删除数组元素都要移动内存，甚至重新开辟一块内存，这是相当消耗资源的。如果一个程序中有大量的此类操作，那么程序的性能将堪忧，这有悖于「C语言非常高效」的初衷，所以C语言并不支持动态数组。</p>
+
+<h1 id="数组越界">数组越界</h1>
+
+<p>C语言数组是静态的，不能自动扩容，当下标小于零或大于等于数组长度时，就发生了<font color="bule">越界（Out Of Bounds）</font>，访问到数组以外的内存。如果下标小于零，就会发生<font color="bule">下限越界（Off Normal Lower）</font>；如果下标大于等于数组长度，就会发生<font color="bule">上限越界（Off Normal Upper）</font>。</p>
+
+<p><font color="red">C语言为了提高效率，保证操作的灵活性，并不会对越界行为进行检查，即使越界了，也能够正常编译，只有在运行期间才可能会发生问题。</font></p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int a[3] = {10, 20, 30}, i;
+    for(i=-2; i&lt;=4; i++){
+        printf(&quot;a[%d]=%d\n&quot;, i, a[i]);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">a[-2]=39
+a[-1]=0
+a[0]=10
+a[1]=20
+a[2]=30
+a[3]=3
+a[4]=11870896
+</code></pre>
+
+<p>越界访问的数组元素的值都是不确定的，没有实际的含义，因为数组之外的内存我们并不知道是什么，可能是其它变量的值，可能是函数参数，可能是一个地址，这些都是不可控的。</p>
+
+<p>当发生数组越界时，如果我们对该内存有使用权限，那么程序将正常运行，但会出现不可控的结果（如上例所示）；如果我们对该内存没有使用权限，或者该内存压根就没有被分配，那么程序将会崩溃。请看下面的例子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int a[3];
+    printf(&quot;%d&quot;, a[10000]);
+    return 0;
+}
+</code></pre>
+
+<p>windows下gcc编译运行如下：</p>
+
+<pre><code class="language-bash">c:\&gt;7.exe
+29329
+c:\&gt;7.exe
+
+c:\&gt;7.exe
+
+c:\&gt;7.exe
+
+c:\&gt;7.exe
+
+</code></pre>
+
+<p>vs2019编译运行报错：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200101202104.png" alt="" /></p>
+
+<p>每个程序能使用的内存都是有限的，该程序要访问 4*10000 字节处的内存，显然太远了，超出了程序的访问范围。这个地方的内存可能没有被分配，可能是系统本身占用的内存，可能是其它数据的内存，如果放任这种行为，将带来非常危险的后果，操作系统只能让程序停止运行。</p>
+
+<h1 id="数组溢出">数组溢出</h1>
+
+<p>当赋予数组的元素个数超过数组长度时，就会发生<font color="bule">溢出（Overflow）</font>。如下所示：</p>
+
+<pre><code class="language-c">int a[3] = {1, 2, 3, 4, 5};
+</code></pre>
+
+<p>数组长度为3，初始化时却赋予5个元素，超出了数组容量，所以只能保存前3个元素，后面的元素被丢弃。</p>
+
+<p>一般情况下数组溢出不会有什么问题，顶多是丢失多余的元素。但是当以字符串的形式输出字符数组时，就会产生不可控的情况，请看下面的代码：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    char str[10] = &quot;https://www.baidu.com&quot;;
+    puts(str);
+    return 0;
+}
+</code></pre>
+
+<p>gcc编译运行如下：</p>
+
+<pre><code class="language-bash">7.c: In function 'main':
+7.c:4:20: warning: initializer-string for array of chars is too long
+     char str[10] = &quot;https://www.baidu.com&quot;;
+                    ^~~~~~~~~~~~~~~~~~~~~~~
+https://ww
+</code></pre>
+
+<p>vs2019编译运行如下：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200101202513.png" alt="" /></p>
+
+<p>字符串的长度大于数组长度，数组只能容纳字符串的前面一部分，也就是<code>&quot;http://c.b&quot;</code>，即使编译器在最后添加了<code>'\0'</code>，它也保存不到数组里面，所以 printf() 扫描数组时不会遇到结束符<code>'\0'</code>，只能继续向后扫描。而后面内存中的数据我们不知道是什么，字符能否识别，何时遇到<code>'\0'</code>，这些都是不确定的。当字符无法识别时，就会出现乱码，显示奇怪的字符。</p>
+
+<p><font color="red">由此可见，在用字符串给字符数组赋值时，要保证数组长度大于字符串长度，以容纳结束符<code>'\0'</code>。</font></p>
+
+<h1 id="变长数组-使用变量指明数组的长度">变长数组：使用变量指明数组的长度</h1>
+
+<p>目前经常使用的C语言有三个版本，分别是 C89、C99 和 C11。C89（也称 ANSI  C）是较早的版本，也是最经典的版本，国内大学几乎都是以该版本为基础进行授课。C99 和 C11 是后来对 C89  的升级，增添了一些新内容（不多），语法更加灵活了，同时兼容 C89。</p>
+
+<p>各种编译器都能很好地支持 C89 标准，但对 C99 的支持却不同：开源组织的 GCC 和 Xcode 使用的 LLVM/Clang
+已经支持了大部分（几乎全部）的 C99 标准，而微软的 VC、VS 对 C99 却不感兴趣，直到后来的 VS2013、VS2015、VS2017
+才慢慢支持，而且支持得还不好。</p>
+
+<p>C89 和 C99 对数组做出了不同的规定：</p>
+
+<ul>
+<li>在 C89 中，必须使用常量表达式指明数组长度；也就是说，数组长度中不能包含变量，不管该变量有没有初始化。</li>
+<li>而在 C99 中，可以使用变量指明数组长度。</li>
+</ul>
+
+<p>下面的代码使用常量表达式指明数组长度，在任何编译器下都能编译通过：</p>
+
+<pre><code class="language-c">int a[10];  //长度为10
+int b[3*5];  //长度为15
+int c[4+8];  //长度为12
+</code></pre>
+
+<p>下面的代码使用变量指明数组长度，在 GCC 和 Xcode 下能够编译通过，而在 VC 和 VS（包括 VC 6.0、VS2010、VS2013、VS2015、VS2017 等）下都会报错：</p>
+
+<pre><code class="language-c">int m = 10, n;
+scanf(&quot;%d&quot;, &amp;n);
+int a[m], b[n];
+</code></pre>
+
+<p>有时数组的长度不能提前确定，如果这个变化范围小，那么使用常量表达式定义一个足够大的数组就可以，如果这个变化范围很大，就可能会浪费内存，这时就可以使用变长数组。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int n;
+    printf(&quot;Input string length: &quot;);
+    scanf(&quot;%d&quot;,&amp;n);
+    scanf(&quot;%*[^\n]&quot;); scanf(&quot;%*c&quot;);  //清空输入缓冲区
+    char str[n];
+    printf(&quot;Input a string: &quot;);
+    gets(str);
+    puts(str);
+    return 0;
+}
+</code></pre>
+
+<p>运行如下：</p>
+
+<pre><code class="language-bash">c:\&gt;8.exe
+Input string length: 10↙
+Input a string: test↙
+test
+</code></pre>
+
+<p>变量的值在编译期间并不能确定，只有等到程序运行后，根据计算结果才能知道它的值到底是什么，所以数组长度中一旦包含了变量，那么数组长度在编译期间就不能确定了，也就不能为数组分配内存了，只有等到程序运行后，得到了变量的值，确定了具体的长度，才能给数组分配内存，我们将这样的数组称为<font color="bule">变长数组(VLA, Variable Length Array)</font>。</p>
+
+<p>普通数组（固定长度的数组）是在编译期间分配内存的，而变长数组是在运行期间分配内存的。</p>
+
+<p><strong>变长数组仍然是静态数组</strong></p>
+
+<p>注意，变长数组是说数组的长度在<strong>定义之前</strong>可以改变，一旦定义了，就不能再改变了，所以变长数组的容量也是不能扩大或缩小的，它仍然是静态数组。以上面的代码为例，第 8 行代码是数组定义，此时就确定了数组的长度，在此之前长度可以随意改变，在此之后长度就固定了。</p>
+
+<h1 id="对数组元素进行排序-冒泡排序法">对数组元素进行排序（冒泡排序法）</h1>
+
+<p>对数组元素进行排序的方法有很多种，比如冒泡排序、归并排序、选择排序、插入排序、快速排序等，其中最经典最需要掌握的是「冒泡排序」。</p>
+
+<p>以从小到大排序为例，冒泡排序的整体思想是这样的：</p>
+
+<ul>
+<li>从数组头部开始，不断比较相邻的两个元素的大小，让较大的元素逐渐往后移动（交换两个元素的值），直到数组的末尾。经过第一轮的比较，就可以找到最大的元素，并将它移动到最后一个位置。</li>
+<li>第一轮结束后，继续第二轮。仍然从数组头部开始比较，让较大的元素逐渐往后移动，直到数组的倒数第二个元素为止。经过第二轮的比较，就可以找到次大的元素，并将它放到倒数第二个位置。</li>
+<li>以此类推，进行 n-1（n 为数组长度）轮“冒泡”后，就可以将所有的元素都排列好。</li>
+</ul>
+
+<p>具体的代码实现如下所示：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main()
+{
+    int nums[10]={4,5,2,9,8,10,6,1,3,7};
+    int i,j,temp;
+
+    for(i=0;i&lt;10-1;i++){
+        for(j=0;j&lt;10-1-i;j++){
+            if(nums[j]&gt;nums[j+1]){
+                temp=nums[j];
+                nums[j]=nums[j+1];
+                nums[j+1]=temp;
+            }
+        }
+    }
+
+    for(i=0;i&lt;10;i++){
+        printf(&quot;%d&quot;,nums[i]);
+    }
+    printf(&quot;\n&quot;);
+
+    return 0;
+}
+</code></pre>
+
+<h2 id="优化算法">优化算法</h2>
+
+<p>上面的算法是大部分教材中提供的算法，其中有一点是可以优化的：当比较到第 i 轮的时候，如果剩下的元素已经排序好了，那么就不用再继续比较了，跳出循环即可，这样就减少了比较的次数，提高了执行效率。</p>
+
+<p>未经优化的算法一定会进行 n-1 轮比较，经过优化的算法最多进行 n-1 轮比较，高下立判。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+    int nums[10]={4,5,2,9,8,10,6,1,3,7};
+    int i, j, temp, isSorted;
+    
+    //优化算法：最多进行 n-1 轮比较
+    for(i=0; i&lt;10-1; i++){
+        isSorted = 1;  //假设剩下的元素已经排序好了
+        for(j=0; j&lt;10-1-i; j++){
+            if(nums[j] &gt; nums[j+1]){
+                temp = nums[j];
+                nums[j] = nums[j+1];
+                nums[j+1] = temp;
+                isSorted = 0;  //一旦需要交换数组元素，就说明剩下的元素没有排序好
+            }
+        }
+        if(isSorted) break; //如果没有发生交换，说明剩下的元素已经排序好了
+    }
+    for(i=0; i&lt;10; i++){
+        printf(&quot;%d &quot;, nums[i]);
+    }
+    printf(&quot;\n&quot;);
+    
+    return 0;
+}
+</code></pre>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/" rel="prev">上一篇</a>
+                    
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

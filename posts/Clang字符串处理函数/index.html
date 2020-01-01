@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang字符串处理函数 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang字符串处理函数</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang字符串处理函数</h1>
+                <div class="stuff">
+                    
+                    <span>January 1, 2020</span>
+                    <span>字数 905</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p>C语言提供了丰富的字符串处理函数，可以对字符串进行输入、输出、合并、修改、比较、转换、复制、搜索等操作，使用这些现成的函数可以大大减轻我们的编程负担。</p>
+
+<p>用于输入输出的字符串函数，例如<code>printf</code>、<code>puts</code>、<code>scanf</code>、<code>gets</code>等，使用时要包含头文件<code>stdio.h</code>，而使用其它字符串函数要包含头文件<code>string.h</code>。</p>
+
+<p><code>string.h</code>是一个专门用来处理字符串的头文件，它包含了很多字符串处理函数，由于篇幅限制，本节只能讲解几个常用的，有兴趣的请<a href="http://www.cplusplus.com/reference/cstring/">猛击这里</a>查阅所有函数。</p>
+
+<h2 id="字符串连接函数-strcat">字符串连接函数 strcat()</h2>
+
+<p>strcat 是 string catenate 的缩写，意思是把两个字符串拼接在一起，语法格式为：</p>
+
+<pre><code class="language-c">strcat(arrayName1, arrayName2);
+</code></pre>
+
+<p>arrayName1、arrayName2 为需要拼接的字符串。</p>
+
+<p>strcat() 将把 arrayName2 连接到 arrayName1 后面，并删除原来 arrayName1 最后的结束标志<code>'\0'</code>。这意味着，arrayName1 必须足够长，要能够同时容纳 arrayName1 和 arrayName2，否则会越界（超出范围）。</p>
+
+<p>strcat() 的返回值为 arrayName1 的地址。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char str1[100]=&quot;The URL is : &quot;;
+    char str2[60];
+    printf(&quot;Input a url: &quot;);
+    gets(str2);
+    strcat(str1,str2);
+    puts(str1);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code class="language-bash">c:\&gt;strcat.exe
+Input a url: https://www.baidu.com↙
+The URL is : https://www.baidu.com
+</code></pre>
+
+<h2 id="字符串复制函数-strcpy">字符串复制函数 strcpy()</h2>
+
+<p>strcpy 是 string copy 的缩写，意思是字符串复制，也即将字符串从一个地方复制到另外一个地方，语法格式为：</p>
+
+<pre><code class="language-c">strcpy(arrayName1, arrayName2);
+</code></pre>
+
+<p>strcpy() 会把 arrayName2 中的字符串拷贝到 arrayName1 中，字符串结束标志<code>'\0'</code>也一同拷贝。</p>
+
+<p>strcpy() 要求 arrayName1 要有足够的长度，否则不能全部装入所拷贝的字符串。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char str1[50]=&quot;The URL is : &quot;;
+    char str2[50]=&quot;https://www.baidu.com&quot;;
+    strcpy(str1,str2);
+    puts(str1);
+    return 0;
+}
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code class="language-bash">https://www.baidu.com
+</code></pre>
+
+<p>str2 复制到 str1 后，str1 中原来的内容就被覆盖了。</p>
+
+<h2 id="字符串比较函数-strcmp">字符串比较函数 strcmp()</h2>
+
+<p>strcmp 是 string compare 的缩写，意思是字符串比较，语法格式为：</p>
+
+<pre><code class="language-c">strcmp(arrayName1, arrayName2);
+</code></pre>
+
+<p>arrayName1 和 arrayName2 是需要比较的两个字符串。</p>
+
+<p>字符本身没有大小之分，strcmp() 以各个字符对应的 ASCII 码值进行比较。strcmp() 从两个字符串的第 0 个字符开始比较，如果它们相等，就继续比较下一个字符，直到遇见不同的字符，或者到字符串的末尾。</p>
+
+<p>返回值：若 arrayName1 和 arrayName2 相同，则返回0；若 arrayName1 大于 arrayName2，则返回大于 0 的值；若 arrayName1 小于 arrayName2，则返回小于0 的值。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+int main()
+{
+    char a[]=&quot;aBcDeF&quot;;
+    char b[]=&quot;AbCdEf&quot;;
+    char c[]=&quot;abcdef&quot;;
+    char d[]=&quot;aBcDef&quot;;
+    printf(&quot;a VS b: %d\n&quot;,strcmp(a,b));
+    printf(&quot;a VS c: %d\n&quot;,strcmp(a,c));
+    printf(&quot;a VS d: %d\n&quot;,strcmp(a,d));
+
+    return 0;
+}
+</code></pre>
+
+<p>windows下输出结果：</p>
+
+<pre><code class="language-bash">a VS b: 1
+a VS c: -1
+a VS d: -1
+</code></pre>
+
+<p>Linux下输出结果：</p>
+
+<pre><code class="language-bash">a VS b: 32
+a VS c: -32
+a VS d: -32
+</code></pre>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%841/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%842/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang数组1 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang数组1</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang数组1</h1>
+                <div class="stuff">
+                    
+                    <span>January 1, 2020</span>
+                    <span>字数 3877</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="数组">数组</h1>
+
+<h2 id="二维数组">二维数组</h2>
+
+<p>二维数组的初始化可以按行分段赋值，也可按行连续赋值。</p>
+
+<p>例如，对于数组 <code>a[5][3]</code>，按行分段赋值应该写作：</p>
+
+<pre><code>int a[5][3]={ {80,75,92}, {61,65,71}, {59,63,70}, {85,87,90}, {76,77,85} };
+</code></pre>
+
+<p>按行连续赋值应该写作：</p>
+
+<pre><code>int a[5][3]={80, 75, 92, 61, 65, 71, 59, 63, 70, 85, 87, 90, 76, 77, 85};
+</code></pre>
+
+<p>这两种赋初值的结果是完全相同的。</p>
+
+<h3 id="对于二维数组的初始化还要注意以下几点">对于二维数组的初始化还要注意以下几点：</h3>
+
+<h4 id="可以只对部分元素赋值-未赋值的元素自动取-零-值-例如">可以只对部分元素赋值，未赋值的元素自动取“零”值。例如：</h4>
+
+<pre><code>int a[3][3] = {{1}, {2}, {3}};
+</code></pre>
+
+<p>是对每一行的第一列元素赋值，未赋值的元素的值为 0。赋值后各元素的值为：</p>
+
+<pre><code class="language-bash">1  0  0
+2  0  0
+3  0  0
+</code></pre>
+
+<p>再如：</p>
+
+<pre><code>int a[3][3] = {{0,1}, {0,0,2}, {3}};
+</code></pre>
+
+<p>赋值后各元素的值为：</p>
+
+<pre><code class="language-bash">0  1  0
+0  0  2
+3  0  0
+</code></pre>
+
+<h4 id="如果对全部元素赋值-那么第一维的长度可以不给出">如果对全部元素赋值，那么第一维的长度可以不给出</h4>
+
+<pre><code>int a[3][3] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+</code></pre>
+
+<p>可以写为：</p>
+
+<pre><code>int a[][3] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+</code></pre>
+
+<h4 id="二维数组可以看作是由一维数组嵌套而成的">二维数组可以看作是由一维数组嵌套而成的</h4>
+
+<p>如果一个数组的每个元素又是一个数组，那么它就是二维数组。当然，前提是各个元素的类型必须相同。根据这样的分析，一个二维数组也可以分解为多个一维数组，C语言允许这种分解。</p>
+
+<p>例如，二维数组<code>a[3][4]</code>可分解为三个一维数组，它们的数组名分别为 a[0]、a[1]、a[2]。</p>
+
+<p>这三个一维数组可以直接拿来使用。这三个一维数组都有 4 个元素，比如，一维数组 a[0] 的元素为 <code>a[0][0]</code>、<code>a[0][1]</code>、<code>a[0][2]</code>、<code>a[0][3]</code>。</p>
+
+<h1 id="判断数组中是否包含某个元素">判断数组中是否包含某个元素</h1>
+
+<p>C语言标准库没有提供与数组查询相关的函数，所以我们只能自己编写代码。</p>
+
+<h2 id="对无序数组的查询">对无序数组的查询</h2>
+
+<p>所谓无序数组，就是数组元素的排列没有规律。无序数组元素查询的思路也很简单，就是用循环遍历数组中的每个元素，把要查询的值挨个比较一遍</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main()
+{
+    int nums[10] = {1,10,6,296,177,23,0,100,34,999};
+    int i,num,thisindex = -1;
+    printf(&quot;Input an integer: &quot;);
+    scanf(&quot;%d&quot;,&amp;num);
+    for(i=0;i&lt;10;i++){
+        if(nums[i]==num){
+            thisindex=i;
+            break;
+        }
+    }
+    if(thisindex&lt;0){
+        printf(&quot;%d isn't in the array.\n&quot;,num);
+    }else{
+        printf(&quot;%d is in the array,it's index is %d.\n&quot;,num,thisindex);
+    }
+    return 0;
+}
+</code></pre>
+
+<h2 id="对有序数组的查询">对有序数组的查询</h2>
+
+<p>查询无序数组需要遍历数组中的所有元素，而查询有序数组只需要遍历其中一部分元素。例如有一个长度为 10
+的整型数组，它所包含的元素按照从小到大的顺序（升序）排列，假设比较到第 4 个元素时发现它的值大于输入的数字，那么剩下的 5 个元素就没必要再比较了，肯定也大于输入的数字，这样就减少了循环的次数，提高了执行效率。</p>
+
+<h1 id="字符数组和字符串详解">字符数组和字符串详解</h1>
+
+<p>用来存放字符的数组称为<font color="red">字符数组</font ></p>
+
+<pre><code>char a[10];  //一维字符数组
+char b[5][10];  //二维字符数组
+char c[20]={'c', '  ', 'p', 'r', 'o', 'g', 'r', 'a','m'};  // 给部分数组元素赋值
+char d[]={'c', ' ', 'p', 'r', 'o', 'g', 'r', 'a', 'm' };  //对全体元素赋值时可以省去长度
+</code></pre>
+
+<p>字符数组实际上是一系列字符的集合，也就是<font color="red"><strong>字符串（String）</strong></font >。在C语言中，没有专门的字符串变量，没有string类型，通常就用一个字符数组来存放一个字符串。</p>
+
+<p>C语言规定，可以将字符串直接赋值给字符数组，例如：</p>
+
+<pre><code class="language-c">char str[30] = {&quot;c.biancheng.net&quot;};
+char str[30] = &quot;c.biancheng.net&quot;;  //这种形式更加简洁，实际开发中常用
+</code></pre>
+
+<p>数组第 0 个元素为<code>'c'</code>，第 1 个元素为<code>'.'</code>，第 2 个元素为<code>'b'</code>，后面的元素以此类推。</p>
+
+<p>为了方便，可以不指定数组长度，从而写作：</p>
+
+<pre><code class="language-c">char str[] = {&quot;c.biancheng.net&quot;};
+char str[] = &quot;c.biancheng.net&quot;;  //这种形式更加简洁，实际开发中常用
+</code></pre>
+
+<p>给字符数组赋值时，我们通常使用这种写法，将字符串一次性地赋值（可以指明数组长度，也可以不指明），而不是一个字符一个字符地赋值，那样做太麻烦了。</p>
+
+<p>这里需要留意一个坑，字符数组只有在定义时才能将整个字符串一次性地赋值给它，一旦定义完了，就只能一个字符一个字符地赋值了。请看下面的例子：</p>
+
+<pre><code class="language-c">char str[7];
+str = &quot;abc123&quot;;  //错误
+//正确
+str[0] = 'a'; str[1] = 'b'; str[2] = 'c';
+str[3] = '1'; str[4] = '2'; str[5] = '3';
+</code></pre>
+
+<h1 id="字符串结束标志-划重点">字符串结束标志(划重点)</h1>
+
+<p>字符串是一系列连续的字符的组合，要想在内存中定位一个字符串，除了要知道它的开头，还要知道它的结尾。找到字符串的开头很容易，知道它的名字（字符数组名或者字符串名）就可以；然而，如何找到字符串的结尾呢？C语言的解决方案有点奇妙，或者说有点奇葩。</p>
+
+<p><font color="red">在C语言中，字符串总是以<code>'\0'</code>作为结尾，所以<code>'\0'</code>也被称为字符串结束标志，或者字符串结束符。</font></p>
+
+<blockquote>
+<p><code>'\0'</code>是 ASCII 码表中的第 0 个字符，英文称为 NUL，中文称为“空字符”。该字符既不能显示，也没有控制功能，输出该字符不会有任何效果，它在C语言中唯一的作用就是作为字符串结束标志。</p>
+</blockquote>
+
+<p>C语言在处理字符串时，会从前往后逐个扫描字符，一旦遇到<code>'\0'</code>就认为到达了字符串的末尾，就结束处理。<code>'\0'</code>至关重要，没有<code>'\0'</code>就意味着永远也到达不了字符串的结尾。</p>
+
+<p><font color="red">由<code>&quot; &quot;</code>包围的字符串会自动在末尾添加<code>'\0'</code>。</font></p>
+
+<p>需要注意的是，逐个字符地给数组赋值并不会自动添加<code>'\0'</code>，例如：</p>
+
+<pre><code class="language-c">char str[] = {'a', 'b', 'c'};
+</code></pre>
+
+<p>数组 str 的长度为 3，而不是 4，因为最后没有<code>'\0'</code>。</p>
+
+<p>当用字符数组存储字符串时，要特别注意<code>'\0'</code>，要为<code>'\0'</code>留个位置；这意味着，字符数组的长度至少要比字符串的长度大 1。请看下面的例子：</p>
+
+<pre><code class="language-c">char str[7] = &quot;abc123&quot;;
+</code></pre>
+
+<p><code>&quot;abc123&quot;</code>看起来只包含了 6 个字符，我们却将 str 的长度定义为 7，就是为了能够容纳最后的<code>'\0'</code>。如果将 str 的长度定义为 6，它就无法容纳<code>'\0'</code>了。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main()
+{
+	char str[30];
+	char c;
+	int i;
+	for (c = 65, i = 0;c &lt;= 90;c++, i++) {
+		str[i] = c;
+	}
+	printf(&quot;%s\n&quot;, str);
+	return 0;
+}
+</code></pre>
+
+<p>在 VS2019 下的运行结果：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200101192454.png" alt="" /></p>
+
+<blockquote>
+<p>乱码表示无法显示的特殊字符。</p>
+</blockquote>
+
+<p>gcc下运行结果如下：</p>
+
+<pre><code class="language-bash">ABCDEFGHIJKLMNOPQRSTUVWXYZ
+</code></pre>
+
+<p><font color="red">在函数内部定义的变量、数组、结构体、共用体等都称为局部数据。在很多编译器下，局部数据的初始值都是随机的、无意义的，而不是我们通常认为的“零”值。这一点非常重要，大家一定要谨记，否则后面会遇到很多奇葩的错误。</font></p>
+
+<p>本例在 VS2019 下的运行结果中: str 数组在定义完成以后并没有立即初始化，所以它所包含的元素的值都是随机的，只有很小的概率会是“零”值。循环结束以后，str 的前 26 个元素被赋值了，剩下的 4 个元素的值依然是随机的，不知道是什么。</p>
+
+<p>printf() 输出字符串时，会从第 0 个元素开始往后检索，直到遇见<code>'\0'</code>才停止，然后把<code>'\0'</code>前面的字符全部输出，这就是 printf() 输出字符串的原理。本例中我们使用 printf() 输出 str，按理说到了第 26 个元素就能检索到<code>'\0'</code>，就到达了字符串的末尾，然而事实却不是这样，由于我们并未对最后 4 个元素赋值，所以第 26 个元素不是<code>'\0'</code>，第 27 个也不是，第 28 个也不是……可能到了第 50 个元素才遇到<code>'\0'</code>，printf() 把这 50 个字符全部输出出来，就是上面的样子，多出来的字符毫无意义，甚至不能显示。</p>
+
+<p>数组总共才 30 个元素，到了第 50 个元素不早就超出数组范围了吗？是的，的确超出范围了！然而，数组后面依然有其它的数据，printf() 也会将这些数据作为字符串输出。</p>
+
+<p>所以如果<font color="red">不注意<code>'\0'</code>，会造成严重的后果。不但不能正确处理字符串，甚至还会毁坏其它数据</font>。</p>
+
+<p>要想避免这些问题也很容易，在字符串的最后手动添加<code>'\0'</code>即可。修改上面的代码，在循环结束后添加<code>'\0'</code>：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main() 
+{
+	char str[30];
+	char c;
+	int i;
+	for (c = 65, i = 0; c &lt;= 90; c++, i++) {
+		str[i] = c;
+	}
+	str[i] = 0;  //此处为添加的代码，也可以写作 str[i] = '\0';
+	printf(&quot;%s\n&quot;, str);
+
+	return 0;
+}
+</code></pre>
+
+<p>在 VS2019 下的运行结果：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200101192416.png" alt="" /></p>
+
+<p>但是，这样的写法貌似有点业余，或者说不够简洁，更加专业的做法是将数组的所有元素都初始化为“零”值，这样才能够从根本上避免问题。再次修改上面的代码：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200101192702.png" alt="" /></p>
+
+<h2 id="字符串长度">字符串长度</h2>
+
+<p>所谓字符串长度，就是字符串包含了多少个字符（不包括最后的结束符<code>'\0'</code>）。例如<code>&quot;abc&quot;</code>的长度是 3，而不是 4。</p>
+
+<p>在C语言中，我们使用<code>string.h</code>头文件中的 strlen() 函数来求字符串的长度，它的用法为：</p>
+
+<pre><code class="language-c">length strlen(strname);
+</code></pre>
+
+<p>下面是一个完整的例子:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;  //记得引入该头文件
+int main(){
+    char str[] = &quot;This is a test string&quot;;
+    long len = strlen(str);
+    printf(&quot;The lenth of the string is %ld.\n&quot;, len);
+    
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">The lenth of the string is 21.
+</code></pre>
+
+<h1 id="字符串的输出输入">字符串的输出输入</h1>
+
+<p>在C语言中，有两个函数可以在控制台（显示器）上输出字符串，它们分别是：</p>
+
+<ul>
+<li>puts()：输出字符串并自动换行，该函数只能输出字符串。</li>
+<li>printf()：通过格式控制符<code>%s</code>输出字符串，不能自动换行。除了字符串，printf() 还能输出其他类型的数据。</li>
+</ul>
+
+<p>在C语言中，有两个函数可以让用户从键盘上输入字符串，它们分别是：</p>
+
+<ul>
+<li>scanf()：通过格式控制符<code>%s</code>输入字符串。除了字符串，scanf() 还能输入其他类型的数据。</li>
+<li>gets()：直接输入字符串，并且只能输入字符串。</li>
+</ul>
+
+<p>但是，scanf() 和 gets() 是有区别的：</p>
+
+<ul>
+<li>scanf() 读取字符串时以空格为分隔，遇到空格就认为当前字符串结束了，所以无法读取含有空格的字符串。</li>
+
+<li><p><font color="red">gets() 认为空格也是字符串的一部分，只有遇到回车键时才认为字符串输入结束</font>，所以，不管输入了多少个空格，只要不按下回车键，对 gets() 来说就是一个完整的字符串。换句话说，gets() 用来读取一整行字符串。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+char str1[30] = {0};
+char str2[30] = {0};
+char str3[30] = {0};
+//gets() 用法
+printf(&quot;Input a string: &quot;);
+gets(str1);
+//scanf() 用法
+printf(&quot;Input a string: &quot;);
+scanf(&quot;%s&quot;, str2);		//注意：这里没有&quot;&amp;&quot;符号
+scanf(&quot;%s&quot;, str3);
+    
+printf(&quot;\nstr1: %s\n&quot;, str1);
+printf(&quot;str2: %s\n&quot;, str2);
+printf(&quot;str3: %s\n&quot;, str3);
+return 0;
+}
+</code></pre></li>
+</ul>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">c:\&gt;5.exe
+Input a string: this is a string↙
+Input a string: testing string↙
+
+str1: this is a string
+str2: testing
+str3: string
+</code></pre>
+
+<p>注意，scanf() 在读取数据时需要的是数据的地址，这一点是恒定不变的，所以对于 int、char、float 等类型的变量都要在前边添加<code>&amp;</code>以获取它们的地址。但是在本段代码中，我们只给出了字符串的名字，却没有在前边添加<code>&amp;</code>，这是为什么呢？因为字符串名字或者数组名字在使用的过程中一般都会转换为地址，所以再添加<code>&amp;</code>就是多此一举，甚至会导致错误了。</p>
+
+<p><font color="red">就目前学到的知识而言，int、char、float 等类型的变量用于 scanf() 时都要在前面添加<code>&amp;</code>，而数组或者字符串用于 scanf() 时不用添加<code>&amp;</code>，它们本身就会转换为地址。一定要谨记这一点。</font></p>
+
+<p><strong>其实 scanf() 也可以读取带空格的字符串</strong></p>
+
+<p>以上是 scanf() 和 gets() 的一般用法，很多教材也是这样讲解的，所以大部分初学者都认为 scanf()  不能读取包含空格的字符串，不能替代 gets()。其实不然，scanf() 的用法还可以更加复杂和灵活，它不但可以完全替代 gets()  读取一整行字符串，而且比 gets() 的功能更加强大。比如，以下功能都是 gets() 不具备的：</p>
+
+<ul>
+<li>scanf() 可以控制读取字符的数目；</li>
+<li>scanf() 可以只读取指定的字符；</li>
+<li>scanf() 可以不读取某些字符；</li>
+<li>scanf() 可以把读取到的字符丢弃。</li>
+</ul>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%BC%8F%E9%94%AE%E7%9B%98%E7%9B%91%E5%90%AC%E7%94%A8%E6%88%B7%E4%B8%8D%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE%E7%A8%8B%E5%BA%8F%E4%B9%9F%E8%83%BD%E7%BB%A7%E7%BB%AD%E6%89%A7%E8%A1%8C/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+
