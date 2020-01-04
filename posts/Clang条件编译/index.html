@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang条件编译 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang条件编译</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang条件编译</h1>
+                <div class="stuff">
+                    
+                    <span>January 4, 2020</span>
+                    <span>字数 2014</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="c语言-if-ifdef-ifndef的用法详解-c语言条件编译详解">C语言#if、##ifdef、#ifndef的用法详解，C语言条件编译详解</h1>
+
+<p>假如现在要开发一个C语言程序，让它输出红色的文字，并且要求跨平台，在 Windows 和 Linux下都能运行，怎么办呢？</p>
+
+<p>Windows 有专有的宏<code>_WIN32</code>，Linux 有专有的宏<code>__linux__</code>，以现有的知识，我们很容易就想到了  <code>if else</code></p>
+
+<p>请看下面的代码:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+    if(_WIN32){
+        system(&quot;color 0c&quot;);
+        printf(&quot;http://c.biancheng.net\n&quot;);
+    }else if(__linux__){
+        printf(&quot;\033[22;31mhttp://c.biancheng.net\n\033[22;30m&quot;);
+    }else{
+        printf(&quot;http://c.biancheng.net\n&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+<pre><code>
+</code></pre>
+
+<p>但这段代码是错误的，在 Windows 下提示 <strong>linux</strong> 是未定义的标识符，在 Linux 下提示 _Win32 是未定义的标识符。对上面的代码进行改进：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+    #if _WIN32
+        system(&quot;color 0c&quot;);
+        printf(&quot;http://c.biancheng.net\n&quot;);
+    #elif __linux__
+        printf(&quot;\033[22;31mhttp://c.biancheng.net\n\033[22;30m&quot;);
+    #else
+        printf(&quot;http://c.biancheng.net\n&quot;);
+    #endif
+    return 0;
+}
+</code></pre>
+
+<p>#if、#elif、#else 和 #endif 都是预处理命令，整段代码的意思是：如果宏 _WIN32 的值为真，就保留第 4、5
+行代码，删除第 7、9 行代码；如果宏 <strong>linux</strong> 的值为真，就保留第 7 行代码；如果所有的宏都为假，就保留第 9 行代码。</p>
+
+<p>这些操作都是在预处理阶段完成的，多余的代码以及所有的宏都不会参与编译，不仅保证了代码的正确性，还减小了编译后文件的体积。</p>
+
+<p>这种能够根据不同情况编译不同代码、产生不同目标文件的机制，称为条件编译。条件编译是预处理程序的功能，不是编译器的功能。</p>
+
+<h2 id="if-的用法">#if 的用法</h2>
+
+<p>#if 用法的一般格式为：</p>
+
+<pre><code class="language-c">#if 整型常量表达式1
+    程序段1
+#elif 整型常量表达式2
+    程序段2
+#elif 整型常量表达式3
+    程序段3
+#else
+    程序段4
+#endif
+</code></pre>
+
+<p>它的意思是：如常“表达式1”的值为真（非0），就对“程序段1”进行编译，否则就计算“表达式2”，结果为真的话就对“程序段2”进行编译，为假的话就继续往下匹配，直到遇到值为真的表达式，或者遇到 #else。这一点和 if else 非常类似。</p>
+
+<p>需要注意的是，#if 命令要求判断条件为“整型常量表达式”，也就是说，<font color="red">表达式中不能包含变量，而且结果必须是整数</font>；而 if 后面的表达式没有限制，只要符合语法就行。这是 #if 和 if 的一个重要区别。</p>
+
+<p>#elif 和 #else 也可以省略</p>
+
+<h2 id="ifdef-的用法">#ifdef 的用法</h2>
+
+<p>#ifdef 用法的一般格式为：</p>
+
+<pre><code class="language-c">#ifdef  宏名
+    程序段1
+#else
+    程序段2
+#endif
+</code></pre>
+
+<p>它的意思是，如果当前的宏已被定义过，则对“程序段1”进行编译，否则对“程序段2”进行编译。</p>
+
+<p>也可以省略 #else：</p>
+
+<pre><code class="language-c">#ifdef  宏名
+    程序段
+#endif
+</code></pre>
+
+<p>VS/VC 有两种编译模式，Debug 和 Release。在学习过程中，我们通常使用 Debug 模式，这样便于程序的调试；而最终发布的程序，要使用 Release 模式，这样编译器会进行很多优化，提高程序运行效率，删除冗余信息。</p>
+
+<p>为了能够清楚地看到当前程序的编译模式，不妨在程序中增加提示，请看下面的代码：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+int main() {
+#ifdef _DEBUG
+	printf(&quot;正在使用 Debug 模式编译程序...\n&quot;);
+#else
+	printf(&quot;正在使用 Release 模式编译程序...\n&quot;);
+#endif
+	system(&quot;pause&quot;);
+	return 0;
+}
+</code></pre>
+
+<p>当以 Debug 模式编译程序时，宏 _DEBUG 会被定义，预处器会保留第 5 行代码，删除第 7 行代码。反之会删除第 5 行，保留第 7 行。</p>
+
+<h2 id="ifndef-的用法">#ifndef 的用法</h2>
+
+<p>#ifndef 用法的一般格式为：</p>
+
+<pre><code class="language-c">#ifndef 宏名
+    程序段1 
+#else 
+    程序段2 
+#endif
+</code></pre>
+
+<p>与 #ifdef 相比，仅仅是将 #ifdef 改为了 #ifndef。它的意思是，如果当前的宏未被定义，则对“程序段1”进行编译，否则对“程序段2”进行编译，这与 #ifdef 的功能正好相反。</p>
+
+<h2 id="三者之间的区别">三者之间的区别</h2>
+
+<p>需要注意的是，#if 后面跟的是“整型常量表达式”，而 #ifdef 和 #ifndef 后面跟的只能是一个宏名，不能是其他的。</p>
+
+<h1 id="error命令">#error命令</h1>
+
+<p>#error 指令用于在编译期间产生错误信息，并阻止程序的编译，其形式如下：</p>
+
+<pre><code class="language-c">#error error_message
+</code></pre>
+
+<p>例如，程序针对 Linux 编写，不保证兼容 Windows，那么可以这样做：</p>
+
+<pre><code class="language-c">#ifdef WIN32
+#error This programme cannot compile at Windows Platform
+#endif
+</code></pre>
+
+<p>WIN32 是 Windows 下的预定义宏。当用户在 Windows 下编译该程序时，由于定义了 WIN32 这个宏，所以会执行 <code>#error</code>命令，提示用户发生了编译错误，错误信息是：</p>
+
+<pre><code class="language-bash">This programme cannot compile at Windows Platform
+</code></pre>
+
+<p>要注意的是：报错信息不需要加引号<code>&quot; &quot;</code>，如果加上，引号会被一起输出。例如将上面的 #error 命令改为：</p>
+
+<pre><code class="language-c">#error &quot;This programme cannot compile at Windows Platform&quot;
+</code></pre>
+
+<p>那么错误信息如下：</p>
+
+<pre><code class="language-bash">&quot;This programme cannot compile at Windows Platform&quot;
+</code></pre>
+
+<h1 id="c语言预处理命令总结">C语言预处理命令总结</h1>
+
+<p>预处理指令是以<code>#</code>号开头的代码行，# 号必须是该行除了任何空白字符外的第一个字符。# 后是指令关键字，在关键字和 # 号之间允许存在任意个数的空白字符，整行语句构成了一条预处理指令，该指令将在编译器进行编译之前对源代码做某些转换。</p>
+
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>#</td>
+<td>空指令，无任何效果</td>
+</tr>
+
+<tr>
+<td>#include</td>
+<td>包含一个源代码文件</td>
+</tr>
+
+<tr>
+<td>#define</td>
+<td>定义宏</td>
+</tr>
+
+<tr>
+<td>#undef</td>
+<td>取消已定义的宏</td>
+</tr>
+
+<tr>
+<td>#if</td>
+<td>如果给定条件为真，则编译下面代码</td>
+</tr>
+
+<tr>
+<td>#ifdef</td>
+<td>如果宏已经定义，则编译下面代码</td>
+</tr>
+
+<tr>
+<td>#ifndef</td>
+<td>如果宏没有定义，则编译下面代码</td>
+</tr>
+
+<tr>
+<td>#elif</td>
+<td>如果前面的#if给定条件不为真，当前条件为真，则编译下面代码</td>
+</tr>
+
+<tr>
+<td>#endif</td>
+<td>结束一个#if……#else条件编译块</td>
+</tr>
+</tbody>
+</table>
+
+<p>预处理功能是C语言特有的功能，它是在对源程序正式编译前由预处理程序完成的，程序员在程序中用预处理命令来调用这些功能。</p>
+
+<p>宏定义可以带有参数，宏调用时是以实参代换形参，而不是“值传送”。</p>
+
+<p>为了避免宏代换时发生错误，宏定义中的字符串应加括号，字符串中出现的形式参数两边也应加括号。</p>
+
+<p>文件包含是预处理的一个重要功能，它可用来把多个源文件连接成一个源文件进行编译，结果将生成一个目标文件。</p>
+
+<p>条件编译允许只编译源程序中满足条件的程序段，使生成的目标程序较短，从而减少了内存的开销并提高了程序的效率。</p>
+
+<p>使用预处理功能便于程序的修改、阅读、移植和调试，也便于实现模块化程序设计。</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%AE%8F%E5%AE%9A%E4%B9%89/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%98%AF%E4%BB%80%E4%B9%88/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

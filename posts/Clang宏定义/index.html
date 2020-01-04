@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang宏定义 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang宏定义</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang宏定义</h1>
+                <div class="stuff">
+                    
+                    <span>January 4, 2020</span>
+                    <span>字数 2055</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="define的用法">#define的用法</h1>
+
+<p>#define 叫做宏定义命令，它也是C语言预处理命令的一种。所谓宏定义，就是用一个标识符来表示一个字符串，如果在后面的代码中出现了该标识符，那么就全部替换成指定的字符串。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#define N 100
+int main(){
+    int sum = 20 + N;
+    printf(&quot;%d\n&quot;, sum);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果如下：</p>
+
+<pre><code class="language-bash">120
+</code></pre>
+
+<p>注意第 4 行代码<code>int sum = 20 + N</code>，<code>N</code>被<code>100</code>代替了。</p>
+
+<p><code>#define N 100</code> 就是宏定义，<code>N</code>为宏名，<code>100</code>是宏的内容（宏所表示的字符串）。在预处理阶段，对程序中所有出现的“宏名”，预处理器都会用宏定义中的字符串去代换，这称为“宏替换”或“宏展开”。</p>
+
+<p>宏定义是由源程序中的宏定义命令<code>#define</code>完成的，宏替换是由预处理程序完成的。</p>
+
+<p>宏定义的一般形式为：</p>
+
+<pre><code class="language-c">#define  宏名  字符串
+</code></pre>
+
+<p><code>#</code>表示这是一条预处理命令，所有的预处理命令都以 # 开头。<code>宏名</code>是标识符的一种，命名规则和变量相同。<code>字符串</code>可以是数字、表达式、if 语句、函数等。</p>
+
+<blockquote>
+<p>这里所说的字符串是一般意义上的字符序列，不要和C语言中的字符串等同，它不需要双引号。</p>
+</blockquote>
+
+<p>程序中反复使用的表达式就可以使用宏定义，例如：</p>
+
+<pre><code class="language-c">#define M (n*n+3*n)
+</code></pre>
+
+<p>它的作用是指定标识符<code>M</code>来表示<code>(y*y+3*y)</code>这个表达式。在编写代码时，所有出现 (y*y+3*y) 的地方都可以用 M 来表示，而对源程序编译时，将先由预处理程序进行宏代替，即用 (y*y+3*y) 去替换所有的宏名 M，然后再进行编译。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#define M (n*n+3*n)
+int main(){
+    int sum, n;
+    printf(&quot;Input a number: &quot;);
+    scanf(&quot;%d&quot;, &amp;n);
+    sum = 3*M+4*M+5*M;
+    printf(&quot;sum=%d\n&quot;, sum);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果如下：</p>
+
+<pre><code class="language-bash">C:\&gt;1.exe
+Input a number: 10↙
+sum=1560
+</code></pre>
+
+<p>程序的开头首先定义了一个宏 M，它表示 (n*n+3*n) 这个表达式。在 9 行代码中使用了宏 M，预处理程序将它展开为下面的语句：</p>
+
+<pre><code class="language-c">sum=3*(n*n+3*n)+4*(n*n+3*n)+5*(n*n+3*n);
+</code></pre>
+
+<p>需要注意的是，在宏定义中表达式<code>(n*n+3*n)</code>两边的括号不能少，否则在宏展开以后可能会产生歧义。下面是一个反面的例子：</p>
+
+<pre><code class="language-c">#difine M n*n+3*n
+</code></pre>
+
+<p>在宏展开后将得到下述语句：</p>
+
+<pre><code class="language-c">s=3*n*n+3*n+4*n*n+3*n+5*n*n+3*n;
+</code></pre>
+
+<h2 id="对-define-用法的几点说明">对 #define 用法的几点说明</h2>
+
+<ul>
+<li>宏定义是用宏名来表示一个字符串，在宏展开时又以该字符串取代宏名，这只是一种简单粗暴的替换。字符串中可以含任何字符，它可以是常数、表达式、if 语句、函数等，预处理程序对它不作任何检查，如有错误，只能在编译已被宏展开后的源程序时发现。</li>
+<li>宏定义不是说明或语句，在行末不必加分号，如加上分号则连分号也一起替换。</li>
+
+<li><p>宏定义必须写在函数之外，其作用域为宏定义命令起到源程序结束。如要终止其作用域可使用<code>#undef</code>命令。</p>
+
+<pre><code class="language-c">#define PI 3.14159
+int main(){
+// Code
+return 0;
+}
+#undef PI
+void func(){
+// Code
+}
+</code></pre></li>
+</ul>
+
+<p>表示 PI 只在 main() 函数中有效，在 func() 中无效。</p>
+
+<ul>
+<li><p>代码中的宏名如果被引号包围，那么预处理程序不对其作宏代替，例如：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#define OK 100
+int main(){
+ printf(&quot;OK\n&quot;);	
+ return 0;
+}
+//该例中定义宏名 OK 表示 100，但在 printf 语句中 OK 被引号括起来，因此不作宏替换，而作为字符串处理。
+</code></pre></li>
+
+<li><p>宏定义允许嵌套，在宏定义的字符串中可以使用已经定义的宏名，在宏展开时由预处理程序层层代换。</p>
+
+<pre><code class="language-c">#define PI 3.1415926
+#define S PI*y*y    /* PI是已定义的宏名*/
+</code></pre></li>
+
+<li><p>习惯上宏名用大写字母表示，以便于与变量区别。但也允许用小写字母。</p></li>
+
+<li><p>可用宏定义表示数据类型，使书写方便。</p>
+
+<pre><code class="language-c">#define UINT unsigned int
+</code></pre></li>
+</ul>
+
+<p>应注意用宏定义表示数据类型和用 <a href="http://c.biancheng.net/cpp/html/100.html">typedef</a> 定义数据说明符的区别。宏定义只是简单的字符串替换，由预处理器来处理；而 typedef 是在编译阶段由编译器处理的，它并不是简单的字符串替换，而给原有的数据类型起一个新的名字，将它作为一种新的数据类型。</p>
+
+<pre><code class="language-c">#define PIN1 int *
+typedef int *PIN2;  //也可以写作typedef int (*PIN2);
+</code></pre>
+
+<p>从形式上看这两者相似， 但在实际使用中却不相同。</p>
+
+<p>下面用 PIN1，PIN2 说明变量时就可以看出它们的区别：</p>
+
+<pre><code class="language-c">PIN1 a, b;
+</code></pre>
+
+<p>在宏代换后变成：</p>
+
+<pre><code class="language-c">int * a, b;
+</code></pre>
+
+<p>表示 a 是指向整型的指针变量，而 b 是整型变量。然而：</p>
+
+<pre><code class="language-c">PIN2 a,b;
+</code></pre>
+
+<p>表示 a、b 都是指向整型的指针变量。因为 PIN2 是一个新的、完整的数据类型。由这个例子可见，宏定义虽然也可表示数据类型， 但毕竟只是简单的字符串替换。在使用时要格外小心，以避出错。</p>
+
+<h1 id="带参数的宏定义">带参数的宏定义</h1>
+
+<p><a href="http://c.biancheng.net/view/1982.html">C语言带参数的宏定义</a></p>
+
+<p>带参数的宏和函数很相似，但有本质上的区别：宏展开仅仅是字符串的替换，不会对表达式进行计算；宏在编译之前就被处理掉了，它没有机会参与编译，也不会占用内存。而函数是一段可以重复使用的代码，会被编译，会给它分配内存，每次调用函数，就是执行这块内存中的代码。</p>
+
+<h1 id="c语言宏参数的字符串化和宏参数的连接">C语言宏参数的字符串化和宏参数的连接</h1>
+
+<p>在宏定义中，有时还会用到<code>#</code>和<code>##</code>两个符号，它们能够对宏参数进行操作。</p>
+
+<h2 id="的用法">#的用法</h2>
+
+<p><code>#</code>  用来将宏参数转换为字符串，也就是在宏参数的开头和末尾添加引号。例如有如下宏定义：</p>
+
+<pre><code class="language-c">#define STR(s) #s
+
+printf(&quot;%s&quot;, STR(c.biancheng.net));
+printf(&quot;%s&quot;, STR(&quot;c.biancheng.net&quot;));
+分别被展开为： 
+printf(&quot;%s&quot;, &quot;c.biancheng.net&quot;);
+printf(&quot;%s&quot;, &quot;\&quot;c.biancheng.net\&quot;&quot;);
+</code></pre>
+
+<p>可以发现，即使给宏参数“传递”的数据中包含引号，使用<code>#</code>仍然会在两头添加新的引号，而原来的引号会被转义。</p>
+
+<h2 id="的用法-1">##的用法</h2>
+
+<p><code>##</code>称为连接符，用来将宏参数或其他的串连接起来。例如有如下的宏定义：</p>
+
+<pre><code class="language-c">#define CON1(a, b) a##e##b
+#define CON2(a, b) a##b##00
+那么： 
+printf(&quot;%f\n&quot;, CON1(8.5, 2));
+printf(&quot;%d\n&quot;, CON2(12, 34));
+将被展开为： 
+printf(&quot;%f\n&quot;, 8.5e2);
+printf(&quot;%d\n&quot;, 123400);
+</code></pre>
+
+<h1 id="c语言宏参数的字符串化和宏参数的连接-1">C语言宏参数的字符串化和宏参数的连接</h1>
+
+<p>在宏定义中，有时还会用到<code>#</code>和<code>##</code>两个符号，它们能够对宏参数进行操作。</p>
+
+<h2 id="的用法-2">#的用法</h2>
+
+<p><code>#</code>  用来将宏参数转换为字符串，也就是在宏参数的开头和末尾添加引号。例如有如下宏定义：</p>
+
+<pre><code class="language-c">#define STR(s) #s
+
+printf(&quot;%s&quot;, STR(c.biancheng.net));
+printf(&quot;%s&quot;, STR(&quot;c.biancheng.net&quot;));
+分别被展开为： 
+printf(&quot;%s&quot;, &quot;c.biancheng.net&quot;);
+printf(&quot;%s&quot;, &quot;\&quot;c.biancheng.net\&quot;&quot;);
+</code></pre>
+
+<p>可以发现，即使给宏参数“传递”的数据中包含引号，使用<code>#</code>仍然会在两头添加新的引号，而原来的引号会被转义。</p>
+
+<h2 id="的用法-3">##的用法</h2>
+
+<p><code>##</code>称为连接符，用来将宏参数或其他的串连接起来。例如有如下的宏定义：</p>
+
+<pre><code class="language-c">#define CON1(a, b) a##e##b
+#define CON2(a, b) a##b##00
+那么： 
+printf(&quot;%f\n&quot;, CON1(8.5, 2));
+printf(&quot;%d\n&quot;, CON2(12, 34));
+将被展开为： 
+printf(&quot;%f\n&quot;, 8.5e2);
+printf(&quot;%d\n&quot;, 123400);
+</code></pre>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E9%A2%84%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

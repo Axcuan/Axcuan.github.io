@@ -6,10 +6,100 @@
     <description>Recent content in Posts on Some Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 01 Jan 2020 20:13:27 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jan 2020 23:10:12 +0800</lastBuildDate>
     
 	<atom:link href="https://axcuan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Clang数组灵活多变的访问形式</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%84%E7%81%B5%E6%B4%BB%E5%A4%9A%E5%8F%98%E7%9A%84%E8%AE%BF%E9%97%AE%E5%BD%A2%E5%BC%8F/</link>
+      <pubDate>Sat, 04 Jan 2020 23:10:12 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%84%E7%81%B5%E6%B4%BB%E5%A4%9A%E5%8F%98%E7%9A%84%E8%AE%BF%E9%97%AE%E5%BD%A2%E5%BC%8F/</guid>
+      <description>C语言中的指针使得代码的编写非常灵活，如果指针能够和数组结合，那将会有更多的“花招”，请看下面的代码： #include &amp;lt;stdio.h&amp;gt; int main() { char str[20] = &amp;quot;c.biancheng.net&amp;quot;; char *s1 = str; char *s2 = str + 2; char c1 = str[4]; char</description>
+    </item>
+    
+    <item>
+      <title>Clang字符串指针</title>
+      <link>https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sat, 04 Jan 2020 23:02:48 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/</guid>
+      <description>字符串指针 C语言中没有特定的字符串类型，我们通常是将字符串放在一个字符数组中 #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;string.h&amp;gt; int main(){ char str[] = &amp;quot;http://c.biancheng.net&amp;quot;; int len = strlen(str), i; //直接输出字符串 printf(&amp;quot;%s\n&amp;quot;, str); //每次输出一个字符 for(i=0;</description>
+    </item>
+    
+    <item>
+      <title>Clang指针变量的运算</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E8%BF%90%E7%AE%97/</link>
+      <pubDate>Sat, 04 Jan 2020 20:33:25 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E8%BF%90%E7%AE%97/</guid>
+      <description>指针变量的运算 指针变量 保存的是地址，而地址本质上是一个整数，所以指针变量可以进行部分运算，例如加法、减法、比较等，请看下面的代码： #include &amp;lt;stdio.h&amp;gt; int main(){ int a = 10, *pa =</description>
+    </item>
+    
+    <item>
+      <title>Clang指针是什么</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%98%AF%E4%BB%80%E4%B9%88/</link>
+      <pubDate>Sat, 04 Jan 2020 19:36:58 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%98%AF%E4%BB%80%E4%B9%88/</guid>
+      <description>计算机中所有的数据都必须放在内存中，不同类型的数据占用的字节数不一样，例如 int 占用 4 个字节，char 占用 1 个字节。为了正确地访问这些数据，必须为每个字节</description>
+    </item>
+    
+    <item>
+      <title>Clang条件编译</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91/</link>
+      <pubDate>Sat, 04 Jan 2020 18:31:54 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91/</guid>
+      <description>C语言#if、##ifdef、#ifndef的用法详解，C语言条件编译详解 假如现在要开发一个C语言程序，让它输出红色的文字，并且要求跨平台，在 Windows 和 Li</description>
+    </item>
+    
+    <item>
+      <title>Clang宏定义</title>
+      <link>https://axcuan.github.io/posts/Clang%E5%AE%8F%E5%AE%9A%E4%B9%89/</link>
+      <pubDate>Sat, 04 Jan 2020 18:10:33 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E5%AE%8F%E5%AE%9A%E4%B9%89/</guid>
+      <description>#define的用法 #define 叫做宏定义命令，它也是C语言预处理命令的一种。所谓宏定义，就是用一个标识符来表示一个字符串，如果在后面的代码中出现了该标识符，那</description>
+    </item>
+    
+    <item>
+      <title>Clang预处理命令</title>
+      <link>https://axcuan.github.io/posts/Clang%E9%A2%84%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4/</link>
+      <pubDate>Sat, 04 Jan 2020 17:49:38 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E9%A2%84%E5%A4%84%E7%90%86%E5%91%BD%E4%BB%A4/</guid>
+      <description>在编译和链接之前，还需要对源文件进行一些文本方面的操作，比如文本替换、文件包含、删除部分代码等，这个过程叫做预处理，由预处理程序完成。 较之其他编程语言</description>
+    </item>
+    
+    <item>
+      <title>忽略语法细节,从整体上理解函数</title>
+      <link>https://axcuan.github.io/posts/%E5%BF%BD%E7%95%A5%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E4%BB%8E%E6%95%B4%E4%BD%93%E4%B8%8A%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Sat, 04 Jan 2020 17:43:45 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E5%BF%BD%E7%95%A5%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E4%BB%8E%E6%95%B4%E4%BD%93%E4%B8%8A%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0/</guid>
+      <description>从整体上看，C语言代码是由一个一个的函数构成的，除了定义和说明类的语句（例如变量定义、宏定义、类型定义等）可以放在函数外面，所有具有运算或逻辑处理能力</description>
+    </item>
+    
+    <item>
+      <title>Clang递归函数</title>
+      <link>https://axcuan.github.io/posts/Clang%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Sat, 04 Jan 2020 17:03:22 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0/</guid>
+      <description>递归函数 一个函数在它的函数体内调用它自身称为递归调用，这种函数称为递归函数。执行递归函数将反复调用其自身，每调用一次就进入新的一层，当最内层的函数执行</description>
+    </item>
+    
+    <item>
+      <title>Clang作用域</title>
+      <link>https://axcuan.github.io/posts/Clang%E4%BD%9C%E7%94%A8%E5%9F%9F/</link>
+      <pubDate>Sat, 04 Jan 2020 16:49:55 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E4%BD%9C%E7%94%A8%E5%9F%9F/</guid>
+      <description>全局变量的默认作用域是整个程序，也就是所有的代码文件，包括源文件（.c文件）和头文件（.h文件）。 如果给全局变量加上 static 关键字，它的作用域就变成了当前文</description>
+    </item>
     
     <item>
       <title>Clang数组2</title>
@@ -17,7 +107,7 @@
       <pubDate>Wed, 01 Jan 2020 20:13:27 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%842/</guid>
-      <description>数组是静态的，不能插入或删除元素 在C语言中，数组一旦被定义后，占用的内存空间就是固定的，容量就是不可</description>
+      <description>数组是静态的，不能插入或删除元素 在C语言中，数组一旦被定义后，占用的内存空间就是固定的，容量就是不可改变的，既不能在任何位置插入元素，也不能在任何位置</description>
     </item>
     
     <item>
@@ -26,7 +116,7 @@
       <pubDate>Wed, 01 Jan 2020 19:39:32 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%A4%84%E7%90%86%E5%87%BD%E6%95%B0/</guid>
-      <description>C语言提供了丰富的字符串处理函数，可以对字符串进行输入、输出、合并、修改、比较、转换、复制、搜索等操</description>
+      <description>C语言提供了丰富的字符串处理函数，可以对字符串进行输入、输出、合并、修改、比较、转换、复制、搜索等操作，使用这些现成的函数可以大大减轻我们的编程负担。</description>
     </item>
     
     <item>
@@ -35,7 +125,7 @@
       <pubDate>Wed, 01 Jan 2020 18:25:36 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%841/</guid>
-      <description>数组 二维数组 二维数组的初始化可以按行分段赋值，也可按行连续赋值。 例如，对于数组 a[5][3]，按行分</description>
+      <description>数组 二维数组 二维数组的初始化可以按行分段赋值，也可按行连续赋值。 例如，对于数组 a[5][3]，按行分段赋值应该写作： int a[5][3]={ {80,75,92}, {61,65,71}, {59,63,70}, {85,87,90}, {76,77,85} }; 按行连续赋值应该写</description>
     </item>
     
     <item>
@@ -44,7 +134,7 @@
       <pubDate>Wed, 01 Jan 2020 16:38:03 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E9%9D%9E%E9%98%BB%E5%A1%9E%E5%BC%8F%E9%94%AE%E7%9B%98%E7%9B%91%E5%90%AC%E7%94%A8%E6%88%B7%E4%B8%8D%E8%BE%93%E5%85%A5%E6%95%B0%E6%8D%AE%E7%A8%8B%E5%BA%8F%E4%B9%9F%E8%83%BD%E7%BB%A7%E7%BB%AD%E6%89%A7%E8%A1%8C/</guid>
-      <description>所谓键盘监听，就是用户按下某个键时系统做出相应的处理，本章讲到的输入输出函数也是键盘监听函数的一种，</description>
+      <description>所谓键盘监听，就是用户按下某个键时系统做出相应的处理，本章讲到的输入输出函数也是键盘监听函数的一种，例如 getchar()、getche()、getc</description>
     </item>
     
     <item>
@@ -53,7 +143,7 @@
       <pubDate>Wed, 01 Jan 2020 16:17:38 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E6%A8%A1%E6%8B%9F%E5%AF%86%E7%A0%81%E8%BE%93%E5%85%A5%E6%98%BE%E7%A4%BA%E6%98%9F%E5%8F%B7/</guid>
-      <description>一个安全的程序在用户输入密码时不应该显示密码本身，而应该回显星号或者点号，例如······或****</description>
+      <description>一个安全的程序在用户输入密码时不应该显示密码本身，而应该回显星号或者点号，例如······或******，这在网页、PC软件、ATM机、POS机上经常</description>
     </item>
     
     <item>
@@ -62,7 +152,7 @@
       <pubDate>Wed, 01 Jan 2020 15:48:53 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/ClangScanf%E7%9A%84%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/</guid>
-      <description>Scanf() 的高级用法 指定读取长度 还记得在 printf() 中可以指定最小输出宽度吗？就是在格式控制符的中间加上一个数字，例如</description>
+      <description>Scanf() 的高级用法 指定读取长度 还记得在 printf() 中可以指定最小输出宽度吗？就是在格式控制符的中间加上一个数字，例如，%10d 如果整数的宽度不足 10，那么在左边以空格</description>
     </item>
     
     <item>
@@ -71,7 +161,7 @@
       <pubDate>Wed, 01 Jan 2020 15:20:07 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/%E7%BB%93%E5%90%88Clang%E7%BC%93%E5%86%B2%E5%8C%BA%E8%B0%88scanf%E5%87%BD%E6%95%B0/</guid>
-      <description>scanf() 是从标准输入设备（键盘）读取数据，带有行缓冲区的，这让 scanf() 具有了一些独特的“性格”，例如可以连续输入</description>
+      <description>scanf() 是从标准输入设备（键盘）读取数据，带有行缓冲区的，这让 scanf() 具有了一些独特的“性格”，例如可以连续输入、可以输入多余的数据等。反过来，scanf() 也出</description>
     </item>
     
     <item>
@@ -80,7 +170,7 @@
       <pubDate>Wed, 01 Jan 2020 13:17:02 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E6%B8%85%E7%A9%BA%E5%88%B7%E6%96%B0%E7%BC%93%E5%86%B2%E5%8C%BA/</guid>
-      <description>缓冲区的优点很明显，它加快了程序的运行速度，减少了硬件的读写次数，让整个计算机变得流畅起来；但是，缓</description>
+      <description>缓冲区的优点很明显，它加快了程序的运行速度，减少了硬件的读写次数，让整个计算机变得流畅起来；但是，缓冲区也带来了一些负面影响 那么，该如何消除这些负面影</description>
     </item>
     
     <item>
@@ -89,7 +179,7 @@
       <pubDate>Wed, 01 Jan 2020 12:59:13 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E7%BC%93%E5%86%B2%E5%8C%BA/</guid>
-      <description>缓冲区 缓冲区（Buffer）又称为缓存（Cache），是内存空间的一部分。也就是说，计算机在内存中预</description>
+      <description>缓冲区 缓冲区（Buffer）又称为缓存（Cache），是内存空间的一部分。也就是说，计算机在内存中预留了一定的存储空间，用来暂时保存输入或输出的数据，</description>
     </item>
     
     <item>
@@ -98,7 +188,7 @@
       <pubDate>Tue, 31 Dec 2019 23:13:08 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E8%AF%BB%E5%8F%96%E4%BB%8E%E9%94%AE%E7%9B%98%E8%BE%93%E5%85%A5%E7%9A%84%E6%95%B0%E6%8D%AE/</guid>
-      <description>在C语言中，有多个函数可以从键盘获得用户输入： scanf()：和 printf() 类似，scanf() 可以输入多种类</description>
+      <description>在C语言中，有多个函数可以从键盘获得用户输入： scanf()：和 printf() 类似，scanf() 可以输入多种类型的数据。 getchar()、getche()、g</description>
     </item>
     
     <item>
@@ -107,7 +197,7 @@
       <pubDate>Tue, 31 Dec 2019 00:02:47 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2/</guid>
-      <description>gcc 好像不能成功编译utf-8编码格式的c语言文件。 只要把c语言文件编码方式更改为ANSI即可。 ps:</description>
+      <description>gcc 好像不能成功编译utf-8编码格式的c语言文件。 只要把c语言文件编码方式更改为ANSI即可。 ps:经实验：在windows下使用vscode的utf</description>
     </item>
     
     <item>
@@ -116,7 +206,7 @@
       <pubDate>Sun, 29 Dec 2019 19:29:04 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/Clang%E8%BE%93%E5%87%BA%E6%B1%87%E6%80%BB/</guid>
-      <description>输出汇总 printf格式控制符： 格式控制符 说明 %c 输出一个单一的字符 %hd、%d、%ld 以十进制、有符</description>
+      <description>输出汇总 printf格式控制符： 格式控制符 说明 %c 输出一个单一的字符 %hd、%d、%ld 以十进制、有符号的形式输出 short、int、long 类型的整数</description>
     </item>
     
     <item>
@@ -125,7 +215,7 @@
       <pubDate>Thu, 26 Dec 2019 23:47:21 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E7%AC%A6%E5%8F%B7%E4%B8%8E%E8%BF%9B%E5%88%B6/</guid>
-      <description>内存 内存中存取数据要明确3件事： 数据存储在哪里 数据的长度 数据的处理方式 在32位环境中，各种数据类型的</description>
+      <description>内存 内存中存取数据要明确3件事： 数据存储在哪里 数据的长度 数据的处理方式 在32位环境中，各种数据类型的长度一般如下： 说 明 字符型 短整型 整型 长整型 单精度浮点</description>
     </item>
     
     <item>
@@ -134,7 +224,7 @@
       <pubDate>Sun, 15 Dec 2019 13:23:09 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0/</guid>
-      <description>示例 #include &amp;lt;stdio.h&amp;gt; //包含标准输入输出头文件 //standared input output header 标准输入输出头文件 void main() { char ch = &#39;a&#39;; printf(&amp;quot;</description>
+      <description>示例 #include &amp;lt;stdio.h&amp;gt; //包含标准输入输出头文件 //standared input output header 标准输入输出头文件 void main() { char ch = &#39;a&#39;; printf(&amp;quot;ASCII码：%d\n 字符: %c\n 大小写之分只有一个空</description>
     </item>
     
     <item>
@@ -143,7 +233,7 @@
       <pubDate>Sun, 15 Dec 2019 13:22:53 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0/</guid>
-      <description>Scanf函数 C函数库包含了多个输入函数，scanf是最通用的一个，可以读取不同格式的数据 基本用法 V</description>
+      <description>Scanf函数 C函数库包含了多个输入函数，scanf是最通用的一个，可以读取不同格式的数据 基本用法 VS中scanf()会被警告不安全，需要用scanf</description>
     </item>
     
     <item>
@@ -152,7 +242,7 @@
       <pubDate>Sun, 15 Dec 2019 13:22:14 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/GCC%E5%92%8CGDB/</guid>
-      <description>GCC GCC提供了大量的编译选项，大约有100个，其中最基本，最常用的参数如下： |选项|说明| -|-|- -o | 使用</description>
+      <description>GCC GCC提供了大量的编译选项，大约有100个，其中最基本，最常用的参数如下： |选项|说明| -|-|- -o | 使用指定的文件名保存编译后的二进制文件 -O | 对程序进行优</description>
     </item>
     
     <item>
@@ -161,7 +251,7 @@
       <pubDate>Sun, 15 Dec 2019 13:21:50 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85/</guid>
-      <description>安装pwntools 安装依赖 git clone https://github.com/aquynh/capstone cd capstone make make install 安装pwntools(需要联网，简易使用国内源) sudo apt-get install python-dev</description>
+      <description>安装pwntools 安装依赖 git clone https://github.com/aquynh/capstone cd capstone make make install 安装pwntools(需要联网，简易使用国内源) sudo apt-get install python-dev libffi-dev openssl-devel -y git clone https://github.com/Gallopsled/pwntools cd pwntools sudo python setup.py install 安装gdb输入插件 git clone https://github.com/Ovi3/pstdio.git ~/pstdio</description>
     </item>
     
     <item>
@@ -170,7 +260,7 @@
       <pubDate>Sun, 15 Dec 2019 13:21:18 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/IOT%E5%AE%89%E5%85%A8%E8%B5%84%E6%96%99%E6%95%B4%E5%90%88/</guid>
-      <description>OT安全资料整合 十一月 07, 2019 build [](#IOT-安全资料整合（主要是路由器） &amp;ldquo;IOT 安全资料整合（主要是路由器</description>
+      <description>OT安全资料整合 十一月 07, 2019 build [](#IOT-安全资料整合（主要是路由器） &amp;ldquo;IOT 安全资料整合（主要是路由器）&amp;rdquo;)IOT 安全资料整合（主要是路由器</description>
     </item>
     
     <item>
@@ -179,7 +269,7 @@
       <pubDate>Sun, 15 Dec 2019 13:20:51 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/MIPS32%E6%9E%B6%E6%9E%84%E5%A0%86%E6%A0%88/</guid>
-      <description>MIPS堆栈原理 在计算机科学中，栈是一种具有 先进后出(FILO) 队列特性的数据结构。调用栈(Call</description>
+      <description>MIPS堆栈原理 在计算机科学中，栈是一种具有 先进后出(FILO) 队列特性的数据结构。调用栈(Call Stack) 是指存放某个程序正在运行的函数的信息的栈。调用栈</description>
     </item>
     
     <item>
@@ -188,7 +278,7 @@
       <pubDate>Sun, 15 Dec 2019 13:20:02 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/MIPS%E6%8C%87%E4%BB%A4%E9%9B%86/</guid>
-      <description>MIPS汇编语言基础 MIPS指令特点 MIPS 固定4字节指令长度 内存中的数据访问 (load/store) 必须严格对齐（至少4字节对</description>
+      <description>MIPS汇编语言基础 MIPS指令特点 MIPS 固定4字节指令长度 内存中的数据访问 (load/store) 必须严格对齐（至少4字节对齐） 跳转指令只有 26 位目标地址，加上 2 位对齐位，可寻</description>
     </item>
     
     <item>
@@ -197,7 +287,7 @@
       <pubDate>Sat, 14 Dec 2019 22:23:23 +0800</pubDate>
       
       <guid>https://axcuan.github.io/posts/MIPS%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/</guid>
-      <description>寄存器 ​ RISC的一个显著特点就是大量使用寄存器。因为寄存器的存取可以在一个时钟周期内完成，同时简化</description>
+      <description>寄存器 ​ RISC的一个显著特点就是大量使用寄存器。因为寄存器的存取可以在一个时钟周期内完成，同时简化寻址方式，所以MIPS32的指令中除了加载/储存指</description>
     </item>
     
   </channel>

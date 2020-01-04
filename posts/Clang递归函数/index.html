@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang递归函数 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang递归函数</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang递归函数</h1>
+                <div class="stuff">
+                    
+                    <span>January 4, 2020</span>
+                    <span>字数 2497</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="递归函数">递归函数</h1>
+
+<p>一个函数在它的函数体内调用它自身称为<strong>递归调用</strong>，这种函数称为<strong>递归函数</strong>。执行递归函数将反复调用其自身，每调用一次就进入新的一层，当最内层的函数执行完毕后，再一层一层地由里到外退出。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int factorial(int n)
+{
+    if(n==0||n==1){
+        return 1;
+    }else{
+        return factorial(n-1)*n;
+    }
+}
+
+int main()
+{
+    int a=5;
+    int b=10;
+    printf(&quot;factorial(%d)=%d\n&quot;,a,factorial(a));
+    printf(&quot;factorial(%d)=%d\n&quot;,b,factorial(b));
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">factorial(5)=120
+factorial(10)=3628800
+</code></pre>
+
+<p>factorial() 就是一个递归函数。调用 factorial() 后即进入函数体，只有当 n==0 或 n==1 时函数才会执行结束，否则就一直调用它自身。</p>
+
+<h2 id="递归的进入">递归的进入</h2>
+
+<table>
+<thead>
+<tr>
+<th>层次/层数</th>
+<th>实参/形参</th>
+<th>调用形式</th>
+<th>需要计算的表达式</th>
+<th>需要等待的结果</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td>n=5</td>
+<td>factorial(5)</td>
+<td>factorial(4) * 5</td>
+<td>factorial(4) 的结果</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>n=4</td>
+<td>factorial(4)</td>
+<td>factorial(3) * 4</td>
+<td>factorial(3) 的结果</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>n=3</td>
+<td>factorial(3)</td>
+<td>factorial(2) * 3</td>
+<td>factorial(2) 的结果</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>n=2</td>
+<td>factorial(2)</td>
+<td>factorial(1) * 2</td>
+<td>factorial(1) 的结果</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>n=1</td>
+<td>factorial(1)</td>
+<td>1</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="递归的退出">递归的退出</h2>
+
+<table>
+<thead>
+<tr>
+<th>层次/层数</th>
+<th>调用形式</th>
+<th>需要计算的表达式</th>
+<th>从内层递归得到的结果  （内层函数的返回值）</th>
+<th>表达式的值  （当次调用的结果）</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>5</td>
+<td>factorial(1)</td>
+<td>1</td>
+<td>无</td>
+<td>1</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>factorial(2)</td>
+<td>factorial(1) * 2</td>
+<td>factorial(1) 的返回值，也就是 1</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>factorial(3)</td>
+<td>factorial(2) * 3</td>
+<td>factorial(2) 的返回值，也就是 2</td>
+<td>6</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>factorial(4)</td>
+<td>factorial(3) * 4</td>
+<td>factorial(3) 的返回值，也就是 6</td>
+<td>24</td>
+</tr>
+
+<tr>
+<td>1</td>
+<td>factorial(5)</td>
+<td>factorial(4) * 5</td>
+<td>factorial(4) 的返回值，也就是 24</td>
+<td>120</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="更多关于递归函数的内容">更多关于递归函数的内容</h2>
+
+<p>factorial() 是最简单的一种递归形式——尾递归，也就是递归调用位于函数体的结尾处。除了尾递归，还有更加烧脑的两种递归形式，分别是中间递归和多层递归：</p>
+
+<ul>
+<li>中间递归：发生递归调用的位置在函数体的中间；</li>
+<li>多层递归：在一个函数里面多次调用自己。</li>
+</ul>
+
+<p>递归函数也只是一种解决问题的技巧，它和其它技巧一样，也存在某些缺陷，具体来说就是：递归函数的时间开销和内存开销都非常大，极端情况下会导致程序崩溃。</p>
+
+<h1 id="中间递归函数">中间递归函数</h1>
+
+<p>所谓中间递归，就是发生递归的位置在函数体的中间，而不是末尾。</p>
+
+<p>尾递归在逐层退出时除了 return 语句，一般不再执行其他操作；而中间递归在逐层退出时还要执行一些其他的操作，所以比较复杂。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+char *reverse(char *str)
+{
+    int len=strlen(str);
+    if(len&gt;1){
+        char ctemp=str[0];
+        str[0]=str[len-1];
+        str[len-1]='\0';        //最后一个字符在下次递归时不再处理
+        reverse(str+1);         //递归调用
+        str[len-1]=ctemp;
+    }
+    return str;
+}
+
+int main()
+{
+    char str[20]=&quot;123456789&quot;;
+    printf(&quot;%s\n&quot;,reverse(str));
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-c">987654321
+</code></pre>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/%E4%B8%AD%E9%97%B4%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0.gif" alt="" /></p>
+
+<h1 id="多层递归函数">多层递归函数</h1>
+
+<p>多层递归的调用关系比较复杂，整体上看起来像一颗倒立的树：对于双层递归，树的每个节点有两个分叉；对于三层递归，树的每个节点有三个分叉；以此类推……</p>
+
+<p>以「求菲波那契数」为例来演示双层递归</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+//递归计算斐波那契数
+long fib(int n) {
+    if (n &lt;= 2) {
+        return 1;
+    }
+    else {
+        return fib(n - 1) + fib(n - 2);
+    }
+}
+int main() {
+    int a;
+    printf(&quot;Input a number: &quot;);
+    scanf(&quot;%d&quot;, &amp;a);
+    printf(&quot;Fib(%d) = %ld\n&quot;, a, fib(a));
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\&gt;多层递归.exe
+Input a number: 7↙
+Fib(7) = 13
+</code></pre>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/%E5%A4%9A%E5%B1%82%E9%80%92%E5%BD%92%E5%87%BD%E6%95%B0.gif" alt="" /></p>
+
+<h1 id="递归函数的致命缺陷">递归函数的致命缺陷</h1>
+
+<p>递归函数是一种强有力的技巧，用来解决某些问题很顺手，比如前面提到的求阶乘、求菲波那契数；但是和其他技巧一样，递归函数也是有缺陷的，而且这种缺陷是致命性的。</p>
+
+<h2 id="递归函数的空间开销">递归函数的空间开销</h2>
+
+<p>在程序占用的整个内存中，有一块内存区域叫做栈（Stack），它是专门用来给函数分配内存的，每次调用函数，都会将相关数据压入栈中，包括局部变量、局部数组、形参、寄存器、冗余数据等。</p>
+
+<p>栈是针对线程来说的，每个线程都拥有一个栈，如果一个程序包含了多个线程，那么它就拥有多个栈。目前我们编写的程序都是单线程的，所以不必考虑多线程的情况。</p>
+
+<p>对每个线程来说，栈能使用的内存是有限的，一般是 1M~8M，这在编译时就已经决定了，程序运行期间不能再改变。如果程序使用的栈内存超出最大值，就会发生栈溢出（Stack Overflow）错误。</p>
+
+<p>栈内存的大小和编译器有关，编译器会为栈内存指定一个最大值，在 VC/VS 下，默认是 1M，在 C-Free 下，默认是 2M，在 Linux GCC 下，默认是 8M。当然，我们也可以通过参数来修改栈内存的大小。</p>
+
+<p>发生函数调用时会将相关数据压入栈中，函数调用结束会释放这一部分内存，对于一般的函数来说，这不会有任何问题，但是对于递归函数，这会导致严重的问题！</p>
+
+<p>递归函数内部嵌套了对自身的调用，除非等到最内层的函数调用结束，否则外层的所有函数都不会调用结束。通俗地讲，外层函数被卡主了，它要等待所有的内层函数调用完成后，它自己才能调用完成。</p>
+
+<p>每一层的递归调用都会在栈上分配一块内存，有多少层递归调用就分配多少块相似的内存，所有内存加起来的总和是相当恐怖的，很容易超过栈内存的大小限制，这个时候就会导致程序崩溃。</p>
+
+<p>例如，一个递归函数需要递归 10000 次，每次需要 1KB 的内存，那么最终就需要 10MB 的内存。</p>
+
+<p>为了演示由于栈溢出而导致程序崩溃的情形，用递归的方式来求 1+2+3+ &hellip;&hellip; + (n-1) + n 的值：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+long sum(int n) {
+	//为了增加每次函数调用的内存，额外增加了一个无用的数组，它占用 1KB 的内存
+	int arr[250];
+	if (n &lt;= 1) {
+		return n;
+	}
+	else {
+		return  n + sum(n - 1);
+	}
+}
+int main() {
+	printf(&quot;从1加到1000的值为 %ld\n&quot;, sum(1000));
+	return 0;
+}
+</code></pre>
+
+<p>vs2019下调试运行：
+<img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200104173359.png" alt="" /></p>
+
+<p>gcc下编译运行：</p>
+
+<pre><code class="language-bash">从1加到1000的值为 500500
+</code></pre>
+
+<h2 id="递归函数的时间开销">递归函数的时间开销</h2>
+
+<p>每次调用函数都会在栈上分配内存，函数调用结束后再释放这一部分内存，内存的分配和释放都是需要时间的。</p>
+
+<p>每次调用函数还会多次修改寄存器的值，函数调用结束后还需要找到上层函数的位置再继续执行，这也是需要时间的。</p>
+
+<p>所有的这些时间加在一起是非常恐怖的。</p>
+
+<p>以「求斐波那契数」为例来演示双层递归的时间开销。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+// 递归计算斐波那契数
+long fib(int n) {
+    if (n &lt;= 2) {
+        return 1;
+    }
+    else {
+        return fib(n - 1) + fib(n - 2);
+    }
+}
+int main() {
+    int a;
+    clock_t time_start, time_end;
+    printf(&quot;Input a number: &quot;);
+    scanf(&quot;%d&quot;, &amp;a);
+    time_start = clock();
+    printf(&quot;Fib(%d) = %ld\n&quot;, a, fib(a));
+    time_end = clock();
+    printf(&quot;run time: %lfs\n&quot;, (double)(time_end - time_start)/ CLOCKS_PER_SEC );
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\&gt;3
+Input a number: 42↙
+Fib(42) = 267914296
+run time: 0.842000s
+</code></pre>
+
+<p>可以看到，为了求 42 的斐波那契数程序竟然运行了0.84 秒。</p>
+
+<h1 id="使用迭代来替换递归函数">使用迭代来替换递归函数</h1>
+
+<p>大部分能用递归解决的问题也能用迭代来解决。所谓迭代，就是循环。</p>
+
+<p>与递归函数相比，迭代不但没有额外的内存开销，也没有额外的时间开销。代码的可读性可能稍差一些。</p>
+
+<p>分别用递归和迭代的方案来求斐波那契数:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+//递归计算斐波那契数
+long fib_recursion(int n) {
+    if (n &lt;= 2) {
+        return 1;
+    }
+    else {
+        return fib_recursion(n - 1) + fib_recursion(n - 2);
+    }
+}
+//迭代计算斐波那契数
+long fib_iteration(int n){
+    long result;
+    long previous_result;
+    long next_older_result;
+    result = previous_result = 1;
+    while (n &gt; 2) {
+        n -= 1;
+        next_older_result = previous_result;
+        previous_result = result;
+        result = previous_result + next_older_result;
+    }
+    return result;
+}
+int main() {
+    int a;
+    clock_t time_start_recursion, time_end_recursion;
+    clock_t time_start_iteration, time_end_iteration;
+    printf(&quot;Input a number: &quot;);
+    scanf(&quot;%d&quot;, &amp;a);
+    //递归的时间
+    time_start_recursion = clock();
+    printf(&quot;Fib_recursion(%d) = %ld\n&quot;, a, fib_recursion(a));
+    time_end_recursion = clock();
+    printf(&quot;run time with recursion: %lfs\n&quot;, (double)(time_end_recursion - time_start_recursion)/ CLOCKS_PER_SEC );
+    //迭代的时间
+    time_start_iteration = clock();
+    printf(&quot;Fib_iteration(%d) = %ld\n&quot;, a, fib_iteration(a));
+    time_end_iteration = clock();
+    printf(&quot;run time with iteration: %lfs\n&quot;, (double)(time_end_iteration - time_start_iteration) / CLOCKS_PER_SEC);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">C:\&gt;4
+Input a number: 42↙
+Fib_recursion(42) = 267914296
+run time with recursion: 0.841000s
+Fib_iteration(42) = 267914296
+run time with iteration: 0.000000s
+</code></pre>
+
+<p>递归用了0.841 秒，迭代几乎瞬间完成（接近0秒），迭代比递归快成千上万倍，这个差异是巨大的。</p>
+
+<h1 id="总结">总结</h1>
+
+<p>函数调用本来就存在内存开销和时间开销，递归一次这种开销就增加一倍，如果有成千上万次的递归，那么所有开销的总和就是巨大的。这是递归的致命缺陷，无法优化。所以建议尽量少用递归，能用迭代就用迭代吧。</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/%E5%BF%BD%E7%95%A5%E8%AF%AD%E6%B3%95%E7%BB%86%E8%8A%82%E4%BB%8E%E6%95%B4%E4%BD%93%E4%B8%8A%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

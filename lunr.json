@@ -8,6 +8,14 @@
         ]
     },
     {
+        "uri": "/posts/Clang作用域",
+        "title": "Clang作用域",
+        "content": "\r\n全局变量的默认作用域是整个程序，也就是所有的代码文件，包括源文件（`.c`文件）和头文件（`.h`文件）。\r\n\r\n如果给全局变量加上 **static** 关键字，它的作用域就变成了当前文件，在其它文件中就无效了。\r\n\r\n",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
         "uri": "/posts/Clang字符串",
         "title": "Clang字符串",
         "content": "\r\ngcc 好像不能成功编译utf-8编码格式的c语言文件。\r\n\r\n只要把c语言文件编码方式更改为ANSI即可。\r\n\r\nps:经实验：在windows下使用vscode的utf-8编码和Linux `",
@@ -24,6 +32,38 @@
         ]
     },
     {
+        "uri": "/posts/Clang字符串指针",
+        "title": "Clang字符串指针",
+        "content": "\r\n# 字符串指针\r\n\r\nC语言中没有特定的字符串类型，我们通常是将字符串放在一个字符数组中\r\n\r\n```c\r\n#include \r\n#include \r\n\r\nint main(){\r\n    char str[] = \"http://c.biancheng.n",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang宏定义",
+        "title": "Clang宏定义",
+        "content": "\r\n# #define的用法\r\n\r\n#define 叫做宏定义命令，它也是C语言预处理命令的一种。所谓宏定义，就是用一个标识符来表示一个字符串，如果在后面的代码中出现了该标识符，那么就全部替换成指定的字符串。\r\n\r\n```c\r\n#include \r\n#define N 100\r\ni",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang指针变量的运算",
+        "title": "Clang指针变量的运算",
+        "content": "\r\n# 指针变量的运算\r\n\r\n指针变量  保存的是地址，而地址本质上是一个整数，所以指针变量可以进行部分运算，例如加法、减法、比较等，请看下面的代码：\r\n\r\n```c\r\n#include \r\n\r\nint main(){\r\n    int    a = 10,   *pa = &a,",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang指针是什么",
+        "title": "Clang指针是什么",
+        "content": "\r\n计算机中所有的数据都必须放在内存中，不同类型的数据占用的字节数不一样，例如 int 占用 4 个字节，char 占用 1 个字节。为了正确地访问这些数据，必须为每个字节都编上号码，就像门牌号、身份证号一样，每个字节的编号是唯一的，根据编号可以准确地找到某个字节。\r\n\r\n下图是 4G 内存中每个字",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
         "uri": "/posts/Clang数组1",
         "title": "Clang数组1",
         "content": "\r\n# 数组\r\n\r\n## 二维数组\r\n\r\n二维数组的初始化可以按行分段赋值，也可按行连续赋值。\r\n\r\n例如，对于数组 `a[5][3]`，按行分段赋值应该写作： \r\n\r\n```\r\nint a[5][3]={ {80,75,92}, {61,65,71}, {59,63,70}, {85,87,90}",
@@ -35,6 +75,22 @@
         "uri": "/posts/Clang数组2",
         "title": "Clang数组2",
         "content": "\r\n# 数组是静态的，不能插入或删除元素\r\n\r\n在C语言中，数组一旦被定义后，占用的内存空间就是固定的，容量就是不可改变的，既不能在任何位置插入元素，也不能在任何位置删除元素，只能读取和修改元素，我们将这样的数组称为静态数组。\r\n\r\n反过来说，如果数组在定义后可以改变容量，允许在任意位置插入或者删除",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang数组灵活多变的访问形式",
+        "title": "Clang数组灵活多变的访问形式",
+        "content": "\r\nC语言中的指针使得代码的编写非常灵活，如果指针能够和数组结合，那将会有更多的“花招”，请看下面的代码：\r\n\r\n```c\r\n#include \r\n\r\nint main()\r\n{\r\n    char str[20] = \"c.biancheng.net\";\r\n\r\n    char ",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang条件编译",
+        "title": "Clang条件编译",
+        "content": "\r\n# C语言#if、##ifdef、#ifndef的用法详解，C语言条件编译详解\r\n\r\n假如现在要开发一个C语言程序，让它输出红色的文字，并且要求跨平台，在 Windows 和 Linux下都能运行，怎么办呢？\r\n\r\nWindows 有专有的宏`_WIN32`，Linux 有专有的宏`__linu",
         "tags": [
             "Clang"
         ]
@@ -75,6 +131,22 @@
         "uri": "/posts/Clang输出汇总",
         "title": "Clang输出汇总",
         "content": "\n# 输出汇总\n\n`printf`格式控制符：\n\n| 格式控制符                       | 说明                                                         |\n| ------------------------------",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang递归函数",
+        "title": "Clang递归函数",
+        "content": "\r\n# 递归函数\r\n\r\n一个函数在它的函数体内调用它自身称为**递归调用**，这种函数称为**递归函数**。执行递归函数将反复调用其自身，每调用一次就进入新的一层，当最内层的函数执行完毕后，再一层一层地由里到外退出。\r\n\r\n```c\r\n#include \r\n\r\nint factor",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang预处理命令",
+        "title": "Clang预处理命令",
+        "content": "\r\n在编译和链接之前，还需要对源文件进行一些文本方面的操作，比如文本替换、文件包含、删除部分代码等，这个过程叫做预处理，由预处理程序完成。\r\n\r\n较之其他编程语言，C/C++ 语言更依赖预处理器，所以在阅读或开发 C/C++ 程序过程中，可能会接触大量的预处理指令，比如 #include、#defi",
         "tags": [
             "Clang"
         ]
@@ -149,6 +221,14 @@
         "content": "\n# 寄存器\n\n​      RISC的一个显著特点就是大量使用寄存器。因为寄存器的存取可以在一个时钟周期内完成，同时简化寻址方式，所以MIPS32的指令中除了加载/储存指令以外，都是用寄存器或者立即数作为操作数，以便让编译器通过保持对寄存器内数据的频繁存取进一步优化代码的生成性能。MIPS32中的",
         "tags": [
             "MIPS"
+        ]
+    },
+    {
+        "uri": "/posts/忽略语法细节从整体上理解函数",
+        "title": "忽略语法细节,从整体上理解函数",
+        "content": "\r\n从整体上看，C语言代码是由一个一个的函数构成的，除了定义和说明类的语句（例如变量定义、宏定义、类型定义等）可以放在函数外面，所有具有运算或逻辑处理能力的语句（例如加减乘除、[if else](http://c.biancheng.net/c/if_else/)、for、函数调用等）都要放在函数内",
+        "tags": [
+            "Clang"
         ]
     },
     {

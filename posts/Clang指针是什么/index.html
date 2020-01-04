@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang指针是什么 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang指针是什么</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang指针是什么</h1>
+                <div class="stuff">
+                    
+                    <span>January 4, 2020</span>
+                    <span>字数 3050</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p>计算机中所有的数据都必须放在内存中，不同类型的数据占用的字节数不一样，例如 int 占用 4 个字节，char 占用 1 个字节。为了正确地访问这些数据，必须为每个字节都编上号码，就像门牌号、身份证号一样，每个字节的编号是唯一的，根据编号可以准确地找到某个字节。</p>
+
+<p>下图是 4G 内存中每个字节的编号（以十六进制表示）：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1I3043925-0.png" alt="" /></p>
+
+<p>我们将内存中字节的编号称为地址（Address）或 指针（Pointer）。地址从 0 开始依次增加，对于 32 位环境，程序能够使用的内存为 4GB，最小的地址为 0，最大的地址为 0XFFFFFFFF。</p>
+
+<blockquote>
+<p>C语言中有一个控制符<code>%p</code>，专门用来以十六进制形式输出地址，不过 %p 的输出格式并不统一，有的编译器带<code>0x</code>前缀，有的不带。</p>
+</blockquote>
+
+<h1 id="一切都是地址">一切都是地址</h1>
+
+<p>C语言用变量来存储数据，用函数来定义一段可以重复使用的代码，它们最终都要放到内存中才能供 CPU 使用。</p>
+
+<p>数据和代码都以二进制的形式存储在内存中，计算机无法从格式上区分某块内存到底存储的是数据还是代码。当程序被加载到内存后，操作系统会给不同的内存块指定不同的权限，拥有读取和执行权限的内存块就是代码，而拥有读取和写入权限（也可能只有读取权限）的内存块就是数据。</p>
+
+<p>CPU 只能通过地址来取得内存中的代码和数据，程序在执行过程中会告知 CPU
+要执行的代码以及要读写的数据的地址。如果程序不小心出错，或者开发者有意为之，在 CPU
+要写入数据时给它一个代码区域的地址，就会发生内存访问错误。这种内存访问错误会被硬件和操作系统拦截，强制程序崩溃，程序员没有挽救的机会。</p>
+
+<p><font color="red">CPU 访问内存时需要的是地址，而不是变量名和函数名！变量名和函数名只是地址的一种助记符，当源文件被编译和链接成可执行程序后，它们都会被替换成地址。编译和链接过程的一项重要任务就是找到这些名称所对应的地址。</font></p>
+
+<p>假设变量 a、b、c 在内存中的地址分别是 0X1000、0X2000、0X3000，那么加法运算<code>c = a + b;</code>将会被转换成类似下面的形式：</p>
+
+<pre><code class="language-c">0X3000 = (0X1000) + (0X2000);
+</code></pre>
+
+<p><code>( )</code>表示取值操作，整个表达式的意思是，取出地址 0X1000 和 0X2000 上的值，将它们相加，把相加的结果赋值给地址为 0X3000 的内存</p>
+
+<p>需要注意的是，虽然变量名、函数名、字符串名和数组名在本质上是一样的，它们都是地址的助记符，但在编写代码的过程中，我们认为变量名表示的是数据本身，而函数名、字符串名和数组名表示的是代码块或数据块的首地址。</p>
+
+<h1 id="指针变量的定义和使用">指针变量的定义和使用</h1>
+
+<p>数据在内存中的地址也称为  指针，如果一个变量存储了一份数据的指针，我们就称它为<strong>指针变量</strong>。</p>
+
+<p>在C语言中，允许用一个变量来存放指针，这种变量称为指针变量。指针变量的值就是某份数据的地址，这样的一份数据可以是数组、字符串、函数，也可以是另外的一个普通变量或指针变量。</p>
+
+<p>现在假设有一个 char 类型的变量 c，它存储了字符 &lsquo;K&rsquo;（ASCII码为十进制数 75），并占用了地址为 0X11A
+的内存（地址通常用十六进制表示）。另外有一个指针变量 p，它的值为 0X11A，正好等于变量 c 的地址，这种情况我们就称 p 指向了 c，或者说 p 是指向变量 c 的指针。</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/%E6%8C%87%E9%92%88.png" alt="" /></p>
+
+<h2 id="定义指针变量">定义指针变量</h2>
+
+<p>定义指针变量与定义普通变量非常类似，不过要在变量名前面加星号<code>*</code>，格式为：</p>
+
+<pre><code class="language-c">datatype *name;
+或者 
+datatype *name = value;
+</code></pre>
+
+<p><code>*</code>表示这是一个指针变量，<code>datatype</code>表示该指针变量所指向的数据的类型 。例如：</p>
+
+<pre><code class="language-c">int *p1;
+</code></pre>
+
+<p>p1 是一个指向 int 类型数据的指针变量，至于 p1 究竟指向哪一份数据，应该由赋予它的值决定。再如：</p>
+
+<pre><code class="language-c">int a = 100;
+int *p_a = &amp;a;
+</code></pre>
+
+<p>在定义指针变量 p_a 的同时对它进行初始化，并将变量 a 的地址赋予它，此时 p_a 就指向了 a。值得注意的是，p_a 需要的一个地址，a 前面必须要加取地址符<code>&amp;</code>，否则是不对的。</p>
+
+<p>和普通变量一样，指针变量也可以被多次写入，只要你想，随时都能够改变指针变量的值，请看下面的代码：</p>
+
+<pre><code class="language-c">//定义普通变量
+float a = 99.5, b = 10.6;
+char c = '@', d = '#';
+//定义指针变量
+float *p1 = &amp;a;
+char *p2 = &amp;c;
+//修改指针变量的值
+p1 = &amp;b;
+p2 = &amp;d;
+</code></pre>
+
+<p><code>*</code>是一个特殊符号，表明一个变量是指针变量，定义 p1、p2 时必须带<code>*</code>。而给 p1、p2 赋值时，因为已经知道了它是一个指针变量，就没必要多此一举再带上<code>*</code>，后边可以像使用普通变量一样来使用指针变量。也就是说，<font color="red">定义指针变量时必须带<code>*</code>，给指针变量赋值时不能带<code>*</code></font>。</p>
+
+<p>假设变量 a、b、c、d 的地址分别为 0X1000、0X1004、0X2000、0X2004，下面的示意图很好地反映了 p1、p2 指向的变化：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1IG3J50-1.jpg" alt="" /></p>
+
+<p>需要强调的是，p1、p2 的类型分别是<code>float*</code>和<code>char*</code>，而不是<code>float</code>和<code>char</code>，它们是完全不同的数据类型，读者要引起注意。</p>
+
+<p>注意每个变量前面都要带<code>*</code>。如果写成下面的形式，那么只有 a 是指针变量，b、c 都是类型为 int 的普通变量：</p>
+
+<pre><code class="language-c">int *a, b, c;
+</code></pre>
+
+<h2 id="通过指针变量取得数据">通过指针变量取得数据</h2>
+
+<p>指针变量存储了数据的地址，通过指针变量能够获得该地址上的数据，格式为：</p>
+
+<pre><code>*pointer;
+</code></pre>
+
+<p>这里的<code>*</code>称为指针运算符，用来取得某个地址上的数据，请看下面的例子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int a = 15;
+    int *p = &amp;a;
+    printf(&quot;%d, %d\n&quot;, a, *p);  //两种方式都可以输出a的值
+    return 0;
+}
+</code></pre>
+
+<p>假设 a 的地址是 0X1000，p 指向 a 后，p 本身的值也会变为 0X1000，*p 表示获取地址 0X1000 上的数据，也即变量 a 的值。从运行结果看，*p 和 a 是等价的。</p>
+
+<p>CPU 读写数据必须要知道数据在内存中的地址，普通变量和指针变量都是地址的助记符，虽然通过 *p 和 a 获取到的数据一样，但它们的运行过程稍有不同：a 只需要一次运算就能够取得数据，而 *p 要经过两次运算，多了一层“间接”。</p>
+
+<p>假设变量 a、p 的地址分别为 0X1000、0XF0A0，它们的指向关系如下图所示：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1IG3MJ-2.jpg" alt="" /></p>
+
+<p>程序被编译和链接后，a、p 被替换成相应的地址。使用 *p 的话，要先通过地址 0XF0A0 取得变量 p 本身的值，这个值是变量 a 的地址，然后再通过这个值取得变量 a 的数据，前后共有两次运算；而使用 a 的话，可以通过地址 0X1000 直接取得它的数据，只需要一步运算。</p>
+
+<p>也就是说，使用指针是间接获取数据，使用变量名是直接获取数据，前者比后者的代价要高。</p>
+
+<p>指针除了可以获取内存上的数据，也可以修改内存上的数据，例如：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int a = 15, b = 99, c = 222;
+    int *p = &amp;a;  //定义指针变量
+    *p = b;  //通过指针变量修改内存上的数据
+    c = *p;  //通过指针变量获取内存上的数据
+    printf(&quot;%d, %d, %d, %d\n&quot;, a, b, c, *p);
+    return 0;
+}
+</code></pre>
+
+<p><code>*</code>在不同的场景下有不同的作用：<code>*</code>可以用在指针变量的定义中，表明这是一个指针变量，以和普通变量区分开；使用指针变量时在前面加<code>*</code>表示获取指针指向的数据，或者说表示的是指针指向的数据本身。</p>
+
+<p>也就是说，定义指针变量时的<code>*</code>和使用指针变量时的<code>*</code>意义完全不同。以下面的语句为例：</p>
+
+<pre><code class="language-c">int *p = &amp;a;
+*p = 100;
+</code></pre>
+
+<p>第1行代码中<code>*</code>用来指明 p 是一个指针变量，第2行代码中<code>*</code>用来获取指针指向的数据。</p>
+
+<p>需要注意的是，给指针变量本身赋值时不能加<code>*</code>。修改上面的语句：</p>
+
+<pre><code class="language-c">int *p;
+p = &amp;a;		//p 前面就不能加*
+*p = 100;
+</code></pre>
+
+<h2 id="关于-和">关于 * 和 &amp;</h2>
+
+<p>假设有一个 int 类型的变量 a，pa 是指向它的指针，那么<code>*&amp;a</code>和<code>&amp;*pa</code>分别是什么意思呢？</p>
+
+<p><code>*&amp;a</code>可以理解为<code>*(&amp;a)</code>，<code>&amp;a</code>表示取变量 a 的地址（等价于 pa），<code>*(&amp;a)</code>表示取这个地址上的数据（等价于 *pa），绕来绕去，又回到了原点，<code>*&amp;a</code>仍然等价于 a。</p>
+
+<p><code>&amp;*pa</code>可以理解为<code>&amp;(*pa)</code>，<code>*pa</code>表示取得 pa 指向的数据（等价于 a），<code>&amp;(*pa)</code>表示数据的地址（等价于 &amp;a），所以<code>&amp;*pa</code>等价于 pa。</p>
+
+<pre><code class="language-c">int a
+int *pa=&amp;a
+*&amp;a==a
+&amp;*a=pa
+</code></pre>
+
+<h2 id="对星号-的总结">对星号<code>*</code>的总结</h2>
+
+<p>目前所学到的语法中，星号<code>*</code></p>
+
+<ul>
+<li>表示乘法，例如<code>int a = 3, b = 5, c;  c = a * b;</code>，这是最容易理解的。</li>
+<li>表示定义一个指针变量，以和普通变量区分开，例如<code>int a = 100;  int *p = &amp;a;</code>。</li>
+<li>表示获取指针指向的数据，是一种间接操作，例如<code>int a, b, *p = &amp;a;  *p = 100;  b = *p;</code>。</li>
+</ul>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%9D%A1%E4%BB%B6%E7%BC%96%E8%AF%91/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E8%BF%90%E7%AE%97/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

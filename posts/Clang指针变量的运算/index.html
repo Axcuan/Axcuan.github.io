@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang指针变量的运算 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang指针变量的运算</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang指针变量的运算</h1>
+                <div class="stuff">
+                    
+                    <span>January 4, 2020</span>
+                    <span>字数 3159</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="指针变量的运算">指针变量的运算</h1>
+
+<p>指针变量  保存的是地址，而地址本质上是一个整数，所以指针变量可以进行部分运算，例如加法、减法、比较等，请看下面的代码：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int    a = 10,   *pa = &amp;a, *paa = &amp;a;
+    double b = 99.9, *pb = &amp;b;
+    char   c = '@',  *pc = &amp;c;
+    //最初的值
+    printf(&quot;&amp;a=%#X, &amp;b=%#X, &amp;c=%#X\n&quot;, &amp;a, &amp;b, &amp;c);
+    printf(&quot;pa=%#X, pb=%#X, pc=%#X\n&quot;, pa, pb, pc);
+    //加法运算
+    pa++; pb++; pc++;
+    printf(&quot;pa=%#X, pb=%#X, pc=%#X\n&quot;, pa, pb, pc);
+    //减法运算
+    pa -= 2; pb -= 2; pc -= 2;
+    printf(&quot;pa=%#X, pb=%#X, pc=%#X\n&quot;, pa, pb, pc);
+    //比较运算
+    if(pa == paa){
+        printf(&quot;%d\n&quot;, *paa);
+    }else{
+        printf(&quot;%d\n&quot;, *pa);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">&amp;a=0X61FDFC, &amp;b=0X61FDF0, &amp;c=0X61FDEF
+pa=0X61FDFC, pb=0X61FDF0, pc=0X61FDEF
+pa=0X61FE00, pb=0X61FDF8, pc=0X61FDF0
+pa=0X61FDF8, pb=0X61FDE8, pc=0X61FDEE
+4200345
+</code></pre>
+
+<p>从运算结果可以看出：pa、pb、pc 每次加 1，它们的地址分别增加 4、8、1，正好是 int、double、char 类型的长度；减 2 时，地址分别减少 8、16、2，正好是 int、double、char 类型长度的 2 倍。</p>
+
+<p>这很奇怪，指针变量加减运算的结果跟数据类型的长度有关，而不是简单地加 1 或减 1，这是为什么呢？</p>
+
+<p>以 a 和 pa 为例，a 的类型为 int，占用 4 个字节，pa 是指向 a 的指针，如下图所示：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1J0563E7-0.jpg" alt="" /></p>
+
+<p>刚开始的时候，pa 指向 a 的开头，通过 *pa 读取数据时，从 pa 指向的位置向后移动 4 个字节，把这 4 个字节的内容作为要获取的数据，这 4 个字节也正好是变量 a 占用的内存。</p>
+
+<p>如果<code>pa++;</code>使得地址加 1 的话，就会变成如下图所示的指向关系：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1J0563064-1.jpg" alt="" /></p>
+
+<p>这个时候 pa 指向整数 a 的中间，*pa 使用的是红色虚线画出的 4 个字节，其中前 3 个是变量 a 的，后面 1 个是其它数据的，把它们“搅和”在一起显然没有实际的意义，取得的数据也会非常怪异。</p>
+
+<p>如果<code>pa++;</code>使得地址加 4 的话，正好能够完全跳过整数 a，指向它后面的内存，如下图所示：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1J05622E-2.jpg" alt="" /></p>
+
+<p>我们知道，数组中的所有元素在内存中是连续排列的，如果一个指针指向了数组中的某个元素，那么加 1 就表示指向下一个元素，减 1 就表示指向上一个元素，这样指针的加减运算就具有了现实的意义</p>
+
+<p>不过C语言并没有规定变量的存储方式，如果连续定义多个变量，它们有可能是挨着的，也有可能是分散的，这取决于变量的类型、编译器的实现以及具体的编译模式，<font color="red">所以对于指向普通变量的指针，我们往往不进行加减运算，虽然编译器并不会报错，但这样做没有意义，因为不知道它后面指向的是什么数据。</font></p>
+
+<p>下面的例子是一个反面教材，警告我们不要尝试通过指针获取下一个变量的地址：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+    int a = 1, b = 2, c = 3;
+    int *p = &amp;c;
+    int i;
+    for(i=0; i&lt;8; i++){
+        printf(&quot;%d\n&quot;, *(p+i) );
+    }
+    return 0;
+}
+</code></pre>
+
+<p>gcc运行结果：</p>
+
+<pre><code class="language-bash">第一次运行：
+3
+6422020
+0
+39
+2
+1
+6
+1662160
+第二次运行：
+3
+6422020
+0
+39
+2
+1
+6
+11230416
+</code></pre>
+
+<p>vs2019运行结果：</p>
+
+<pre><code class="language-bash">3
+-858993460
+-858993460
+2
+-858993460
+-858993460
+1
+-858993460
+</code></pre>
+
+<p>可以发现，变量 a、b、c 并不挨着，它们中间还参杂了别的辅助数据。</p>
+
+<p>指针变量除了可以参与加减运算，还可以参与比较运算。当对指针变量进行比较运算时，比较的是指针变量本身的值，也就是数据的地址。如果地址相等，那么两个指针就指向同一份数据，否则就指向不同的数据。</p>
+
+<p>上面的代码（第一个例子）在比较 pa 和 paa 的值时，pa 已经指向了 a 的上一份数据，所以它们不相等。而 a
+的上一份数据又不知道是什么，所以会导致 printf() 输出一个没有意义的数，这正好印证了上面的观点，不要对指向普通变量的指针进行加减运算。</p>
+
+<p>另外需要说明的是，不能对指针变量进行乘法、除法、取余等其他运算，除了会发生语法错误，也没有实际的含义。</p>
+
+<h1 id="数组指针-指向数组的指针-详解">数组指针（指向数组的指针）详解</h1>
+
+<p>数组（Array）是一系列具有相同类型的数据的集合，每一份数据叫做一个数组元素（Element）。数组中的所有元素在内存中是连续排列的，整个数组占用的是一块内存。</p>
+
+<p>定义数组时，要给出数组名和数组长度，数组名可以认为是一个指针，它指向数组的第 0 个元素。在C语言中，我们将第 0 个元素的地址称为数组的首地址。</p>
+
+<blockquote>
+<p>数组名的本意是表示整个数组，也就是表示多份数据的集合，但在使用过程中经常会转换为指向数组第 0 个元素的指针，所以上面使用了“认为”一词，表示数组名和数组首地址并不总是等价。</p>
+</blockquote>
+
+<p>下面的例子演示了如何以指针的方式遍历数组元素：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int arr[] = { 99, 15, 100, 888, 252 };
+    int len = sizeof(arr) / sizeof(int);  //求数组长度
+    int i;
+    for(i=0; i&lt;len; i++){
+        printf(&quot;%d  &quot;, *(arr+i) );  //*(arr+i)等价于arr[i]
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">99  15  100  888  252 
+</code></pre>
+
+<p>我们也可以定义一个指向数组的指针，例如：</p>
+
+<pre><code class="language-c">int arr[] = { 99, 15, 100, 888, 252 };
+int *p = arr;
+</code></pre>
+
+<p>arr 本身就是一个指针，可以直接赋值给指针变量 p。arr 是数组第 0 个元素的地址，所以<code>int *p = arr;</code>也可以写作<code>int *p = &amp;arr[0];</code>。也就是说，arr、p、&amp;arr[0] 这三种写法都是等价的，它们都指向数组第 0 个元素，或者说指向数组的开头。</p>
+
+<blockquote>
+<p>再强调一遍，“arr 本身就是一个指针”这种表述并不准确，严格来说应该是“arr 被转换成了一个指针”。</p>
+</blockquote>
+
+<p>如果一个指针指向了数组，我们就称它为数组指针（Array Pointer）。</p>
+
+<p>数组指针指向的是数组中的一个具体元素，而不是整个数组，所以数组指针的类型和数组元素的类型有关，上面的例子中，p 指向的数组元素是 int 类型，所以 p 的类型必须也是<code>int *</code>。</p>
+
+<p>使用数组指针来遍历数组元素：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int arr[] = { 99, 15, 100, 888, 252 };
+    int len = sizeof(arr) / sizeof(int);  //求数组长度
+    printf(&quot;[sizeof(arr) / sizeof(int)] = %d\n&quot;,len);
+    int i;
+    for(i=0; i&lt;len; i++){
+        printf(&quot;%d  &quot;, *(arr+i) );  //*(arr+i)等价于arr[i]
+    }
+    printf(&quot;\n&quot;);
+    printf(&quot;[sizeof(arr) / sizeof(*arr) ]= %d\n&quot;,sizeof(arr) / sizeof(*arr));
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">[sizeof(arr) / sizeof(int)] = 5
+99  15  100  888  252  
+[sizeof(arr) / sizeof(*arr) ]= 5
+</code></pre>
+
+<p>数组在内存中只是数组元素的简单排列，没有开始和结束标志，在求数组的长度时不能使用<code>sizeof(p) / sizeof(int)</code>，因为 p 只是一个指向 int 类型的指针，编译器并不知道它指向的到底是一个整数还是一系列整数（数组），所以 sizeof(p) 求得的是 p 这个指针变量本身所占用的字节数，而不是整个数组占用的字节数。</p>
+
+<p>也就是说，根据数组指针不能逆推出整个数组元素的个数，以及数组从哪里开始、到哪里结束等信息。不像字符串，数组本身也没有特定的结束标志，如果不知道数组的长度，那么就无法遍历整个数组。</p>
+
+<p>上节我们讲到，对指针变量进行加法和减法运算时，是根据数据类型的长度来计算的。如果一个指针变量 p 指向了数组的开头，那么 p+i 就指向数组的第i 个元素；如果 p 指向了数组的第 n 个元素，那么 p+i 就是指向第 n+i 个元素；而不管 p 指向了数组的第几个元素，p+1 总是指向下一个元素，p-1 也总是指向上一个元素。</p>
+
+<p>更改上面的代码，让 p 指向数组中的第二个元素：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int arr[] = { 99, 15, 100, 888, 252 };
+    int *p = &amp;arr[2];  //也可以写作 int *p = arr + 2;
+
+    printf(&quot;%d, %d, %d, %d, %d\n&quot;, *(p-2), *(p-1), *p, *(p+1), *(p+2) );
+    return 0;
+}
+</code></pre>
+
+<p>引入数组指针后，我们就有两种方案来访问数组元素了，一种是使用下标，另外一种是使用指针。</p>
+
+<ul>
+<li><h4 id="使用下标">使用下标</h4>
+
+<ul>
+<li>也就是采用 arr[i] 的形式访问数组元素。如果 p 是指向数组 arr 的指针，那么也可以使用 p[i] 来访问数组元素，它等价于 arr[i]。</li>
+</ul></li>
+
+<li><h4 id="使用指针">使用指针</h4>
+
+<ul>
+<li>也就是使用 *(p+i) 的形式访问数组元素。另外数组名本身也是指针，也可以使用 *(arr+i) 来访问数组元素，它等价于 *(p+i)。</li>
+</ul></li>
+</ul>
+
+<p>不管是数组名还是数组指针，都可以使用上面的两种方式来访问数组元素。不同的是，数组名是常量，它的值不能改变，而数组指针是变量（除非特别指明它是常量），它的值可以任意改变。也就是说，数组名只能指向数组的开头，而数组指针可以先指向数组开头，再指向其他元素。</p>
+
+<p>更改上面的代码，借助自增运算符来遍历数组元素：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int arr[] = { 99, 15, 100, 888, 252 };
+    int i, *p = arr, len = sizeof(arr) / sizeof(int);
+
+    for(i=0; i&lt;len; i++){
+        printf(&quot;%d  &quot;, *p++ );
+    }
+    printf(&quot;\n&quot;);
+    return 0;
+}
+</code></pre>
+
+<p>第 8 行代码中，*p++ 应该理解为 *(p++)，每次循环都会改变 p 的值（p++ 使得 p 自身的值增加），以使 p 指向下一个数组元素。该语句不能写为 *arr++，因为 arr 是常量，而 arr++ 会改变它的值，这显然是错误的。</p>
+
+<h1 id="p-p-p">*p++、*++p、(*p)++</h1>
+
+<p>假设 p 是指向数组 arr 中第 n 个元素的指针，那么 <em>p++、</em>++p、(*p)++ 分别是什么意思呢？</p>
+
+<ul>
+<li>*p++ 等价于 *(p++)，表示先取得第 n 个元素的值，再将 p 指向下一个元素，上面已经进行了详细讲解。</li>
+<li>*++p 等价于 *(++p)，会先进行 ++p 运算，使得 p 的值增加，指向下一个元素，整体上相当于 *(p+1)，所以会获得第 n+1 个数组元素的值。</li>
+<li>(*p)++ 就非常简单了，会先取得第 n 个元素的值，再对该元素的值加 1。假设 p 指向第 0  个元素，并且第 0 个元素的值为 99，执行完该语句后，第 0  个元素的值就会变为 100。</li>
+</ul>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%98%AF%E4%BB%80%E4%B9%88/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+
