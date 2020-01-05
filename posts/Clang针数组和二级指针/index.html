@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang针数组和二级指针 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang针数组和二级指针</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang针数组和二级指针</h1>
+                <div class="stuff">
+                    
+                    <span>January 5, 2020</span>
+                    <span>字数 2334</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    char *lines[5] = {
+        &quot;COSC1283/1284&quot;,
+        &quot;Programming&quot;,
+        &quot;Techniques&quot;,
+        &quot;is&quot;,
+        &quot;great fun&quot;
+    };
+
+    char *str1 = lines[1];
+    char *str2 = *(lines + 3);
+    char c1 = *(*(lines + 4) + 6);
+    char c2 = (*lines + 5)[5];
+    char c3 = *lines[0] + 2;
+
+    printf(&quot;str1 = %s\n&quot;, str1);
+    printf(&quot;str2 = %s\n&quot;, str2);
+    printf(&quot;  c1 = %c\n&quot;, c1);
+    printf(&quot;  c2 = %c\n&quot;, c2);
+    printf(&quot;  c3 = %c\n&quot;, c3);
+
+    return 0;
+}
+</code></pre>
+
+<p>为了方便说明问题，我们将上面的字符串数组改成下面的形式，它们都是等价的：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    char *string0 = &quot;COSC1283/1284&quot;;
+    char *string1 = &quot;Programming&quot;;
+    char *string2 = &quot;Techniques&quot;;
+    char *string3 = &quot;is&quot;;
+    char *string4 = &quot;great fun&quot;;
+   
+    char *lines[5];
+    lines[0] = string0;
+    lines[1] = string1;
+    lines[2] = string2;
+    lines[3] = string3;
+    lines[4] = string4;
+
+    char *str1 = lines[1];
+    char *str2 = *(lines + 3);
+    char c1 = *(*(lines + 4) + 6);
+    char c2 = (*lines + 5)[5];
+    char c3 = *lines[0] + 2;
+
+    printf(&quot;str1 = %s\n&quot;, str1);
+    printf(&quot;str2 = %s\n&quot;, str2);
+    printf(&quot;  c1 = %c\n&quot;, c1);
+    printf(&quot;  c2 = %c\n&quot;, c2);
+    printf(&quot;  c3 = %c\n&quot;, c3);
+
+    return 0;
+}
+</code></pre>
+
+<p>输出结果：</p>
+
+<pre><code class="language-bash">str1 = Programming
+str2 = is
+  c1 = f
+  c2 = 2
+  c3 = E
+</code></pre>
+
+<p><code>char *lines[5]</code>定义了一个指针数组，它的每个元素的类型都是<code>char *</code>。在表达式中使用 lines 时，它会转换为一个类型为<code>char **</code>的指针，这样<code>*lines</code>就表示一个指向字符的指针，而<code>**lines</code>表示一个具体的字符。</p>
+
+<p>指针是可以进行运算的，lines 表示数组的首地址（第0个元素的地址），lines+0、lines+1、lines+2 &hellip; 分别表示第0、1、2 &hellip;个元素的地址，<em>(lines+0)或lines[0]、</em>(lines+1)或lines[1]、*(lines+2)或lines[2] &hellip; 分别是字符串 string0, string1, string2 &hellip; 的首地址。所以：</p>
+
+<pre><code class="language-c">*lines == *(lines+0) == lines[0] == string0
+*(lines+1) == lines[1] == string1
+*(lines+2) == lines[2] == string2
+...
+</code></pre>
+
+<p>注意：lines 是二级指针，*(lines+i) 是一级指针，**(lines+i) 才是具体的字符。</p>
+
+<p>上面的题目中：</p>
+
+<ul>
+<li>lines[1]：它是一个指针，指向字符串string1，即 string1 的首地址。</li>
+<li>*(lines + 3)：lines + 3 为数组中第 3 个元素的地址，*(lines + 3) 为第 3 个元素的值，它是一个指针，指向字符串 string3。</li>
+<li>*(*(lines + 4) + 6)：*(lines + 4) + 6 ==  lines[4] + 6 == string4 + 6，表示字符串 string4 中第 6 个字符的地址，即 f 的地址，所以  *(*(lines + 4) + 6) 就表示字符 f。</li>
+<li>(*lines + 5)[5]：*lines + 5 为字符串 string0 中第 5 个字符的地址，即 2 的地址，(<em>lines + 5)[5]等价于</em>(*lines + 5 + 5)，表示第10个字符，即 2。</li>
+<li>*lines[0] + 2：lines[0] 为字符串 string0 中第 0  个字符的地址，即 C 的地址；*lines[0] 也就表示第 0 个字符，即字符 C。字符与整数运算，首先转换为该字符对应的 ASCII  码，然后再运算，所以 *lines[0] + 2 = 67 + 2 = 69，69 对应的字符为 E。</li>
+</ul>
+
+<h1 id="二维数组指-指向二维数组的指针-详解">二维数组指(指向二维数组的指针)详解</h1>
+
+<p>二维数组在概念上是二维的，有行和列，但在内存中所有的数组元素都是连续排列的，它们之间没有“缝隙”。以下面的二维数组 a 为例：</p>
+
+<pre><code class="language-c">int a[3][4] = { {0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11} };
+</code></pre>
+
+<p>从概念上理解，a 的分布像一个矩阵：</p>
+
+<pre><code class="language-bash">0   1   2   3
+4   5   6   7
+8   9  10  11
+</code></pre>
+
+<p>但在内存中，a 的分布是一维线性的，整个数组占用一块连续的内存：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/16011C417-0.jpg" alt="" /></p>
+
+<p>C语言中的二维数组是按行排列的，也就是先存放 a[0] 行，再存放 a[1] 行，最后存放 a[2] 行；每行中的 4 个元素也是依次存放。数组 a 为 int 类型，每个元素占用 4 个字节，整个数组共占用 4×(3×4) = 48 个字节。</p>
+
+<p>C语言允许把一个二维数组分解成多个一维数组来处理。对于数组 a，它可以分解成三个一维数组，即 a[0]、a[1]、a[2]。每一个一维数组又包含了 4 个元素，例如 a[0] 包含 <code>a[0][0]</code>、<code>a[0][1]</code>、<code>a[0][2]</code>、<code>a[0][3]</code>。</p>
+
+<p>假设数组 a 中第 0 个元素的地址为 1000，那么每个一维数组的首地址如下图所示：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1601164D5-1.png" alt="" /></p>
+
+<p>为了更好的理解<a href="http://c.biancheng.net/c/80/">指针</a>和二维数组的关系，我们先来定义一个指向 a 的指针变量 p：</p>
+
+<pre><code class="language-c">int (*p)[4] = a;
+</code></pre>
+
+<p>括号中的<code>*</code>表明 p 是一个指针，它指向一个数组，数组的类型为<code>int [4]</code>，这正是 a 所包含的每个一维数组的类型。</p>
+
+<p><code>[ ]</code>的优先级高于<code>*</code>，<code>( )</code>是必须要加的，如果赤裸裸地写作<code>int *p[4]</code>，那么应该理解为<code>int *(p[4])</code>，p 就成了一个指针数组，而不是二维数组指针</p>
+
+<p>对指针进行加法（减法）运算时，它前进（后退）的步长与它指向的数据类型有关，p 指向的数据类型是<code>int [4]</code>，那么<code>p+1</code>就前进 4×4 = 16 个字节，<code>p-1</code>就后退 16 个字节，这正好是数组 a 所包含的每个一维数组的长度。也就是说，<code>p+1</code>会使得指针指向二维数组的下一行，<code>p-1</code>会使得指针指向数组的上一行。</p>
+
+<p>数组名 a 在表达式中也会被转换为和 p 等价的指针！</p>
+
+<p>下面我们就来探索一下如何使用指针 p 来访问二维数组中的每个元素。按照上面的定义：</p>
+
+<ul>
+<li><code>p</code>指向数组 a 的开头，也即第 0 行；<code>p+1</code>前进一行，指向第 1 行。</li>
+
+<li><p><code>*(p+1)</code>表示取地址上的数据，也就是整个第 1 行数据。注意是一行数据，是多个数据，不是第 1 行中的第 0 个元素，下面的运行结果有力地证明了这一点：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+int a[3][4] = { {0, 1, 2, 3}, {4, 5, 6, 7}, {8, 9, 10, 11} };
+int (*p)[4] = a;
+printf(&quot;%d\n&quot;, sizeof(*(p+1)));
+
+return 0;
+}
+</code></pre></li>
+</ul>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">16
+</code></pre>
+
+<p><code>*(p+1)+1</code>表示第 1 行第 1 个元素的地址。如何理解呢？</p>
+
+<p><code>*(p+1)</code>单独使用时表示的是第 1 行数据，放在表达式中会被转换为第 1 行数据的首地址，也就是第 1 行第 0 个元素的地址，因为使用整行数据没有实际的含义，编译器遇到这种情况都会转换为指向该行第 0 个元素的指针；就像一维数组的名字，在定义时或者和 sizeof、&amp; 一起使用时才表示整个数组，出现在表达式中就会被转换为指向数组第 0 个元素的指针。</p>
+
+<p><code>*(*(p+1)+1)</code>表示第 1 行第 1 个元素的值。很明显，增加一个 * 表示取地址上的数据。</p>
+
+<p>根据上面的结论，可以很容易推出以下的等价关系：</p>
+
+<pre><code class="language-c">a+i == p+i
+a[i] == p[i] == *(a+i) == *(p+i)
+a[i][j] == p[i][j] == *(a[i]+j) == *(p[i]+j) == *(*(a+i)+j) == *(*(p+i)+j)
+</code></pre>
+
+<p>使用指针遍历二维数组:</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+int main(){
+    int a[3][4]={0,1,2,3,4,5,6,7,8,9,10,11};
+    int(*p)[4];
+    int i,j;
+    p=a;
+    for(i=0; i&lt;3; i++){
+        for(j=0; j&lt;4; j++) printf(&quot;%2d  &quot;,*(*(p+i)+j));
+        printf(&quot;\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre>
+
+<h1 id="指针数组和二维数组指针的区别">指针数组和二维数组指针的区别</h1>
+
+<p>指针数组和二维数组指针在定义时非常相似，只是括号的位置不同：</p>
+
+<pre><code class="language-c">int *(p1[5]);  //指针数组，可以去掉括号直接写作 int *p1[5];
+int (*p2)[5];  //二维数组指针，不能去掉括号
+</code></pre>
+
+<p>指针数组和二维数组指针有着本质上的区别：指针数组是一个数组，只是每个元素保存的都是指针，以上面的 p1 为例，在32位环境下它占用 4×5 = 20 个字节的内存。二维数组指针是一个指针，它指向一个二维数组，以上面的 p2 为例，它占用 4 个字节的内存。</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Some Notes</title>
+    <link>https://axcuan.github.io/tags/Linux/</link>
+    <description>Recent content in Linux on Some Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 05 Jan 2020 12:49:58 +0800</lastBuildDate>
+    
+	<atom:link href="https://axcuan.github.io/tags/Linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Iptables转发</title>
+      <link>https://axcuan.github.io/posts/iptables%E8%BD%AC%E5%8F%91/</link>
+      <pubDate>Sun, 05 Jan 2020 12:49:58 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/iptables%E8%BD%AC%E5%8F%91/</guid>
+      <description>iptables 常用命令 iptables -I INPUT -p tcp --dport 1234 -j ACCEPT iptables -I INPUT -p udp --dport 1234 -j ACCEPT iptables -t nat -nvL #查看nat链 iptables -t nat -N MY_TCP #在nat表上新建名为MY_TCP自定义链 iptables -t nat -A PREROUTING -j MY_TCP #将MY_TCP</description>
+    </item>
+    
+  </channel>
+</rss>

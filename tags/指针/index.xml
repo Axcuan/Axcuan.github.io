@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>指针 on Some Notes</title>
+    <link>https://axcuan.github.io/tags/%E6%8C%87%E9%92%88/</link>
+    <description>Recent content in 指针 on Some Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sun, 05 Jan 2020 19:08:02 +0800</lastBuildDate>
+    
+	<atom:link href="https://axcuan.github.io/tags/%E6%8C%87%E9%92%88/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>C指针的总结</title>
+      <link>https://axcuan.github.io/posts/C%E6%8C%87%E9%92%88%E7%9A%84%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sun, 05 Jan 2020 19:08:02 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/C%E6%8C%87%E9%92%88%E7%9A%84%E6%80%BB%E7%BB%93/</guid>
+      <description>指针（Pointer）就是内存的地址，C语言允许用一个变量来存放指针，这种变量称为指针变量。指针变量可以存放基本类型数据的地址，也可以存放数组、函数以</description>
+    </item>
+    
+    <item>
+      <title>只需一招,彻底攻克C语言指针</title>
+      <link>https://axcuan.github.io/posts/%E5%8F%AA%E9%9C%80%E4%B8%80%E6%8B%9B%E5%BD%BB%E5%BA%95%E6%94%BB%E5%85%8BC%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 17:19:28 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E5%8F%AA%E9%9C%80%E4%B8%80%E6%8B%9B%E5%BD%BB%E5%BA%95%E6%94%BB%E5%85%8BC%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88/</guid>
+      <description>前面我们讲解了指针数组、二维数组指针、函数指针等几种较为复杂的指针，它们的定义形式分别是： int *p1[6]; //指针数组 int *(p2[6]); //指针数组，和上面的形式等价 int (*p3)[6]; //二</description>
+    </item>
+    
+    <item>
+      <title>Clang函数指针</title>
+      <link>https://axcuan.github.io/posts/Clang%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 17:12:43 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/</guid>
+      <description>一个函数总是占用一段连续的内存区域，函数名在表达式中有时也会被转换为该函数所在内存区域的首地址，这和数组名非常类似。我们可以把函数的这个首地址（或称入</description>
+    </item>
+    
+    <item>
+      <title>Clang指针数组</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Sun, 05 Jan 2020 15:38:18 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84/</guid>
+      <description>指针数组 如果一个数组中的所有元素保存的都是指针，那么我们就称它为指针数组。指针数组的定义形式一般为： dataType *arrayName[length]; [ ]的优先级高于*，该定义形式应该理解为： dataType *(arrayName[length]);</description>
+    </item>
+    
+    <item>
+      <title>数组和指针绝不等价,数组是另外一种类型</title>
+      <link>https://axcuan.github.io/posts/%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88%E7%BB%9D%E4%B8%8D%E7%AD%89%E4%BB%B7%E6%95%B0%E7%BB%84%E6%98%AF%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E7%B1%BB%E5%9E%8B/</link>
+      <pubDate>Sun, 05 Jan 2020 15:08:57 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88%E7%BB%9D%E4%B8%8D%E7%AD%89%E4%BB%B7%E6%95%B0%E7%BB%84%E6%98%AF%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E7%B1%BB%E5%9E%8B/</guid>
+      <description>通过前面的讲解，相信很多读者都会认为数组和指针是等价的，数组名表示数组的首地址。不幸的是，这是一种非常危险的想法，并不完全正确，前面我们将数组和指针等</description>
+    </item>
+    
+    <item>
+      <title>Clang指针作为函数返回值</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC/</link>
+      <pubDate>Sun, 05 Jan 2020 14:31:13 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC/</guid>
+      <description>C语言允许函数的返回值是一个指针（地址），我们将这样的函数称为指针函数。下面的例子定义了一个函数 strlong()，用来返回两个字符串中较长的一个： 用</description>
+    </item>
+    
+    <item>
+      <title>Clang字符串指针</title>
+      <link>https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sat, 04 Jan 2020 23:02:48 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/</guid>
+      <description>字符串指针 C语言中没有特定的字符串类型，我们通常是将字符串放在一个字符数组中 #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;string.h&amp;gt; int main(){ char str[] = &amp;quot;http://c.biancheng.net&amp;quot;; int len = strlen(str), i; //直接输出字符串 printf(&amp;quot;%s\n&amp;quot;, str); //每次输出一个字符 for(i=0;</description>
+    </item>
+    
+    <item>
+      <title>Clang指针变量的运算</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E8%BF%90%E7%AE%97/</link>
+      <pubDate>Sat, 04 Jan 2020 20:33:25 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E5%8F%98%E9%87%8F%E7%9A%84%E8%BF%90%E7%AE%97/</guid>
+      <description>指针变量的运算 指针变量 保存的是地址，而地址本质上是一个整数，所以指针变量可以进行部分运算，例如加法、减法、比较等，请看下面的代码： #include &amp;lt;stdio.h&amp;gt; int main(){ int a = 10, *pa =</description>
+    </item>
+    
+    <item>
+      <title>Clang指针是什么</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%98%AF%E4%BB%80%E4%B9%88/</link>
+      <pubDate>Sat, 04 Jan 2020 19:36:58 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%98%AF%E4%BB%80%E4%B9%88/</guid>
+      <description>计算机中所有的数据都必须放在内存中，不同类型的数据占用的字节数不一样，例如 int 占用 4 个字节，char 占用 1 个字节。为了正确地访问这些数据，必须为每个字节</description>
+    </item>
+    
+  </channel>
+</rss>

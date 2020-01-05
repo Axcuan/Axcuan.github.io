@@ -6,10 +6,109 @@
     <description>Recent content in Posts on Some Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 04 Jan 2020 23:10:12 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jan 2020 20:19:34 +0800</lastBuildDate>
     
 	<atom:link href="https://axcuan.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Clang结构体指针</title>
+      <link>https://axcuan.github.io/posts/Clang%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 20:19:34 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88/</guid>
+      <description>结构体指针 当一个指针结构体指针C语言结构体指针 struct 结构体名 *变量名; //结构体//结构体 struct stu{ char *name; //姓名 int num; //学号 int age; //年龄 char group; //所在小组 float score; //</description>
+    </item>
+    
+    <item>
+      <title>Clang结构体</title>
+      <link>https://axcuan.github.io/posts/Clang%E7%BB%93%E6%9E%84%E4%BD%93/</link>
+      <pubDate>Sun, 05 Jan 2020 19:13:34 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E7%BB%93%E6%9E%84%E4%BD%93/</guid>
+      <description>结构体 前面的教程中我们讲解了 数组（Array)，它是一组具有相同类型的数据的集合。但在实际的编程过程中，我们往往还需要一组类型不同的数据，例如对于学生</description>
+    </item>
+    
+    <item>
+      <title>C指针的总结</title>
+      <link>https://axcuan.github.io/posts/C%E6%8C%87%E9%92%88%E7%9A%84%E6%80%BB%E7%BB%93/</link>
+      <pubDate>Sun, 05 Jan 2020 19:08:02 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/C%E6%8C%87%E9%92%88%E7%9A%84%E6%80%BB%E7%BB%93/</guid>
+      <description>指针（Pointer）就是内存的地址，C语言允许用一个变量来存放指针，这种变量称为指针变量。指针变量可以存放基本类型数据的地址，也可以存放数组、函数以</description>
+    </item>
+    
+    <item>
+      <title>Main()函数的高级用法 接收用户输入的数据</title>
+      <link>https://axcuan.github.io/posts/main%E5%87%BD%E6%95%B0%E7%9A%84%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95-%E6%8E%A5%E6%94%B6%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E7%9A%84%E6%95%B0%E6%8D%AE/</link>
+      <pubDate>Sun, 05 Jan 2020 18:14:10 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/main%E5%87%BD%E6%95%B0%E7%9A%84%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95-%E6%8E%A5%E6%94%B6%E7%94%A8%E6%88%B7%E8%BE%93%E5%85%A5%E7%9A%84%E6%95%B0%E6%8D%AE/</guid>
+      <description>main() 是C语言程序的入口函数，有且只能有一个，它实际上有两种标准的原型： int main(); int main(int argc, char *argv[]); 前面的教程中我们一直使用第一种原型，它简单易懂，能让初学者很快入手。</description>
+    </item>
+    
+    <item>
+      <title>只需一招,彻底攻克C语言指针</title>
+      <link>https://axcuan.github.io/posts/%E5%8F%AA%E9%9C%80%E4%B8%80%E6%8B%9B%E5%BD%BB%E5%BA%95%E6%94%BB%E5%85%8BC%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 17:19:28 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E5%8F%AA%E9%9C%80%E4%B8%80%E6%8B%9B%E5%BD%BB%E5%BA%95%E6%94%BB%E5%85%8BC%E8%AF%AD%E8%A8%80%E6%8C%87%E9%92%88/</guid>
+      <description>前面我们讲解了指针数组、二维数组指针、函数指针等几种较为复杂的指针，它们的定义形式分别是： int *p1[6]; //指针数组 int *(p2[6]); //指针数组，和上面的形式等价 int (*p3)[6]; //二</description>
+    </item>
+    
+    <item>
+      <title>Clang函数指针</title>
+      <link>https://axcuan.github.io/posts/Clang%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 17:12:43 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88/</guid>
+      <description>一个函数总是占用一段连续的内存区域，函数名在表达式中有时也会被转换为该函数所在内存区域的首地址，这和数组名非常类似。我们可以把函数的这个首地址（或称入</description>
+    </item>
+    
+    <item>
+      <title>Clang针数组和二级指针</title>
+      <link>https://axcuan.github.io/posts/Clang%E9%92%88%E6%95%B0%E7%BB%84%E5%92%8C%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 15:44:07 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E9%92%88%E6%95%B0%E7%BB%84%E5%92%8C%E4%BA%8C%E7%BA%A7%E6%8C%87%E9%92%88/</guid>
+      <description>#include &amp;lt;stdio.h&amp;gt; int main(){ char *lines[5] = { &amp;quot;COSC1283/1284&amp;quot;, &amp;quot;Programming&amp;quot;, &amp;quot;Techniques&amp;quot;, &amp;quot;is&amp;quot;, &amp;quot;great fun&amp;quot; }; char *str1 = lines[1]; char *str2 = *(lines + 3); char c1 = *(*(lines + 4) + 6); char c2 = (*lines + 5)[5]; char c3 = *lines[0] + 2; printf(&amp;quot;str1 = %s\n&amp;quot;, str1); printf(&amp;quot;str2 = %s\n&amp;quot;, str2); printf(&amp;quot; c1 = %c\n&amp;quot;, c1); printf(&amp;quot; c2 = %c\n&amp;quot;, c2); printf(&amp;quot; c3 = %c\n&amp;quot;, c3); return 0; } 为了方便</description>
+    </item>
+    
+    <item>
+      <title>Clang指针数组</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84/</link>
+      <pubDate>Sun, 05 Jan 2020 15:38:18 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E6%95%B0%E7%BB%84/</guid>
+      <description>指针数组 如果一个数组中的所有元素保存的都是指针，那么我们就称它为指针数组。指针数组的定义形式一般为： dataType *arrayName[length]; [ ]的优先级高于*，该定义形式应该理解为： dataType *(arrayName[length]);</description>
+    </item>
+    
+    <item>
+      <title>数组和指针绝不等价,数组是另外一种类型</title>
+      <link>https://axcuan.github.io/posts/%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88%E7%BB%9D%E4%B8%8D%E7%AD%89%E4%BB%B7%E6%95%B0%E7%BB%84%E6%98%AF%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E7%B1%BB%E5%9E%8B/</link>
+      <pubDate>Sun, 05 Jan 2020 15:08:57 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88%E7%BB%9D%E4%B8%8D%E7%AD%89%E4%BB%B7%E6%95%B0%E7%BB%84%E6%98%AF%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E7%B1%BB%E5%9E%8B/</guid>
+      <description>通过前面的讲解，相信很多读者都会认为数组和指针是等价的，数组名表示数组的首地址。不幸的是，这是一种非常危险的想法，并不完全正确，前面我们将数组和指针等</description>
+    </item>
+    
+    <item>
+      <title>Clang指针作为函数返回值</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC/</link>
+      <pubDate>Sun, 05 Jan 2020 14:31:13 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC/</guid>
+      <description>C语言允许函数的返回值是一个指针（地址），我们将这样的函数称为指针函数。下面的例子定义了一个函数 strlong()，用来返回两个字符串中较长的一个： 用</description>
+    </item>
+    
+    <item>
+      <title>Iptables转发</title>
+      <link>https://axcuan.github.io/posts/iptables%E8%BD%AC%E5%8F%91/</link>
+      <pubDate>Sun, 05 Jan 2020 12:49:58 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/iptables%E8%BD%AC%E5%8F%91/</guid>
+      <description>iptables 常用命令 iptables -I INPUT -p tcp --dport 1234 -j ACCEPT iptables -I INPUT -p udp --dport 1234 -j ACCEPT iptables -t nat -nvL #查看nat链 iptables -t nat -N MY_TCP #在nat表上新建名为MY_TCP自定义链 iptables -t nat -A PREROUTING -j MY_TCP #将MY_TCP</description>
+    </item>
     
     <item>
       <title>Clang数组灵活多变的访问形式</title>

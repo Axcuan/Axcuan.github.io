@@ -16,6 +16,15 @@
         ]
     },
     {
+        "uri": "/posts/Clang函数指针",
+        "title": "Clang函数指针",
+        "content": "\r\n一个函数总是占用一段连续的内存区域，函数名在表达式中有时也会被转换为该函数所在内存区域的首地址，这和数组名非常类似。我们可以把函数的这个首地址（或称入口地址）赋予一个指针变量，使指针变量指向函数所在的内存区域，然后通过指针变量就可以找到并调用该函数。这种指针就是函数指针。\r\n\r\n函数指针的定义形",
+        "tags": [
+            "Clang",
+            "指针"
+        ]
+    },
+    {
         "uri": "/posts/Clang字符串",
         "title": "Clang字符串",
         "content": "\r\ngcc 好像不能成功编译utf-8编码格式的c语言文件。\r\n\r\n只要把c语言文件编码方式更改为ANSI即可。\r\n\r\nps:经实验：在windows下使用vscode的utf-8编码和Linux `",
@@ -36,7 +45,8 @@
         "title": "Clang字符串指针",
         "content": "\r\n# 字符串指针\r\n\r\nC语言中没有特定的字符串类型，我们通常是将字符串放在一个字符数组中\r\n\r\n```c\r\n#include \r\n#include \r\n\r\nint main(){\r\n    char str[] = \"http://c.biancheng.n",
         "tags": [
-            "Clang"
+            "Clang",
+            "指针"
         ]
     },
     {
@@ -48,11 +58,30 @@
         ]
     },
     {
+        "uri": "/posts/Clang指针作为函数返回值",
+        "title": "Clang指针作为函数返回值",
+        "content": "\r\nC语言允许函数的返回值是一个指针（地址），我们将这样的函数称为指针函数。下面的例子定义了一个函数 strlong()，用来返回两个字符串中较长的一个：\r\n\r\n```c\r\n用指针作为函数返回值时需要注意的一点是，函数运行结束后会销毁在它内部定义的所有局部数据，包括局部变量、局部数组和形式参数，函数",
+        "tags": [
+            "Clang",
+            "指针"
+        ]
+    },
+    {
         "uri": "/posts/Clang指针变量的运算",
         "title": "Clang指针变量的运算",
         "content": "\r\n# 指针变量的运算\r\n\r\n指针变量  保存的是地址，而地址本质上是一个整数，所以指针变量可以进行部分运算，例如加法、减法、比较等，请看下面的代码：\r\n\r\n```c\r\n#include \r\n\r\nint main(){\r\n    int    a = 10,   *pa = &a,",
         "tags": [
-            "Clang"
+            "Clang",
+            "指针"
+        ]
+    },
+    {
+        "uri": "/posts/Clang指针数组",
+        "title": "Clang指针数组",
+        "content": "\r\n# 指针数组\r\n\r\n如果一个数组中的所有元素保存的都是指针，那么我们就称它为指针数组。指针数组的定义形式一般为：\r\n\r\n```c\r\ndataType *arrayName[length];\r\n```\r\n\r\n`[ ]`的优先级高于`*`，该定义形式应该理解为：\r\n\r\n```c\r\ndataType ",
+        "tags": [
+            "Clang",
+            "指针"
         ]
     },
     {
@@ -60,7 +89,8 @@
         "title": "Clang指针是什么",
         "content": "\r\n计算机中所有的数据都必须放在内存中，不同类型的数据占用的字节数不一样，例如 int 占用 4 个字节，char 占用 1 个字节。为了正确地访问这些数据，必须为每个字节都编上号码，就像门牌号、身份证号一样，每个字节的编号是唯一的，根据编号可以准确地找到某个字节。\r\n\r\n下图是 4G 内存中每个字",
         "tags": [
-            "Clang"
+            "Clang",
+            "指针"
         ]
     },
     {
@@ -112,6 +142,22 @@
         ]
     },
     {
+        "uri": "/posts/Clang结构体",
+        "title": "Clang结构体",
+        "content": "\r\n# 结构体\r\n\r\n前面的教程中我们讲解了 数组（Array)，它是一组具有相同类型的数据的集合。但在实际的编程过程中，我们往往还需要一组类型不同的数据，例如对于学生信息登记表，姓名为字符串，学号为整数，年龄为整数，所在的学习小组为字符，成绩为小数，因为数据类型不同，显然不能用一个数组来存放。\r\n",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/Clang结构体指针",
+        "title": "Clang结构体指针",
+        "content": "\r\n# 结构体指针\r\n\r\n当一个指针**结构体指针**C语言结构体指针\r\n\r\n```c\r\n struct 结构体名 *变量名;\r\n```\r\n\r\n```c\r\n//结构体//结构体\r\nstruct stu{\r\n    char *name;  //姓名\r\n    int num;  //学号\r\n    ",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
         "uri": "/posts/Clang缓冲区",
         "title": "Clang缓冲区",
         "content": "\r\n# 缓冲区\r\n\r\n缓冲区（Buffer）又称为缓存（Cache），是内存空间的一部分。也就是说，计算机在内存中预留了一定的存储空间，用来暂时保存输入或输出的数据，这部分预留的空间就叫做缓冲区（",
@@ -144,11 +190,28 @@
         ]
     },
     {
+        "uri": "/posts/Clang针数组和二级指针",
+        "title": "Clang针数组和二级指针",
+        "content": "\r\n```c\r\n#include \r\n\r\nint main(){\r\n    char *lines[5] = {\r\n        \"COSC1283/1284\",\r\n        \"Programming\",\r\n        \"Techniques\",\r\n        \"i",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
         "uri": "/posts/Clang预处理命令",
         "title": "Clang预处理命令",
         "content": "\r\n在编译和链接之前，还需要对源文件进行一些文本方面的操作，比如文本替换、文件包含、删除部分代码等，这个过程叫做预处理，由预处理程序完成。\r\n\r\n较之其他编程语言，C/C++ 语言更依赖预处理器，所以在阅读或开发 C/C++ 程序过程中，可能会接触大量的预处理指令，比如 #include、#defi",
         "tags": [
             "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/C指针的总结",
+        "title": "C指针的总结",
+        "content": "\r\n指针（Pointer）就是内存的地址，C语言允许用一个变量来存放指针，这种变量称为指针变量。指针变量可以存放基本类型数据的地址，也可以存放数组、函数以及其他指针变量的地址。\r\n\r\n程序在运行过程中需要的是数据和指令的地址，变量名、函数名、字符串名和数组名在本质上是一样的，它们都是地址的助记符：在",
+        "tags": [
+            "Clang",
+            "指针"
         ]
     },
     {
@@ -200,6 +263,22 @@
         ]
     },
     {
+        "uri": "/posts/iptables转发",
+        "title": "Iptables转发",
+        "content": "\r\n# iptables 常用命令\r\n\r\n```bash\r\niptables -I INPUT -p tcp --dport 1234 -j ACCEPT\r\niptables -I INPUT -p udp --dport 1234 -j ACCEPT\r\niptables -t nat -nvL #",
+        "tags": [
+            "Linux"
+        ]
+    },
+    {
+        "uri": "/posts/main函数的高级用法接收用户输入的数据",
+        "title": "Main()函数的高级用法 接收用户输入的数据",
+        "content": "\r\nmain() 是C语言程序的入口函数，有且只能有一个，它实际上有两种标准的原型：\r\n\r\n```c\r\nint main();\r\nint main(int argc, char *argv[]);\r\n```\r\n\r\n前面的教程中我们一直使用第一种原型，它简单易懂，能让初学者很快入手。第二种原型在实际开",
+        "tags": [
+            "Clang"
+        ]
+    },
+    {
         "uri": "/posts/MIPS32架构堆栈",
         "title": "MIPS32架构堆栈",
         "content": "\n# MIPS堆栈原理\n\n 在计算机科学中，栈是一种具有 先进后出(FILO) 队列特性的数据结构。调用栈(Call Stack) 是指存放某个程序正在运行的函数的信息的栈。调用栈由栈帧(Stack Fram",
@@ -224,11 +303,29 @@
         ]
     },
     {
+        "uri": "/posts/只需一招彻底攻克C语言指针",
+        "title": "只需一招,彻底攻克C语言指针",
+        "content": "\r\n前面我们讲解了指针数组、二维数组指针、函数指针等几种较为复杂的指针，它们的定义形式分别是：\r\n\r\n```c\r\nint *p1[6];  //指针数组\r\nint *(p2[6]);  //指针数组，和上面的形式等价\r\nint (*p3)[6];  //二维数组指针\r\nint (*p4)(int, ",
+        "tags": [
+            "Clang",
+            "指针"
+        ]
+    },
+    {
         "uri": "/posts/忽略语法细节从整体上理解函数",
         "title": "忽略语法细节,从整体上理解函数",
         "content": "\r\n从整体上看，C语言代码是由一个一个的函数构成的，除了定义和说明类的语句（例如变量定义、宏定义、类型定义等）可以放在函数外面，所有具有运算或逻辑处理能力的语句（例如加减乘除、[if else](http://c.biancheng.net/c/if_else/)、for、函数调用等）都要放在函数内",
         "tags": [
             "Clang"
+        ]
+    },
+    {
+        "uri": "/posts/数组和指针绝不等价数组是另外一种类型",
+        "title": "数组和指针绝不等价,数组是另外一种类型",
+        "content": "\r\n通过前面的讲解，相信很多读者都会认为数组和指针是等价的，数组名表示数组的首地址。不幸的是，这是一种非常危险的想法，并不完全正确，前面我们将数组和指针等价起来是为了方便大家理解（在大多数情况下数组名确实可以当做指针使用），不至于被指针难倒，这节请大家放弃这种观念，我将会颠覆你的认知。\r\n\r\n数组和",
+        "tags": [
+            "Clang",
+            "指针"
         ]
     },
     {

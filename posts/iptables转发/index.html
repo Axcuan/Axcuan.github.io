@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Iptables转发 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Iptables转发</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Iptables转发</h1>
+                <div class="stuff">
+                    
+                    <span>January 5, 2020</span>
+                    <span>字数 424</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="iptables-常用命令">iptables 常用命令</h1>
+
+<pre><code class="language-bash">iptables -I INPUT -p tcp --dport 1234 -j ACCEPT
+iptables -I INPUT -p udp --dport 1234 -j ACCEPT
+iptables -t nat -nvL #查看nat链
+iptables -t nat -N MY_TCP #在nat表上新建名为MY_TCP自定义链 
+iptables -t nat -A PREROUTING -j MY_TCP  #将MY_TCP加入到PREROUTING链
+</code></pre>
+
+<h1 id="iptables实现nat转发">iptables实现NAT转发</h1>
+
+<p>服务器A：192.168.1.7
+服务器B: 192.168.1.160</p>
+
+<p>实现将本机（192.168.1.7:7410）端口流量转发给（192.168.1.160:9200）</p>
+
+<h2 id="配置">配置</h2>
+
+<ul>
+<li><p>内核允许IP转发</p>
+
+<pre><code class="language-bash">echo &quot;net.ipv4.ip_forward=1&quot;&gt;&gt;/etc/sysctl.conf
+sysctl -p
+modprobe ip_conntrack			//加载内核模块
+</code></pre></li>
+
+<li><p>设置filter表基础策略：允许入包/出包/转发</p>
+
+<pre><code class="language-bash">iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+</code></pre></li>
+
+<li><p>设置基础会话规则</p>
+
+<pre><code class="language-bash">iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+</code></pre></li>
+
+<li><p>端口转发流量</p>
+
+<pre><code class="language-bash">iptables -t nat -A PREROUTING -d 192.168.1.7/32 -p tcp --dport 7410 -j DNAT --to-destination 192.168.1.160:9200;
+iptables -t nat -A POSTROUTING -d 192.168.1.160/32 -p tcp --dport 9200 -j SNAT --to-source 192.168.1.7; 
+</code></pre></li>
+
+<li><p>保存</p>
+
+<pre><code>service iptables save
+service iptables restart
+</code></pre></li>
+
+<li><p>测试</p>
+
+<pre><code class="language-bash">telnet 192.168.1.7:7410 
+</code></pre></li>
+</ul>
+
+<h1 id="iptables透明代理">iptables透明代理</h1>
+
+<p>客户端向真实服务器发起连接，代理机冒充服务器与客户端建立连接，并以客户端ip与真实服务器建立连接进行代理转发。因此对于客户端与服务器来说，代理机都是透明的。</p>
+
+<pre><code class="language-bash">echo &quot;net.ipv4.ip_forward=1&quot;&gt;&gt;/etc/sysctl.conf
+sysctl -p
+iptables -A FORWARD -s 192.168.8.0/21 -j ACCEPT
+iptables -t nat -A POSTROUTING -s 192.168.8.0/21 -o eth0 -j MASQUERADE
+service iptables save
+</code></pre>
+
+<h1 id="端口复用">端口复用</h1>
+
+<p>参考： <a href="https://blog.csdn.net/sojrs_sec/article/details/100342613">https://blog.csdn.net/sojrs_sec/article/details/100342613</a></p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%95%B0%E7%BB%84%E7%81%B5%E6%B4%BB%E5%A4%9A%E5%8F%98%E7%9A%84%E8%AE%BF%E9%97%AE%E5%BD%A2%E5%BC%8F/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%8C%87%E9%92%88%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E5%80%BC/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

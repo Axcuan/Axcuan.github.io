@@ -47,7 +47,7 @@
                 <div class="stuff">
                     
                     <span>January 4, 2020</span>
-                    <span>字数 709</span>
+                    <span>字数 1990</span>
                     
                     
                 </div>
@@ -179,6 +179,111 @@ int main(){
 
 <p>在C语言中，函数的参数不仅可以是整数、小数、字符等具体的数据，还可以是指向它们的<a href="http://c.biancheng.net/c/80/">指针</a>。用指针变量作函数参数可以将函数外部的地址传递到函数内部，使得在函数内部可以操作函数外部的数据，并且这些数据不会随着函数的结束而被销毁。</p>
 
+<p>像数组、字符串、动态分配的内存等都是一系列数据的集合，没有办法通过一个参数全部传入函数内部，只能传递它们的指针，在函数内部通过指针来影响这些数据集合。</p>
+
+<p>有的时候，对于整数、小数、字符等基本类型数据的操作也必须要借助指针，一个典型的例子就是交换两个变量的值。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void swap(int a, int b){
+    int temp;  //临时变量
+    temp = a;
+    a = b;
+    b = temp;
+}
+
+int main(){
+    int a = 66, b = 99;
+    swap(a, b);
+    printf(&quot;a = %d, b = %d\n&quot;, a, b);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-c">a = 66, b = 99
+</code></pre>
+
+<p>从结果可以看出，a、b 的值并没有发生改变，交换失败。这是因为 swap() 函数内部的 a、b 和 main() 函数内部的 a、b
+是不同的变量，占用不同的内存，它们除了名字一样，没有其他任何关系，swap() 交换的是它内部 a、b 的值，不会影响它外部（main() 内部） a、b 的值。</p>
+
+<p>改用指针变量作参数后就很容易解决上面的问题：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void swap(int *a, int *b){
+    int temp;  //临时变量
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int main(){
+    int a = 66, b = 99;
+    swap(&amp;a, &amp;b);
+    printf(&quot;a = %d, b = %d\n&quot;, a, b);
+    return 0;
+}
+</code></pre>
+
+<h1 id="用数组作函数参数">用数组作函数参数</h1>
+
+<p>数组是一系列数据的集合，无法通过参数将它们一次性传递到函数内部，如果希望在函数内部操作数组，必须传递数组指针。下面的例子定义了一个函数 max()，用来查找数组中值最大的元素：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int max(int *intArr, int len){
+    int i, maxValue = intArr[0];  //假设第0个元素是最大值
+    for(i=1; i&lt;len; i++){
+        if(maxValue &lt; intArr[i]){
+            maxValue = intArr[i];
+        }
+    }
+   
+    return maxValue;
+}
+
+int main(){
+    int nums[6], i;
+    int len = sizeof(nums)/sizeof(int);
+    //读取用户输入的数据并赋值给数组元素
+    for(i=0; i&lt;len; i++){
+        scanf(&quot;%d&quot;, nums+i);
+    }
+    printf(&quot;Max value is %d!\n&quot;, max(nums, len));
+
+    return 0;
+}
+</code></pre>
+
+<p>用数组做函数参数时，参数也能够以“真正”的数组形式给出。例如对于上面的 max() 函数，它的参数可以写成下面的形式：</p>
+
+<pre><code class="language-c">int max(int intArr[6], int len){	//intArr[6]可以简写为intArr[]
+    int i, maxValue = intArr[0];  //假设第0个元素是最大值
+    for(i=1; i&lt;len; i++){
+        if(maxValue &lt; intArr[i]){
+            maxValue = intArr[i];
+        }
+    }
+    return maxValue;
+}
+</code></pre>
+
+<p>实际上这两种形式的数组定义都是假象，不管是<code>int intArr[6]</code>还是<code>int intArr[]</code>都不会创建一个数组出来，编译器也不会为它们分配内存，实际的数组是不存在的，它们最终还是会转换为<code>int *intArr</code>这样的指针。这就意味着，两种形式都不能将数组的所有元素“一股脑”传递进来，大家还得规规矩矩使用数组指针。</p>
+
+<p><code>int intArr[6]</code>这种形式只能说明函数期望用户传递的数组有 6 个元素，并不意味着数组只能有 6 个元素，真正传递的数组可以有少于或多于 6 个的元素。</p>
+
+<p>需要强调的是，不管使用哪种方式传递数组，都不能在函数内部求得数组长度，因为 intArr 仅仅是一个指针，而不是真正的数组，所以必须要额外增加一个参数来传递数组长度。</p>
+
+<p>C语言为什么不允许直接传递数组的所有元素，而必须传递数组指针呢？</p>
+
+<p>参数的传递本质上是一次赋值的过程，赋值就是对内存进行拷贝。所谓内存拷贝，是指将一块内存上的数据复制到另一块内存上。</p>
+
+<p>对于像 int、float、char 等基本类型的数据，它们占用的内存往往只有几个字节，对它们进行内存拷贝非常快速。而数组是一系列数据的集合，数据的数量没有限制，可能很少，也可能成千上万，对它们进行内存拷贝有可能是一个漫长的过程，会严重拖慢程序的效率，为了防止技艺不佳的程序员写出低效的代码，C语言没有从语法上支持数据集合的直接赋值。</p>
+
+<p>除了C语言，C++、Java、Python等其它语言也禁止对大块内存进行拷贝，在底层都使用类似指针的方式来实现。</p>
+
                     
                     <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
                         <source type="audio/mpeg" src="">
@@ -201,6 +306,8 @@ int main(){
                     
                         <a href="https://axcuan.github.io/posts/Clang%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%8C%87%E9%92%88/" rel="prev">上一篇</a>
                     
+                    
+                        <a href="https://axcuan.github.io/posts/iptables%E8%BD%AC%E5%8F%91/" rel="next">下一篇</a>
                     
                 </span>
             </h3>

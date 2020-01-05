@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang指针作为函数返回值 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang指针作为函数返回值</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang指针作为函数返回值</h1>
+                <div class="stuff">
+                    
+                    <span>January 5, 2020</span>
+                    <span>字数 3220</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p>C语言允许函数的返回值是一个指针（地址），我们将这样的函数称为指针函数。下面的例子定义了一个函数 strlong()，用来返回两个字符串中较长的一个：</p>
+
+<pre><code class="language-c">用指针作为函数返回值时需要注意的一点是，函数运行结束后会销毁在它内部定义的所有局部数据，包括局部变量、局部数组和形式参数，函数返回的指针请尽量不要指向这些数据，C语言没有任何机制来保证这些数据会一直有效，它们在后续使用过程中可能会引发运行时错误。请看下面的例子：#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+char *strlong(char *str1, char *str2){
+    if(strlen(str1) &gt;= strlen(str2)){
+        return str1;
+    }else{
+        return str2;
+    }
+}
+
+int main(){
+    char str1[30], str2[30], *str;
+    gets(str1);
+    gets(str2);
+    str = strlong(str1, str2);
+    printf(&quot;Longer string: %s\n&quot;, str);
+
+    return 0;
+}
+</code></pre>
+
+<p>用指针作为函数返回值时需要注意的一点是，函数运行结束后会销毁在它内部定义的所有局部数据，包括局部变量、局部数组和形式参数，函数返回的指针请尽量不要指向这些数据，C语言没有任何机制来保证这些数据会一直有效，它们在后续使用过程中可能会引发运行时错误。请看下面的例子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int *func(){
+    int n = 100;
+    return &amp;n;
+}
+
+int main(){
+    int *p = func(), n;
+    n = *p;
+    printf(&quot;value = %d\n&quot;, n);
+    return 0;
+}
+</code></pre>
+
+<p>VS2019下运行：</p>
+
+<pre><code class="language-bash">value = 100
+</code></pre>
+
+<p>gcc下编译运行输出为空</p>
+
+<p>n 是 func() 内部的局部变量，func() 返回了指向 n 的指针，根据上面的观点，func() 运行结束后 n 将被销毁，使用 *p
+应该获取不到 n 的值。但是从运行结果来看，我们的推理好像是错误的，func() 运行结束后 *p 依然可以获取局部变量 n
+的值，这个上面的观点不是相悖吗？
+为了进一步看清问题的本质，不妨将上面的代码稍作修改，在第9~10行之间增加一个函数调用，看看会有什么效果：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int *func(){
+    int n = 100;
+    return &amp;n;
+}
+
+int main(){
+    int *p = func(), n;
+    printf(&quot;c.biancheng.net\n&quot;);
+    n = *p;
+    printf(&quot;value = %d\n&quot;, n);
+    return 0;
+}
+</code></pre>
+
+<p>VS2019:</p>
+
+<pre><code class="language-bash">c.biancheng.net
+value = 16
+</code></pre>
+
+<p>gcc下编译运行输出为空</p>
+
+<p>可以看到，现在 p 指向的数据已经不是原来 n 的值了，它变成了一个毫无意义的甚至有些怪异的值。与前面的代码相比，该段代码仅仅是在 *p 之前增加了一个函数调用，这一细节的不同却导致运行结果有天壤之别，究竟是为什么呢？</p>
+
+<p>前面我们说函数运行结束后会销毁所有的局部数据，这个观点并没错，大部分C语言教材也都强调了这一点。但是，这里所谓的销毁并不是将局部数据所占用的内存全部抹掉，而是程序放弃对它的使用权限，弃之不理，后面的代码可以随意使用这块内存。对于上面的两个例子，func()运行结束后 n 的内存依然保持原样，值还是 100，如果使用及时也能够得到正确的数据，如果有其它函数被调用就会覆盖这块内存，得到的数据就失去了意义。</p>
+
+<p>第一个例子在调用其他函数之前使用 *p 抢先获得了 n 的值并将它保存起来，第二个例子显然没有抓住机会，有其他函数被调用后才使用 *p 获取数据，这个时候已经晚了，内存已经被后来的函数覆盖了，而覆盖它的究竟是一份什么样的数据我们无从推断（一般是一个没有意义甚至有些怪异的值）。</p>
+
+<h1 id="二级指针-指向指针的指针">二级指针(指向指针的指针)</h1>
+
+<p>指针可以指向一份普通类型的数据，例如 int、double、char 等，也可以指向一份指针类型的数据，例如 int *、double *、char * 等。</p>
+
+<p>如果一个指针指向的是另外一个指针，我们就称它为二级指针，或者指向指针的指针。</p>
+
+<p>假设有一个 int 类型的变量 a，p1是指向 a 的指针变量，p2 又是指向 p1 的指针变量，它们的关系如下图所示：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1544314910-0.jpg" alt="" /></p>
+
+<p>将这种关系转换为C语言代码：</p>
+
+<pre><code class="language-c">int a =100;
+int *p1 = &amp;a;
+int **p2 = &amp;p1;
+</code></pre>
+
+<p>指针变量也是一种变量，也会占用存储空间，也可以使用<code>&amp;</code>获取它的地址。C语言不限制指针的级数，每增加一级指针，在定义指针变量时就得增加一个星号<code>*</code>。p1 是一级指针，指向普通类型的数据，定义时有一个<code>*</code>；p2 是二级指针，指向一级指针 p1，定义时有两个<code>*</code>。</p>
+
+<p>想要获取指针指向的数据时，一级指针加一个<code>*</code>，二级指针加两个<code>*</code>，三级指针加三个<code>*</code>，以此类推，请看代码：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int a =100;
+    int *p1 = &amp;a;
+    int **p2 = &amp;p1;
+    int ***p3 = &amp;p2;
+
+    printf(&quot;%d, %d, %d, %d\n&quot;, a, *p1, **p2, ***p3);
+    printf(&quot;&amp;p2 = %#X, p3 = %#X\n&quot;, &amp;p2, p3);
+    printf(&quot;&amp;p1 = %#X, p2 = %#X, *p3 = %#X\n&quot;, &amp;p1, p2, *p3);
+    printf(&quot;&amp;a = %#X, p1 = %#X, *p2 = %#X, **p3 = %#X\n&quot;, &amp;a, p1, *p2, **p3);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">100, 100, 100, 100
+&amp;p2 = 0X61FE00, p3 = 0X61FE00
+&amp;p1 = 0X61FE08, p2 = 0X61FE08, *p3 = 0X61FE08
+&amp;a = 0X61FE14, p1 = 0X61FE14, *p2 = 0X61FE14, **p3 = 0X61FE14
+</code></pre>
+
+<p>以三级指针 p3 为例来分析上面的代码。<code>***p3</code>等价于<code>*(*(*p3))</code>。<em>p3 得到的是 p2 的值，也即 p1 的地址；</em>(<em>p3) 得到的是 p1 的值，也即 a 的地址；经过三次“取值”操作后，</em>(*(*p3)) 得到的才是 a 的值。</p>
+
+<p>假设 a、p1、p2、p3 的地址分别是 0X00A0、0X1000、0X2000、0X3000，它们之间的关系可以用下图来描述：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/15443163P-1.jpg" alt="" /></p>
+
+<h1 id="空指针null以及void指针">空指针NULL以及void指针</h1>
+
+<h2 id="空指针-null">空指针 NULL</h2>
+
+<p>一个指针变量可以指向计算机中的任何一块内存，不管该内存有没有被分配，也不管该内存有没有使用权限，只要把地址给它，它就可以指向，C语言没有一种机制来保证指向的内存的正确性，程序员必须自己提高警惕。</p>
+
+<p>很多初学者会在无意间对没有初始化的指针进行操作，这是非常危险的，请看下面的例子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    char *str;
+    gets(str);
+    printf(&quot;%s\n&quot;, str);
+    return 0;
+}
+</code></pre>
+
+<p>这段程序没有语法错误，能够通过编译和链接，但当用户输入完字符串并按下回车键时就会发生错误，在 Linux 下表现为段错误（Segment Fault），在 Windows 下程序直接崩溃。如果你足够幸运，或者输入的字符串少，也可能不报错，这都是未知的。</p>
+
+<p>前面我们讲过，未初始化的局部变量的值是不确定的，C语言并没有对此作出规定，不同的编译器有不同的实现，我曾警告大家不要直接使用未初始化的局部变量。上面的代码中，str就是一个未初始化的局部变量，它的值是不确定的，究竟指向哪块内存也是未知的，大多数情况下这块内存没有被分配或者没有读写权限，使用 gets() 函数向它里面写入数据显然是错误的。</p>
+
+<p>强烈建议对没有初始化的指针赋值为 NULL，例如：</p>
+
+<pre><code class="language-c">char *str = NULL;
+</code></pre>
+
+<p>NULL 是“零值、等于零”的意思，在C语言中表示空指针。从表面上理解，空指针是不指向任何数据的指针，是无效指针，程序使用它不会产生效果。</p>
+
+<blockquote>
+<p>注意区分大小写，null 没有任何特殊含义，只是一个普通的标识符。</p>
+</blockquote>
+
+<p>很多库函数都对传入的指针做了判断，如果是空指针就不做任何操作，或者给出提示信息。更改上面的代码，给 str 赋值 NULL，看看会有什么效果：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    char *str = NULL;
+    gets(str);
+    printf(&quot;%s\n&quot;, str);
+    return 0;
+}
+</code></pre>
+
+<p>运行程序后发现，还未等用户输入任何字符，printf() 就直接输出了<code>(null)</code>[vs2019运行错误，gcc无输出]</p>
+
+<ul>
+<li>gets() 不会让用户输入字符串，也不会向指针指向的内存中写入数据；</li>
+<li>printf() 不会读取指针指向的内容，只是简单地给出提示，让程序员意识到使用了一个空指针。</li>
+</ul>
+
+<p>我们在自己定义的函数中也可以进行类似的判断，例如：</p>
+
+<pre><code class="language-c">void func(char *p){
+    if(p == NULL){
+        printf(&quot;(null)\n&quot;);
+    }else{
+        printf(&quot;%s\n&quot;, p);
+    }
+}
+</code></pre>
+
+<p>这样能够从很大程度上增加程序的健壮性，防止对空指针进行无意义的操作。</p>
+
+<p>其实，NULL 是在<code>stdio.h</code>中定义的一个宏，它的具体内容为：</p>
+
+<pre><code class="language-c">#define NULL ((void *)0)
+</code></pre>
+
+<p><code>(void *)0</code>表示把数值 0 强制转换为<code>void *</code>类型，最外层的<code>( )</code>把宏定义的内容括起来，防止发生歧义。从整体上来看，NULL 指向了地址为 0 的内存，而不是前面说的不指向任何数据。</p>
+
+<p>在进程的虚拟地址空间中，最低地址处有一段内存区域被称为保留区，这个区域不存储有效数据，也不能被用户程序访问，将 NULL 指向这块区域很容易检测到违规指针。</p>
+
+<p>注意，C语言没有规定 NULL 的指向，只是大部分标准库约定成俗地将 NULL 指向 0，所以不要将 NULL 和 0 等同起来，例如下面的写法是不专业的：</p>
+
+<pre><code class="language-c">int *p = 0;
+</code></pre>
+
+<p>而应该坚持写为：</p>
+
+<pre><code class="language-c">int *p = NULL;
+</code></pre>
+
+<blockquote>
+<p>注意 NULL 和 NUL 的区别：NULL 表示空指针，是一个宏定义，可以在代码中直接使用。而 NUL 表示字符串的结束标志 &lsquo;\0&rsquo;，它是ASCII码表中的第 0 个字符。NUL 没有在C语言中定义，仅仅是对 &lsquo;\0&rsquo; 的称呼，不能在代码中直接使用。</p>
+</blockquote>
+
+<h2 id="void-指针">void 指针</h2>
+
+<p>对于空指针 NULL 的宏定义内容，上面只是对<code>((void *)0)</code>作了粗略的介绍，这里重点说一下<code>void *</code>的含义。void 用在函数定义中可以表示函数没有返回值或者没有形式参数，用在这里表示指针指向的数据的类型是未知的。</p>
+
+<p>也就是说，<code>void *</code>表示一个有效指针，它确实指向实实在在的数据，只是数据的类型尚未确定，在后续使用过程中一般要进行强制类型转换。</p>
+
+<p>C语言动态内存分配函数 malloc() 的返回值就是<code>void *</code>类型，在使用时要进行强制类型转换，请看下面的例子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    //分配可以保存30个字符的内存，并把返回的指针转换为 char *
+    char *str = (char *)malloc(sizeof(char) * 30);
+    gets(str);
+    printf(&quot;%s\n&quot;, str);
+    return 0;
+}
+</code></pre>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/iptables%E8%BD%AC%E5%8F%91/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/%E6%95%B0%E7%BB%84%E5%92%8C%E6%8C%87%E9%92%88%E7%BB%9D%E4%B8%8D%E7%AD%89%E4%BB%B7%E6%95%B0%E7%BB%84%E6%98%AF%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E7%B1%BB%E5%9E%8B/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

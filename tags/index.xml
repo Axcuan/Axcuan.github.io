@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Some Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sat, 04 Jan 2020 23:10:12 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jan 2020 20:19:34 +0800</lastBuildDate>
     
 	<atom:link href="https://axcuan.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,9 +14,27 @@
     <item>
       <title>Clang</title>
       <link>https://axcuan.github.io/tags/Clang/</link>
-      <pubDate>Sat, 04 Jan 2020 23:10:12 +0800</pubDate>
+      <pubDate>Sun, 05 Jan 2020 20:19:34 +0800</pubDate>
       
       <guid>https://axcuan.github.io/tags/Clang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>指针</title>
+      <link>https://axcuan.github.io/tags/%E6%8C%87%E9%92%88/</link>
+      <pubDate>Sun, 05 Jan 2020 19:08:02 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/tags/%E6%8C%87%E9%92%88/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>https://axcuan.github.io/tags/Linux/</link>
+      <pubDate>Sun, 05 Jan 2020 12:49:58 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/tags/Linux/</guid>
       <description></description>
     </item>
     
