@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang共用体 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang共用体</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang共用体</h1>
+                <div class="stuff">
+                    
+                    <span>January 8, 2020</span>
+                    <span>字数 1399</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h1 id="共同体">共同体</h1>
+
+<p>结构体（Struct）是一种构造类型或复杂类型，它可以包含多个类型不同的成员。在C语言中，还有另外一种和结构体非常类似的语法，叫做<strong>共用体（Union）</strong>，它的定义格式为：</p>
+
+<pre><code class="language-c">union 共用体名{
+    成员列表
+};
+</code></pre>
+
+<p>共用体有时也被称为联合或者联合体，这也是 Union 这个单词的本意。</p>
+
+<p>结构体和共用体的区别在于：结构体的各个成员会占用不同的内存，互相之间没有影响；而共用体的所有成员占用同一段内存，修改一个成员会影响其余所有成员。</p>
+
+<p>结构体占用的内存大于等于所有成员占用的内存的总和（成员之间可能会存在缝隙），共用体占用的内存等于最长的成员占用的内存。共用体使用了内存覆盖技术，同一时刻只能保存一个成员的值，如果对新的成员赋值，就会把原来成员的值覆盖掉。</p>
+
+<p>共用体也是一种自定义类型，可以通过它来创建变量，例如：</p>
+
+<pre><code class="language-c">union data{
+    int n;
+    char ch;
+    double f;
+};
+union data a, b, c;
+</code></pre>
+
+<p>上面是先定义共用体，再创建变量，也可以在定义共用体的同时创建变量：</p>
+
+<pre><code class="language-c">union data{
+    int n;
+    char ch;
+    double f;
+} a, b, c;
+</code></pre>
+
+<p>如果不再定义新的变量，也可以将共用体的名字省略：</p>
+
+<pre><code class="language-c">union{
+    int n;
+    char ch;
+    double f;
+} a, b, c;
+</code></pre>
+
+<p>共用体 data 中，成员 f 占用的内存最多，为 8 个字节，所以 data 类型的变量（也就是 a、b、c）也占用 8 个字节的内存，请看下面的演示：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+union data{
+    int n;
+    char ch;
+    short m;
+};
+
+int main(){
+    union data a;
+    printf(&quot;%d, %d\n&quot;, sizeof(a), sizeof(union data) );
+    a.n = 0x40;
+    printf(&quot;%X, %c, %hX\n&quot;, a.n, a.ch, a.m);
+    a.ch = '9';
+    printf(&quot;%X, %c, %hX\n&quot;, a.n, a.ch, a.m);
+    a.m = 0x2059;
+    printf(&quot;%X, %c, %hX\n&quot;, a.n, a.ch, a.m);
+    a.n = 0x3E25AD54;
+    printf(&quot;%X, %c, %hX\n&quot;, a.n, a.ch, a.m);
+   
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">4, 4
+40, @, 40
+39, 9, 39
+2059, Y, 2059
+3E25AD54, T, AD54
+</code></pre>
+
+<p>这段代码不但验证了共用体的长度，还说明共用体成员之间会相互影响，修改一个成员的值会影响其他成员。</p>
+
+<p>要想理解上面的输出结果，弄清成员之间究竟是如何相互影响的，就得了解各个成员在内存中的分布。以上面的 data 为例，各个成员在内存中的分布如下：</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/152553G12-0.jpg" alt="" /></p>
+
+<p>成员 n、ch、m 在内存中“对齐”到一头，对 ch 赋值修改的是前一个字节，对 m 赋值修改的是前两个字节，对 n 赋值修改的是全部字节。也就是说，ch、m 会影响到 n 的一部分数据，而 n 会影响到 ch、m 的全部数据。</p>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/LocalPic/2020-1/1525532T7-1.jpg" alt="" /></p>
+
+<p>为什么不同的机器会有不同的分布情况呢？这跟机器的存储模式有关</p>
+
+<h1 id="共用体的应用">共用体的应用</h1>
+
+<p>共用体在一般的编程中应用较少，在单片机中应用较多。对于 PC 机，经常使用到的一个实例是： 现有一张关于学生信息和教师信息的表格。学生信息包括姓名、编号、性别、职业、分数，教师的信息包括姓名、编号、性别、职业、教学科目。请看下面的表格：</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Num</th>
+<th>Sex</th>
+<th>Profession</th>
+<th>Score / Course</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>HanXiaoXiao</td>
+<td>501</td>
+<td>f</td>
+<td>s</td>
+<td>89.5</td>
+</tr>
+
+<tr>
+<td>YanWeiMin</td>
+<td>1011</td>
+<td>m</td>
+<td>t</td>
+<td>math</td>
+</tr>
+
+<tr>
+<td>LiuZhenTao</td>
+<td>109</td>
+<td>f</td>
+<td>t</td>
+<td>English</td>
+</tr>
+
+<tr>
+<td>ZhaoFeiYan</td>
+<td>982</td>
+<td>m</td>
+<td>s</td>
+<td>95.0</td>
+</tr>
+</tbody>
+</table>
+
+<p>f 和 m 分别表示女性和男性，s 表示学生，t 表示教师。可以看出，学生和教师所包含的数据是不同的。现在要求把这些信息放在同一个表格中，并设计程序输入人员信息然后输出。</p>
+
+<p>如果把每个人的信息都看作一个结构体变量的话，那么教师和学生的前 4 个成员变量是一样的，第 5 个成员变量可能是 score 或者 course。当第 4 个成员变量的值是 s 的时候，第 5 个成员变量就是 score；当第 4 个成员变量的值是 t 的时候，第 5 个成员变量就是 course。</p>
+
+<p>可以设计一个包含共用体的结构体，请看下面的代码：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define TOTAL 4  //人员总数
+
+struct{
+    char name[20];
+    int num;
+    char sex;
+    char profession;
+    union{
+        float score;
+        char course[20];
+    } sc;
+} bodys[TOTAL];
+
+int main(){
+    int i;
+    //输入人员信息
+    for(i=0; i&lt;TOTAL; i++){
+        printf(&quot;Input info: &quot;);
+        scanf(&quot;%s %d %c %c&quot;, bodys[i].name, &amp;(bodys[i].num), &amp;(bodys[i].sex), &amp;(bodys[i].profession));
+        if(bodys[i].profession == 's'){  //如果是学生
+            scanf(&quot;%f&quot;, &amp;bodys[i].sc.score);
+        }else{  //如果是老师
+            scanf(&quot;%s&quot;, bodys[i].sc.course);
+        }
+        fflush(stdin);
+    }
+
+    //输出人员信息
+    printf(&quot;\nName\t\tNum\tSex\tProfession\tScore / Course\n&quot;);
+    for(i=0; i&lt;TOTAL; i++){
+        if(bodys[i].profession == 's'){  //如果是学生
+            printf(&quot;%s\t%d\t%c\t%c\t\t%f\n&quot;, bodys[i].name, bodys[i].num, bodys[i].sex, bodys[i].profession, bodys[i].sc.score);
+        }else{  //如果是老师
+            printf(&quot;%s\t%d\t%c\t%c\t\t%s\n&quot;, bodys[i].name, bodys[i].num, bodys[i].sex, bodys[i].profession, bodys[i].sc.course);
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code>Input info: HanXiaoXiao 501 f s 89.5↙
+Input info: YanWeiMin 1011 m t math↙
+Input info: LiuZhenTao 109 f t English↙
+Input info: ZhaoFeiYan 982 m s 95.0↙
+
+Name            Num     Sex     Profession      Score / Course
+HanXiaoXiao     501     f       s               89.500000
+YanWeiMin       1011    m       t               math
+LiuZhenTao      109     f       t               English
+ZhaoFeiYan      982     m       s               95.000000
+</code></pre>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/%E5%A4%A7%E7%AB%AF%E5%B0%8F%E7%AB%AF%E4%BB%A5%E5%8F%8A%E5%88%A4%E5%88%AB%E6%96%B9%E5%BC%8F/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

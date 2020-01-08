@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang_const的用法详解 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang_const的用法详解</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang_const的用法详解</h1>
+                <div class="stuff">
+                    
+                    <span>January 8, 2020</span>
+                    <span>字数 1674</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<h2 id="const的用法">const的用法</h2>
+
+<p>有时候我们希望定义这样一种变量，它的值不能被改变，在整个作用域中都保持固定。例如，用一个变量来表示班级的最大人数，或者表示缓冲区的大小。为了满足这一要求，可以使用<code>const</code>关键字对变量加以限定：</p>
+
+<pre><code class="language-c">const int MaxNum = 100;  //班级的最大人数
+</code></pre>
+
+<p>这样 MaxNum 的值就不能被修改了，任何对 MaxNum 赋值的行为都将引发错误：</p>
+
+<pre><code class="language-c">MaxNum = 90;  //错误，试图向 const 变量写入数据
+</code></pre>
+
+<p>我们经常将 const 变量称为常量（Cons<a href="http://c.biancheng.net/ref/tan.html">tan</a>t）。创建常量的格式通常为：</p>
+
+<pre><code class="language-c">const type name = value;
+</code></pre>
+
+<p>const 和 type 都是用来修饰变量的，它们的位置可以互换，也就是将 type 放在 const 前面：</p>
+
+<pre><code class="language-c">type const name = value;
+</code></pre>
+
+<p>但我们通常采用第一种方式，不采用第二种方式。另外建议将常量名的首字母大写，以提醒程序员这是个常量。</p>
+
+<p>由于常量一旦被创建后其值就不能再改变，所以常量必须在定义的同时赋值（初始化），后面的任何赋值行为都将引发错误。一如既往，初始化常量可以使用任意形式的表达式，如下所示：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int getNum(){
+    return 100;
+}
+
+int main(){
+    int n = 90;
+    const int MaxNum1 = getNum();  //运行时初始化
+    const int MaxNum2 = n;  //运行时初始化
+    const int MaxNum3 = 80;  //编译时初始化
+    printf(&quot;%d, %d, %d\n&quot;, MaxNum1, MaxNum2, MaxNum3);
+
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：
+100, 90, 80</p>
+
+<h2 id="const-和指针">const 和指针</h2>
+
+<p>const 也可以和指针变量一起使用，这样可以限制指针变量本身，也可以限制指针指向的数据。const 和指针一起使用会有几种不同的顺序，如下所示：</p>
+
+<pre><code class="language-c">const int *p1;
+int const *p2;
+int * const p3;
+</code></pre>
+
+<p>在最后一种情况下，指针是只读的，也就是 p3 本身的值不能被修改；在前面两种情况下，指针所指向的数据是只读的，也就是 p1、p2 本身的值可以修改（指向不同的数据），但它们指向的数据不能被修改。</p>
+
+<p>当然，指针本身和它指向的数据都有可能是只读的，下面的两种写法能够做到这一点：</p>
+
+<pre><code class="language-c">const int * const p4;
+int const * const p5;
+</code></pre>
+
+<p>可以这样来记忆：<font color="red">const 离变量名近就是用来修饰指针变量的，离变量名远就是用来修饰指针指向的数据，如果近的和远的都有，那么就同时修饰指针变量以及它指向的数据。</font></p>
+
+<h2 id="const-和函数形参">const 和函数形参</h2>
+
+<p>在C语言中，单独定义 const 变量没有明显的优势，完全可以使用<code>#define</code>命令代替。<font color="red">const 通常用在函数形参中，如果形参是一个指针，为了防止在函数内部修改指针指向的数据，就可以用 const 来限制。</font></p>
+
+<p>在C语言标准库中，有很多函数的形参都被 const 限制了，下面是部分函数的原型：</p>
+
+<pre><code class="language-c">size_t strlen ( const char * str );
+int strcmp ( const char * str1, const char * str2 );
+char * strcat ( char * destination, const char * source );
+char * strcpy ( char * destination, const char * source );
+int system (const char* command);
+int puts ( const char * str );
+int printf ( const char * format, ... );
+</code></pre>
+
+<p>我们自己在定义函数时也可以使用 const 对形参加以限制，例如查找字符串中某个字符出现的次数：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+size_t strnchr(const char *str, char ch){
+    int i, n = 0, len = strlen(str);
+
+    for(i=0; i&lt;len; i++){
+        if(str[i] == ch){
+            n++;
+        }
+    }
+   
+    return n;
+}
+
+int main(){
+    char *str = &quot;https://axcuan.github.io&quot;;
+    char ch = 't';
+    int n = strnchr(str, ch);
+    printf(&quot;%d\n&quot;, n);
+    return 0;
+}
+</code></pre>
+
+<p>根据 strnchr() 的功能可以推断，函数内部要对字符串 str 进行遍历，不应该有修改的动作，用 const 加以限制，不但可以防止由于程序员误操作引起的字符串修改，还可以给用户一个提示，函数不会修改你提供的字符串，请放心。</p>
+
+<h2 id="const-和非-const-类型转换">const 和非 const 类型转换</h2>
+
+<p>当一个指针变量 str1 被 const 限制时，并且类似<code>const char *str1</code>这种形式，说明指针指向的数据不能被修改；如果将str1 赋值给另外一个未被 const 修饰的指针变量 str2，就有可能发生危险。因为通过 str1 不能修改数据，而赋值后通过 str2能够修改数据了，意义发生了转变，所以编译器不提倡这种行为，会给出错误或警告。</p>
+
+<p>也就是说，<code>const char *</code>和<code>char *</code>是不同的类型，不能将<code>const char *</code>类型的数据赋值给<code>char *</code>类型的变量。但反过来是可以的，编译器允许将<code>char *</code>类型的数据赋值给<code>const char *</code>类型的变量。</p>
+
+<p>这种限制很容易理解，<code>char *</code>指向的数据有读取和写入权限，而<code>const char *</code>指向的数据只有读取权限，降低数据的权限不会带来任何问题，但提升数据的权限就有可能发生危险。</p>
+
+<p>C语言标准库中很多函数的参数都被 const 限制了，但我们在以前的编码过程中并没有注意这个问题，经常将非 const 类型的数据传递给 const 类型的形参，这样做从未引发任何副作用，原因就是上面讲到的，将非 const 类型转换为 const 类型是允许的。</p>
+
+<p>下面是一个将 const 类型赋值给非 const 类型的例子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+void func(char *str){ }
+
+int main(){
+    const char *str1 = &quot;c.biancheng.net&quot;;
+    char *str2 = str1;
+    func(str1);
+    return 0;
+}
+</code></pre>
+
+<p>第7、8行代码分别通过赋值、传参（传参的本质也是赋值）将 const 类型的数据交给了非 const 类型的变量，编译器不会容忍这种行为，会给出警告，甚至直接报错。</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang_typedef%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E9%9A%8F%E6%9C%BA%E6%95%B0rand%E5%92%8Csrand%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

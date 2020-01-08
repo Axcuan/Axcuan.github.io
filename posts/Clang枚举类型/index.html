@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang枚举类型 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang枚举类型</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang枚举类型</h1>
+                <div class="stuff">
+                    
+                    <span>January 6, 2020</span>
+                    <span>字数 1245</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    <p>在实际编程中，有些数据的取值往往是有限的，只能是非常少量的整数，并且最好为每个值都取一个名字，以方便在后续代码中使用，比如一个星期只有七天，一年只有十二个月，一个班每周有六门课程等。</p>
+
+<p>以每周七天为例，我们可以使用<code>#define</code>命令来给每天指定一个名字：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+#define Mon 1
+#define Tues 2
+#define Wed 3
+#define Thurs 4
+#define Fri 5
+#define Sat 6
+#define Sun 7
+
+int main(){
+    int day;
+    scanf(&quot;%d&quot;, &amp;day);
+    switch(day){
+        case Mon: puts(&quot;Monday&quot;); break;
+        case Tues: puts(&quot;Tuesday&quot;); break;
+        case Wed: puts(&quot;Wednesday&quot;); break;
+        case Thurs: puts(&quot;Thursday&quot;); break;
+        case Fri: puts(&quot;Friday&quot;); break;
+        case Sat: puts(&quot;Saturday&quot;); break;
+        case Sun: puts(&quot;Sunday&quot;); break;
+        default: puts(&quot;Error!&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+<p><code>#define</code>命令虽然能解决问题，但也带来了不小的副作用，导致宏名过多，代码松散，看起来总有点不舒服。C语言提供了一种<strong>枚举（Enum）类型</strong>，能够列出所有可能的取值，并给它们取一个名字。</p>
+
+<p>枚举类型的定义形式为：</p>
+
+<pre><code class="language-c">enum typeName{ valueName1, valueName2, valueName3, ...... };
+</code></pre>
+
+<p><code>enum</code>是一个新的关键字，专门用来定义枚举类型，这也是它在C语言中的唯一用途；<code>typeName</code>是枚举类型的名字；<code>valueName1, valueName2, valueName3, ......</code>是每个值对应的名字的列表。注意最后的<code>;</code>不能少。</p>
+
+<p>例如，列出一个星期有几天：</p>
+
+<pre><code class="language-c">enum week{ Mon, Tues, Wed, Thurs, Fri, Sat, Sun };
+</code></pre>
+
+<p>可以看到，我们仅仅给出了名字，却没有给出名字对应的值，这是因为枚举值默认从 0 开始，往后逐个加 1（递增）；也就是说，week 中的 Mon、Tues &hellip;&hellip; Sun 对应的值分别为 0、1 &hellip;&hellip; 6。</p>
+
+<p>也可以给每个名字都指定一个值：</p>
+
+<pre><code class="language-c">enum week{ Mon = 1, Tues = 2, Wed = 3, Thurs = 4, Fri = 5, Sat = 6, Sun = 7 };
+</code></pre>
+
+<p>更为简单的方法是只给第一个名字指定值：</p>
+
+<pre><code class="language-c">enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun };
+</code></pre>
+
+<p>这样枚举值就从 1 开始递增，跟上面的写法是等效的。</p>
+
+<p>枚举是一种类型，通过它可以定义枚举变量：</p>
+
+<pre><code class="language-c">enum week a, b, c;
+</code></pre>
+
+<p>也可以在定义枚举类型的同时定义变量：</p>
+
+<pre><code class="language-c">enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun } a, b, c;
+</code></pre>
+
+<p>有了枚举变量，就可以把列表中的值赋给它：</p>
+
+<pre><code class="language-c">enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun };
+enum week a = Mon, b = Wed, c = Sat;
+或者： 
+enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun } a = Mon, b = Wed, c = Sat;
+</code></pre>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun } day;
+    scanf(&quot;%d&quot;, &amp;day);
+    switch(day){
+        case Mon: puts(&quot;Monday&quot;); break;
+        case Tues: puts(&quot;Tuesday&quot;); break;
+        case Wed: puts(&quot;Wednesday&quot;); break;
+        case Thurs: puts(&quot;Thursday&quot;); break;
+        case Fri: puts(&quot;Friday&quot;); break;
+        case Sat: puts(&quot;Saturday&quot;); break;
+        case Sun: puts(&quot;Sunday&quot;); break;
+        default: puts(&quot;Error!&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>需要注意的两点是：</p>
+
+<ul>
+<li>枚举列表中的 Mon、Tues、Wed 这些标识符的作用范围是全局的（严格来说是 main() 函数内部），不能再定义与它们名字相同的变量。</li>
+<li>Mon、Tues、Wed 等都是常量，不能对它们赋值，只能将它们的值赋给其他的变量。</li>
+</ul>
+
+<p>枚举和宏其实非常类似：宏在预处理阶段将名字替换成对应的值，枚举在编译阶段将名字替换成对应的值。我们可以将枚举理解为编译阶段的宏。</p>
+
+<p>对于上面的代码，在编译的某个时刻会变成类似下面的样子：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun } day;
+    scanf(&quot;%d&quot;, &amp;day);
+    switch(day){
+        case 1: puts(&quot;Monday&quot;); break;
+        case 2: puts(&quot;Tuesday&quot;); break;
+        case 3: puts(&quot;Wednesday&quot;); break;
+        case 4: puts(&quot;Thursday&quot;); break;
+        case 5: puts(&quot;Friday&quot;); break;
+        case 6: puts(&quot;Saturday&quot;); break;
+        case 7: puts(&quot;Sunday&quot;); break;
+        default: puts(&quot;Error!&quot;);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>Mon、Tues、Wed 这些名字都被替换成了对应的数字。这意味着，Mon、Tues、Wed 等都不是变量，它们不占用数据区（常量区、全局数据区、栈区和堆区）的内存，而是直接被编译到命令里面，放到代码区，所以不能用<code>&amp;</code>取得它们的地址。这就是枚举的本质。</p>
+
+<p>枚举类型变量需要存放的是一个整数，我猜测它的长度和 int 应该相同，下面来验证一下：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    enum week{ Mon = 1, Tues, Wed, Thurs, Fri, Sat, Sun } day = Mon;
+    printf(&quot;%d, %d, %d, %d, %d\n&quot;, sizeof(enum week), sizeof(day), sizeof(Mon), sizeof(Wed), sizeof(int) );
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：
+4, 4, 4, 4, 4</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E7%BB%93%E6%9E%84%E4%BD%93%E6%8C%87%E9%92%88/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E5%85%B1%E7%94%A8%E4%BD%93/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

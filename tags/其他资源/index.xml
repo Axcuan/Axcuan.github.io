@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>其他资源 on Some Notes</title>
+    <link>https://axcuan.github.io/tags/%E5%85%B6%E4%BB%96%E8%B5%84%E6%BA%90/</link>
+    <description>Recent content in 其他资源 on Some Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Wed, 08 Jan 2020 23:26:02 +0800</lastBuildDate>
+    
+	<atom:link href="https://axcuan.github.io/tags/%E5%85%B6%E4%BB%96%E8%B5%84%E6%BA%90/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>国内开源站点列表</title>
+      <link>https://axcuan.github.io/posts/%E5%9B%BD%E5%86%85%E5%BC%80%E6%BA%90%E7%AB%99%E7%82%B9%E5%88%97%E8%A1%A8/</link>
+      <pubDate>Wed, 08 Jan 2020 23:26:02 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E5%9B%BD%E5%86%85%E5%BC%80%E6%BA%90%E7%AB%99%E7%82%B9%E5%88%97%E8%A1%A8/</guid>
+      <description>最后更新于：2018-09-13 一、站点版 （一）、企业站 1.搜狐：http://mirrors.sohu.com/ 2.网易：http://mirror</description>
+    </item>
+    
+  </channel>
+</rss>

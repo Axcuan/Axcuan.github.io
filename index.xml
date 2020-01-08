@@ -6,10 +6,109 @@
     <description>Recent content on Some Notes</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 05 Jan 2020 20:19:34 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jan 2020 23:26:02 +0800</lastBuildDate>
     
 	<atom:link href="https://axcuan.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>国内开源站点列表</title>
+      <link>https://axcuan.github.io/posts/%E5%9B%BD%E5%86%85%E5%BC%80%E6%BA%90%E7%AB%99%E7%82%B9%E5%88%97%E8%A1%A8/</link>
+      <pubDate>Wed, 08 Jan 2020 23:26:02 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E5%9B%BD%E5%86%85%E5%BC%80%E6%BA%90%E7%AB%99%E7%82%B9%E5%88%97%E8%A1%A8/</guid>
+      <description>最后更新于：2018-09-13 一、站点版 （一）、企业站 1.搜狐：http://mirrors.sohu.com/ 2.网易：http://mirror</description>
+    </item>
+    
+    <item>
+      <title>ASCII码对照表</title>
+      <link>https://axcuan.github.io/posts/ASCII%E7%A0%81%E5%AF%B9%E7%85%A7%E8%A1%A8/</link>
+      <pubDate>Wed, 08 Jan 2020 23:17:45 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/ASCII%E7%A0%81%E5%AF%B9%E7%85%A7%E8%A1%A8/</guid>
+      <description>ASCII（American Standard Code for Information Interchange，美国信息互换标准代码）是一套基于拉丁字母的字符编码，共收录了 128 个字符，用一个字节就可以存储</description>
+    </item>
+    
+    <item>
+      <title>Clang随机数rand和srand用法详解</title>
+      <link>https://axcuan.github.io/posts/Clang%E9%9A%8F%E6%9C%BA%E6%95%B0rand%E5%92%8Csrand%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 08 Jan 2020 23:02:39 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E9%9A%8F%E6%9C%BA%E6%95%B0rand%E5%92%8Csrand%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>随机数 在实际编程中，我们经常需要生成随机数，例如，贪吃蛇游戏中在随机的位置出现食物，扑克牌游戏中随机发牌。 在C语言中，我们一般使用 头文件中的 rand() 函数来生</description>
+    </item>
+    
+    <item>
+      <title>Clang_const的用法详解</title>
+      <link>https://axcuan.github.io/posts/Clang_const%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 08 Jan 2020 22:56:06 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang_const%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>const的用法 有时候我们希望定义这样一种变量，它的值不能被改变，在整个作用域中都保持固定。例如，用一个变量来表示班级的最大人数，或者表示缓冲区的大小</description>
+    </item>
+    
+    <item>
+      <title>Clang_typedef的用法详解</title>
+      <link>https://axcuan.github.io/posts/Clang_typedef%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Wed, 08 Jan 2020 22:47:04 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang_typedef%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/</guid>
+      <description>typedef C语言允许为一个数据类型起一个新的别名，就像给人起“绰号”一样。 起别名的目的不是为了提高程序运行效率，而是为了编码方便。例如有一个结构体的名字是 st</description>
+    </item>
+    
+    <item>
+      <title>Clang使用位运算对数据或文件内容进行加密</title>
+      <link>https://axcuan.github.io/posts/Clang%E4%BD%BF%E7%94%A8%E4%BD%8D%E8%BF%90%E7%AE%97%E5%AF%B9%E6%95%B0%E6%8D%AE%E6%88%96%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/</link>
+      <pubDate>Wed, 08 Jan 2020 22:43:49 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E4%BD%BF%E7%94%A8%E4%BD%8D%E8%BF%90%E7%AE%97%E5%AF%B9%E6%95%B0%E6%8D%AE%E6%88%96%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/</guid>
+      <description>数据加密解密是一个常用的功能，如果你不希望让别人看到文件中的内容，可以通过密钥（也称”密码“）将文件的内容加密。比如文本文件(.txt)，加密前的内容</description>
+    </item>
+    
+    <item>
+      <title>Clang位运算</title>
+      <link>https://axcuan.github.io/posts/Clang%E4%BD%8D%E8%BF%90%E7%AE%97/</link>
+      <pubDate>Wed, 08 Jan 2020 22:30:51 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E4%BD%8D%E8%BF%90%E7%AE%97/</guid>
+      <description>所谓位运算，就是对一个比特（Bit）位进行操作。比特（Bit）是一个电子元器件，8个比特构成一个字节（Byte），它已经是粒度最小的可操作单元了。 C语</description>
+    </item>
+    
+    <item>
+      <title>Clang位域</title>
+      <link>https://axcuan.github.io/posts/Clang%E4%BD%8D%E5%9F%9F/</link>
+      <pubDate>Wed, 08 Jan 2020 22:17:55 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E4%BD%8D%E5%9F%9F/</guid>
+      <description>有些数据在存储时并不需要占用一个完整的字节，只需要占用一个或几个二进制位即可。例如开关只有通电和断电两种状态，用 0 和 1 表示足以，也就是用一个二进位。正</description>
+    </item>
+    
+    <item>
+      <title>大端小端以及判别方式</title>
+      <link>https://axcuan.github.io/posts/%E5%A4%A7%E7%AB%AF%E5%B0%8F%E7%AB%AF%E4%BB%A5%E5%8F%8A%E5%88%A4%E5%88%AB%E6%96%B9%E5%BC%8F/</link>
+      <pubDate>Wed, 08 Jan 2020 22:06:50 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/%E5%A4%A7%E7%AB%AF%E5%B0%8F%E7%AB%AF%E4%BB%A5%E5%8F%8A%E5%88%A4%E5%88%AB%E6%96%B9%E5%BC%8F/</guid>
+      <description>大端和小端是指数据在内存中的存储模式，它由 CPU 决定： 大端模式（Big-endian）是指将数据的低位（比如 1234 中的 34 就是低位）放在内存的高地址上，而数据的</description>
+    </item>
+    
+    <item>
+      <title>Clang共用体</title>
+      <link>https://axcuan.github.io/posts/Clang%E5%85%B1%E7%94%A8%E4%BD%93/</link>
+      <pubDate>Wed, 08 Jan 2020 21:40:08 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E5%85%B1%E7%94%A8%E4%BD%93/</guid>
+      <description>共同体 结构体（Struct）是一种构造类型或复杂类型，它可以包含多个类型不同的成员。在C语言中，还有另外一种和结构体非常类似的语法，叫做共用体（Uni</description>
+    </item>
+    
+    <item>
+      <title>Clang枚举类型</title>
+      <link>https://axcuan.github.io/posts/Clang%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B/</link>
+      <pubDate>Mon, 06 Jan 2020 20:38:11 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/Clang%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B/</guid>
+      <description>在实际编程中，有些数据的取值往往是有限的，只能是非常少量的整数，并且最好为每个值都取一个名字，以方便在后续代码中使用，比如一个星期只有七天，一年只有十</description>
+    </item>
     
     <item>
       <title>Clang结构体指针</title>

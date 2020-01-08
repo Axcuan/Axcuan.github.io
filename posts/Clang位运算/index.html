@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang位运算 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang位运算</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang位运算</h1>
+                <div class="stuff">
+                    
+                    <span>January 8, 2020</span>
+                    <span>字数 2523</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p>所谓<strong>位运算</strong>，就是对一个比特（Bit）位进行操作。比特（Bit）是一个电子元器件，8个比特构成一个字节（Byte），它已经是粒度最小的可操作单元了。</p>
+
+<p>C语言提供了六种位运算符：</p>
+
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>&amp;</th>
+<th>|</th>
+<th>^</th>
+<th>~</th>
+<th>&lt;&lt;</th>
+<th>&gt;&gt;</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>说明</td>
+<td>按位与</td>
+<td>按位或</td>
+<td>按位异或</td>
+<td>取反</td>
+<td>左移</td>
+<td>右移</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="按位与运算">按位与运算（&amp;）</h2>
+
+<p>一个比特（Bit）位只有 0 和 1 两个取值，只有参与<code>&amp;</code>运算的两个位都为 1 时，结果才为 1，否则为 0。例如<code>1&amp;1</code>为 1，<code>0&amp;0</code>为 0，<code>1&amp;0</code>也为 0，这和逻辑运算符<code>&amp;&amp;</code>非常类似。</p>
+
+<p>C语言中不能直接使用二进制，<code>&amp;</code>两边的操作数可以是十进制、八进制、十六进制，它们在内存中最终都是以二进制形式存储，<code>&amp;</code>就是对这些内存中的二进制位进行运算。其他的位运算符也是相同的道理。</p>
+
+<p>例如，<code>9 &amp; 5</code>可以转换成如下的运算：</p>
+
+<pre><code class="language-bash">  0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （9 在内存中的存储）
+&amp; 0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+-----------------------------------------------------------------------------------
+  0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0001  （1 在内存中的存储）
+</code></pre>
+
+<p>也就是说，按位与运算会对参与运算的两个数的所有二进制位进行<code>&amp;</code>运算，<code>9 &amp; 5</code>的结果为 1。</p>
+
+<p>又如，<code>-9 &amp; 5</code>可以转换成如下的运算：</p>
+
+<pre><code class="language-bash">  1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+&amp; 0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+-----------------------------------------------------------------------------------
+  0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+</code></pre>
+
+<p><code>-9 &amp; 5</code>的结果是 5。</p>
+
+<p>再强调一遍，<font color="red"><code>&amp;</code>是根据内存中的二进制位进行运算的，而不是数据的二进制形式；其他位运算符也一样。</font>以<code>-9&amp;5</code>为例，-9 的在内存中的存储和 -9 的二进制形式截然不同：</p>
+
+<pre><code class="language-bash"> 1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+-0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （-9 的二进制形式，前面多余的 0 可以抹掉）
+</code></pre>
+
+<p><font color="red">按位与运算通常用来对某些位清 0，或者保留某些位。</font>例如要把 n 的高 16 位清 0 ，保留低 16 位，可以进行<code>n &amp; 0XFFFF</code>运算（0XFFFF 在内存中的存储形式为 0000 0000 &ndash; 0000 0000 &ndash; 1111 1111 &ndash; 1111 1111）。</p>
+
+<p>【实例】对上面的分析进行检验。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int n = 0X8FA6002D;
+    printf(&quot;%d, %d, %X\n&quot;, 9 &amp; 5, -9 &amp; 5, n &amp; 0XFFFF);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">1, 5, 2D
+</code></pre>
+
+<h2 id="按位或运算">按位或运算（|）</h2>
+
+<p>参与<code>|</code>运算的两个二进制位有一个为 1 时，结果就为 1，两个都为 0 时结果才为 0。例如<code>1|1</code>为1，<code>0|0</code>为0，<code>1|0</code>为1，这和逻辑运算中的<code>||</code>非常类似。</p>
+
+<p>例如，<code>9 | 5</code>可以转换成如下的运算：</p>
+
+<pre><code class="language-bash">    0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （9 在内存中的存储）
+|   0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+-----------------------------------------------------------------------------------
+    0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1101  （13 在内存中的存储）
+</code></pre>
+
+<p><code>9 | 5</code>的结果为 13。</p>
+
+<p>又如，<code>-9 | 5</code>可以转换成如下的运算：</p>
+
+<pre><code class="language-bash">    1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+|   0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+-----------------------------------------------------------------------------------
+    1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+</code></pre>
+
+<p><code>-9 | 5</code>的结果是 -9。</p>
+
+<p><font color="red">按位或运算可以用来将某些位置 1，或者保留某些位。</font>例如要把 n 的高 16 位置 1，保留低 16 位，可以进行<code>n | 0XFFFF0000</code>运算（0XFFFF0000 在内存中的存储形式为 1111 1111 &ndash; 1111 1111 &ndash; 0000 0000 &ndash; 0000 0000）。</p>
+
+<p>【实例】对上面的分析进行校验。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    int n = 0X2D;
+    printf(&quot;%d, %d, %X\n&quot;, 9 | 5, -9 | 5, n | 0XFFFF0000);
+    return 0;
+}
+</code></pre>
+
+<pre><code class="language-bash">13, -9, FFFF002D
+</code></pre>
+
+<h2 id="按位异或运算">按位异或运算（^）</h2>
+
+<p>参与<code>^</code>运算两个二进制位不同时，结果为 1，相同时结果为 0。例如<code>0^1</code>为1，<code>0^0</code>为0，<code>1^1</code>为0。</p>
+
+<p>例如，<code>9 ^ 5</code>可以转换成如下的运算：</p>
+
+<pre><code class="language-bash">   0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （9 在内存中的存储）
+^  0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+-----------------------------------------------------------------------------------
+   0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1100  （12 在内存中的存储）
+</code></pre>
+
+<p><code>9 ^ 5</code>的结果为 12。</p>
+
+<p>又如，<code>-9 ^ 5</code>可以转换成如下的运算：</p>
+
+<pre><code class="language-bash">   1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+^  0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0101  （5 在内存中的存储）
+-----------------------------------------------------------------------------------
+   1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0010  （-14 在内存中的存储）
+</code></pre>
+
+<p><code>-9 ^ 5</code>的结果是 -14。</p>
+
+<p><font color="red">按位异或运算可以用来将某些二进制位反转。</font>例如要把 n 的高 16 位反转，保留低 16 位，可以进行n ^ 0XFFFF0000运算（0XFFFF0000 在内存中的存储形式为 1111 1111 &ndash; 1111 1111 &ndash; 0000 0000 &ndash; 0000 0000）。</p>
+
+<p>【实例】对上面的分析进行校验。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    unsigned n = 0X0A07002D;
+    printf(&quot;%d, %d, %X\n&quot;, 9 ^ 5, -9 ^ 5, n ^ 0XFFFF0000);
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：
+12, -14, F5F8002D</p>
+
+<h2 id="取反运算">取反运算（~）</h2>
+
+<p>取反运算符<code>~</code>为单目运算符，右结合性，作用是对参与运算的二进制位取反。例如<code>~1</code>为0，<code>~0</code>为1，这和逻辑运算中的<code>!</code>非常类似。。</p>
+
+<p>例如，<code>~9</code>可以转换为如下的运算：</p>
+
+<pre><code class="language-bash">~ 0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （9 在内存中的存储）
+-----------------------------------------------------------------------------------
+  1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0110  （-10 在内存中的存储）
+</code></pre>
+
+<p>所以<code>~9</code>的结果为 -10。</p>
+
+<p>例如，<code>~-9</code>可以转换为如下的运算：</p>
+
+<pre><code class="language-bash">~ 1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+-----------------------------------------------------------------------------------
+  0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1000  （8 在内存中的存储）
+</code></pre>
+
+<p>所以<code>~-9</code>的结果为 8。</p>
+
+<p>【实例】对上面的分析进行校验。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    printf(&quot;%d, %d\n&quot;, ~9, ~-9 );
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：
+-10, 8</p>
+
+<h2 id="左移运算">左移运算（&lt;&lt;）</h2>
+
+<p>左移运算符<code>&lt;&lt;</code>用来把操作数的各个二进制位全部左移若干位，高位丢弃，低位补0。</p>
+
+<p>例如，<code>9&lt;&lt;3</code>可以转换为如下的运算：</p>
+
+<pre><code class="language-bash">&lt;&lt; 0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （9 在内存中的存储）
+-----------------------------------------------------------------------------------
+   0000 0000 -- 0000 0000 -- 0000 0000 -- 0100 1000  （72 在内存中的存储）
+</code></pre>
+
+<p>所以<code>9&lt;&lt;3</code>的结果为 72。</p>
+
+<p>又如，<code>(-9)&lt;&lt;3</code>可以转换为如下的运算：</p>
+
+<pre><code class="language-bash">&lt;&lt; 1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+-----------------------------------------------------------------------------------
+   1111 1111 -- 1111 1111 -- 1111 1111 -- 1011 1000  （-72 在内存中的存储） 
+</code></pre>
+
+<p>所以(-9)&lt;&lt;3的结果为 -72</p>
+
+<p><font color="red">如果数据较小，被丢弃的高位不包含 1，那么左移 n 位相当于乘以 2 的 n 次方。</font></p>
+
+<p>【实例】对上面的结果进行校验。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    printf(&quot;%d, %d\n&quot;, 9&lt;&lt;3, (-9)&lt;&lt;3 );
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：
+72, -72</p>
+
+<h2 id="右移运算">右移运算（&gt;&gt;）</h2>
+
+<p>右移运算符<code>&gt;&gt;</code>用来把操作数的各个二进制位全部右移若干位，低位丢弃，高位补 0 或 1。如果数据的最高位是 0，那么就补 0；如果最高位是 1，那么就补 1。</p>
+
+<p>例如，<code>9&gt;&gt;3</code>可以转换为如下的运算：</p>
+
+<pre><code class="language-bash">&gt;&gt; 0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 1001  （9 在内存中的存储）
+-----------------------------------------------------------------------------------
+   0000 0000 -- 0000 0000 -- 0000 0000 -- 0000 0001  （1 在内存中的存储）
+</code></pre>
+
+<p>所以<code>9&gt;&gt;3</code>的结果为 1。</p>
+
+<p>又如，<code>(-9)&gt;&gt;3</code>可以转换为如下的运算：</p>
+
+<pre><code class="language-bash">&gt;&gt; 1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 0111  （-9 在内存中的存储）
+-----------------------------------------------------------------------------------
+   1111 1111 -- 1111 1111 -- 1111 1111 -- 1111 1110  （-2 在内存中的存储） 
+</code></pre>
+
+<p>所以<code>(-9)&gt;&gt;3</code>的结果为 -2</p>
+
+<p><font color="red">如果被丢弃的低位不包含 1，那么右移 n 位相当于除以 2 的 n 次方（但被移除的位中经常会包含 1）。</font></p>
+
+<p>【实例】对上面的结果进行校验。</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+
+int main(){
+    printf(&quot;%d, %d\n&quot;, 9&gt;&gt;3, (-9)&gt;&gt;3 );
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：
+1, -2</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E4%BD%8D%E5%9F%9F/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E4%BD%BF%E7%94%A8%E4%BD%8D%E8%BF%90%E7%AE%97%E5%AF%B9%E6%95%B0%E6%8D%AE%E6%88%96%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

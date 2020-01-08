@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang使用位运算对数据或文件内容进行加密 &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang使用位运算对数据或文件内容进行加密</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang使用位运算对数据或文件内容进行加密</h1>
+                <div class="stuff">
+                    
+                    <span>January 8, 2020</span>
+                    <span>字数 579</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    <p>数据加密解密是一个常用的功能，如果你不希望让别人看到文件中的内容，可以通过密钥（也称”密码“）将文件的内容加密。比如文本文件(.txt)，加密前的内容是能够读懂的，加密后的内容是”乱码“，都是一些奇怪的字符，根本无法阅读。</p>
+
+<p>数据加密解密的原理也很简单，就是使用异或运算。请先看下面的代码：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(){
+    char plaintext = 'a';  // 明文
+    char secretkey = '!';  // 密钥
+    char ciphertext = plaintext ^ secretkey;  // 密文
+    char decodetext = ciphertext ^ secretkey;  // 解密后的字符
+    char buffer[9];
+
+    printf(&quot;            char    ASCII\n&quot;);
+    // itoa()用来将数字转换为字符串，可以设定转换时的进制（基数）
+    // 这里将字符对应的ascii码转换为二进制
+    printf(&quot; plaintext   %c     %7s\n&quot;, plaintext, itoa(plaintext, buffer, 2));
+    printf(&quot; secretkey   %c     %7s\n&quot;, secretkey, itoa(secretkey, buffer, 2));
+    printf(&quot;ciphertext   %c     %7s\n&quot;, ciphertext, itoa(ciphertext, buffer, 2));
+    printf(&quot;decodetext   %c     %7s\n&quot;, decodetext, itoa(decodetext, buffer, 2));
+
+    return 0;
+}
+</code></pre>
+
+<p>运行结果：</p>
+
+<pre><code class="language-bash">            char    ASCII
+ plaintext   a     1100001
+ secretkey   !      100001
+ciphertext   @     1000000
+decodetext   a     1100001
+</code></pre>
+
+<p>plaintext 与 decodetext相同，也就是说，两次异或运算后还是原来的结果。</p>
+
+<p>这就是加密的关键技术：</p>
+
+<ul>
+<li>通过一次异或运算，生成密文，密文没有可读性，与原文风马牛不相及，这就是加密；</li>
+<li>密文再经过一次异或运算，就会还原成原文，这就是解密的过程；</li>
+<li>加密和解密需要相同的密钥，如果密钥不对，是无法成功解密的。</li>
+</ul>
+
+<p>上面的加密算法称为对称加密算法，加密和解密使用同一个密钥。</p>
+
+<p>如果加密和解密的密钥不同，则称为非对称加密算法。在非对称算法中，加密的密钥称为公钥，解密的密钥称为私钥，只知道公钥是无法解密的，还必须知道私钥。</p>
+
+<p>注意：程序中的 itoa() 位于 stdlib.h 头文件，它并不是一个标准的C函数，只有Windows下有。</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/Clang%E4%BD%8D%E8%BF%90%E7%AE%97/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/Clang_typedef%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+
