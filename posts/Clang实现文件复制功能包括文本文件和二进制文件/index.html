@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Clang实现文件复制功能(包括文本文件和二进制文件) &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Clang实现文件复制功能(包括文本文件和二进制文件)</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Clang实现文件复制功能(包括文本文件和二进制文件)</h1>
+                <div class="stuff">
+                    
+                    <span>January 9, 2020</span>
+                    <span>字数 1128</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    <p>文件的复制是常用的功能，要求写一段代码，让用户输入要复制的文件以及新建的文件，然后对文件进行复制。能够复制的文件包括文本文件和二进制文件，你可以复制1G的电影，也可以复制1Byte的txt文档。</p>
+
+<p>实现文件复制的主要思路是：开辟一个缓冲区，不断从原文件中读取内容到缓冲区，每读取完一次就将缓冲区中的内容写入到新建的文件，直到把原文件的内容读取完。</p>
+
+<p>这里有两个关键的问题需要解决：</p>
+
+<ul>
+<li>开辟多大的缓冲区合适？缓冲区过小会造成读写次数的增加，过大也不能明显提高效率。目前大部分磁盘的扇区都是4K对齐的，如果读写的数据不是4K的整数倍，就会跨扇区读取，降低效率，所以我们开辟4K的缓冲区。</li>
+<li>缓冲区中的数据是没有结束标志的，如果缓冲区填充不满，如何确定写入的字节数？最好的办法就是每次读取都能返回读取到的字节数。</li>
+</ul>
+
+<p>fread() 的原型为：</p>
+
+<pre><code class="language-c">size_t fread ( void *ptr, size_t size, size_t count, FILE *fp );
+</code></pre>
+
+<p>它返回成功读写的块数，该值小于等于 count。如果我们让参数 size 等于1，那么返回的就是读取的字节数。</p>
+
+<blockquote>
+<p>注意：fopen()一定要以二进制的形式打开文件，不能以文本形式打开，否则系统会对文件进行一些处理，如果是文本文件，像.txt等，可能没有问题，但如果是其他格式的文件，像.mp4, .rmvb, .jpg等，复制后就会出错，无法读取。</p>
+</blockquote>
+
+<p>代码实现：</p>
+
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int copyFile(char *fileRead, char *fileWrite);
+
+int main()
+{
+    char fileRead[100];  // 要复制的文件名
+    char fileWrite[100];  // 复制后的文件名
+   
+    // 获取用户输入
+    printf(&quot;要复制的文件：&quot;);
+    scanf(&quot;%s&quot;, fileRead);
+    printf(&quot;将文件复制到：&quot;);
+    scanf(&quot;%s&quot;, fileWrite);
+
+    // 进行复制操作
+    if( copyFile(fileRead, fileWrite) ){
+        printf(&quot;恭喜你，文件复制成功！\n&quot;);
+    }else{
+        printf(&quot;文件复制失败！\n&quot;);
+    }
+
+    return 0;
+}
+
+/**
+* 文件复制函数
+* @param    fileRead    要复制的文件
+* @param    fileWrite   复制后文件的保存路径
+* @return   int         1: 复制成功；2: 复制失败
+**/
+int copyFile(char *fileRead, char *fileWrite){
+    FILE *fpRead;  // 指向要复制的文件
+    FILE *fpWrite;  // 指向复制后的文件
+    int bufferLen = 1024*4;  // 缓冲区长度
+    char *buffer = (char*)malloc(bufferLen);  // 开辟缓存
+    int readCount;  // 实际读取的字节数
+
+    if( (fpRead=fopen(fileRead, &quot;rb&quot;)) == NULL || (fpWrite=fopen(fileWrite, &quot;wb&quot;)) == NULL ){
+        printf(&quot;Cannot open file, press any key to exit!\n&quot;);
+        getch();
+        exit(1);
+    }
+
+    // 不断从fileRead读取内容，放在缓冲区，再将缓冲区的内容写入fileWrite
+    while( (readCount=fread(buffer, 1, bufferLen, fpRead)) &gt; 0 ){
+        fwrite(buffer, readCount, 1, fpWrite);
+    }
+
+    free(buffer);
+    fclose(fpRead);
+    fclose(fpWrite);
+
+    return 1;
+}
+</code></pre>
+
+<p>第46行是文件复制的核心代码。通过fread()函数，每次从 fileRead 文件中读取 bufferLen 个字节，放到缓冲区，再通过fwrite()函数将缓冲区的内容写入fileWrite文件。</p>
+
+<p>正常情况下，每次会读取bufferLen个字节，即readCount=bufferLen；如果文件大小不足bufferLen个字节，或者读取到文件末尾，实际读取到的字节就会小于bufferLen，即readCount&lt;bufferLen。所以通过fwrite()写入文件时，应该以readCount为准。</p>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/rewind%E5%92%8Cfseek%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3%E9%9A%8F%E6%9C%BA%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/C%E8%AF%AD%E8%A8%80FILE%E7%BB%93%E6%9E%84%E4%BD%93%E4%BB%A5%E5%8F%8A%E7%BC%93%E5%86%B2%E5%8C%BA%E6%B7%B1%E5%85%A5%E6%8E%A2%E8%AE%A8/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+

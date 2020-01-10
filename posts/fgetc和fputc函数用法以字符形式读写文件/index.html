@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html><head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="google" content="notranslate">
+  <title>Fgetc和fputc函数用法(以字符形式读写文件) &middot; Some Notes</title>
+  <meta name="keywords" content="素锦, inspiration, customization, rainmeter, design, web, 壁纸, 设计, 收集, wallpaper, collection, jaku, icon">
+  <meta name="description" content="世界上每个角落都有人过着相似的人生">
+  <meta name="author" content="axcuan">
+  <link rel="icon" type="image/png" href="">
+  <link rel="stylesheet" href="/css/diaspora.css">
+  <link rel="stylesheet" href="/css/insight.css">
+  <link rel="stylesheet" href="/css/custom.css">
+</head><body class="loading">
+        <div id="loading"></div>
+				<div id="nav"></div>
+				<div class="nav-user"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+        <div class="bar">
+        </div>
+        <a class="icon-icon" href="javascript:history.back()">
+        </a>
+        <div title="播放/暂停" class="icon-play">
+        </div>
+        
+        <h3 class="subtitle" style="display: none;">
+        Fgetc和fputc函数用法(以字符形式读写文件)</h3>
+        <div class="social">
+            <div>
+                <div class="share">
+                    <a title="获取二维码" class="icon-wechat" href="javascript:;"></a>
+                </div>
+                <div id="qr"></div>
+            </div>
+        </div>
+        <div class="scrollbar" style="width: 1.1636%;"></div>
+    </div>
+    <div class="section">
+        <div class="article">
+            <div>
+                <h1 class="title">
+                Fgetc和fputc函数用法(以字符形式读写文件)</h1>
+                <div class="stuff">
+                    
+                    <span>January 9, 2020</span>
+                    <span>字数 1591</span>
+                    
+                    
+                </div>
+                <div class="content">
+                    
+
+<p>在C语言中，读写文件比较灵活，既可以每次读写一个字符，也可以读写一个字符串，甚至是任意字节的数据（数据块）。</p>
+
+<p>以字符形式读写文件时，每次可以从文件中读取一个字符，或者向文件中写入一个字符。主要使用两个函数，分别是 fgetc() 和 fputc()。</p>
+
+<h2 id="字符读取函数-fgetc">字符读取函数 fgetc</h2>
+
+<p>fgetc 是 file get char 的缩写，意思是从指定的文件中读取一个字符。fgetc() 的用法为：</p>
+
+<pre><code class="language-c">int fgetc (FILE *fp);
+</code></pre>
+
+<p>fp 为文件指针。fgetc() 读取成功时返回读取到的字符，读取到文件末尾或读取失败时返回<code>EOF</code>。</p>
+
+<p>EOF 是 end of file 的缩写，表示文件末尾，是在 stdio.h 中定义的宏，它的值是一个负数，往往是 -1。fgetc() 的返回值类型之所以为 int，就是为了容纳这个负数（char不能是负数）。</p>
+
+<blockquote>
+<p>EOF 不绝对是 -1，也可以是其他负数，这要看编译器的实现。</p>
+</blockquote>
+
+<p>fgetc() 的用法举例：</p>
+
+<pre><code class="language-c">char ch;
+FILE *fp = fopen(&quot;D:\\demo.txt&quot;, &quot;r+&quot;);
+ch = fgetc(fp);
+</code></pre>
+
+<p>表示从<code>D:\\demo.txt</code>文件中读取一个字符，并保存到变量 ch 中。</p>
+
+<p>在文件内部有一个位置指针，用来指向当前读写到的位置，也就是读写到第几个字节。在文件打开时，该指针总是指向文件的第一个字节。使用 fgetc() 函数后，该指针会向后移动一个字节，所以可以连续多次使用 fgetc() 读取多个字符。</p>
+
+<blockquote>
+<p>注意：这个文件内部的位置指针与C语言中的指针不是一回事。位置指针仅仅是一个标志，表示文件读写到的位置，也就是读写到第几个字节，它不表示地址。文件每读写一次，位置指针就会移动一次，它不需要你在程序中定义和赋值，而是由系统自动设置，对用户是隐藏的。</p>
+</blockquote>
+
+<p>【示例】在屏幕上显示 D:\demo.txt 文件的内容:</p>
+
+<pre><code class="language-c">#include&lt;stdio.h&gt;
+int main()
+{
+    FILE *fp;
+    char ch;
+   
+    //如果文件不存在，给出提示并退出
+    if( (fp=fopen(&quot;D:\\demo.txt&quot;,&quot;rt&quot;)) == NULL ){
+        puts(&quot;Fail to open file!&quot;);
+        exit(0);
+    }
+
+    //每次读取一个字节，直到读取完毕
+    while( (ch=fgetc(fp)) != EOF ){
+        putchar(ch);
+    }
+    putchar('\n');  //输出换行符
+
+    fclose(fp);
+    return 0;
+}
+</code></pre>
+
+<p>程序第 13 行是关键，while 循环的条件为<code>(ch=fgetc(fp)) != EOF</code>。fget() 每次从位置指针所在的位置读取一个字符，并保存到变量 ch，位置指针向后移动一个字节。当文件指针移动到文件末尾时，fget() 就无法读取字符了，于是返回 EOF，表示文件读取结束了。</p>
+
+<h3 id="对-eof-的说明">对 EOF 的说明</h3>
+
+<p>EOF 本来表示文件末尾，意味着读取结束，但是很多函数在读取出错时也返回 EOF，那么当返回 EOF 时，到底是文件读取完毕了还是读取出错了？我们可以借助 stdio.h 中的两个函数来判断，分别是 feof() 和 ferror()。</p>
+
+<p>feof() 函数用来判断文件内部指针是否指向了文件末尾，它的原型是：</p>
+
+<pre><code class="language-c">int feof ( FILE * fp );
+</code></pre>
+
+<p>当指向文件末尾时返回非零值，否则返回零值。</p>
+
+<p>ferror() 函数用来判断文件操作是否出错，它的原型是：</p>
+
+<pre><code class="language-c">int ferror ( FILE *fp );
+</code></pre>
+
+<p>出错时返回非零值，否则返回零值。</p>
+
+<p>需要说明的是，文件出错是非常少见的情况，上面的示例基本能够保证将文件内的数据读取完毕。如果追求完美，也可以加上判断并给出提示：</p>
+
+<pre><code class="language-c">#include&lt;stdio.h&gt;
+int main()
+{
+    FILE *fp;
+    char ch;
+  
+    //如果文件不存在，给出提示并退出
+    if( (fp=fopen(&quot;D:\\demo.txt&quot;,&quot;rt&quot;)) == NULL ){
+        puts(&quot;Fail to open file!&quot;);
+        exit(0);
+    }
+
+    //每次读取一个字节，直到读取完毕
+    while( (ch=fgetc(fp)) != EOF ){
+        putchar(ch);
+    }
+    putchar('\n');  //输出换行符
+
+    if(ferror(fp)){
+        puts(&quot;读取出错&quot;);
+    }else{
+        puts(&quot;读取成功&quot;);
+    }
+
+    fclose(fp);
+    return 0;
+}
+</code></pre>
+
+<h2 id="字符写入函数-fputc">字符写入函数 fputc</h2>
+
+<p>fputc 是 file output char 的所以，意思是向指定的文件中写入一个字符。fputc() 的用法为：</p>
+
+<pre><code class="language-c">int fputc ( int ch, FILE *fp );
+</code></pre>
+
+<p>ch 为要写入的字符，fp 为文件指针。fputc() 写入成功时返回写入的字符，失败时返回 EOF，返回值类型为 int 也是为了容纳这个负数。例如：</p>
+
+<pre><code class="language-c">fputc('a', fp);
+或者： 
+char ch = 'a';
+fputc(ch, fp);
+</code></pre>
+
+<p>表示把字符 &lsquo;a&rsquo; 写入fp所指向的文件中。</p>
+
+<h3 id="两点说明">两点说明</h3>
+
+<ul>
+<li>被写入的文件可以用写、读写、追加方式打开，用写或读写方式打开一个已存在的文件时将清除原有的文件内容，并将写入的字符放在文件开头。如需保留原有文件内容，并把写入的字符放在文件末尾，就必须以追加方式打开文件。不管以何种方式打开，被写入的文件若不存在时则创建该文件。</li>
+<li>每写入一个字符，文件内部位置指针向后移动一个字节。</li>
+</ul>
+
+<p>【示例】从键盘输入一行字符，写入文件。</p>
+
+<pre><code class="language-c">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+int main()
+{
+    FILE *fp;
+    char ch;
+
+    //判断文件是否成功打开
+    if( (fp=fopen(&quot;D:\\demo.txt&quot;,&quot;wt+&quot;)) == NULL ){
+        puts(&quot;Fail to open file!&quot;);
+        exit(0);
+    }
+
+    printf(&quot;Input a string:\n&quot;);
+    //每次从键盘读取一个字符并写入文件
+    while ( (ch=getchar()) != '\n' ){
+        fputc(ch,fp);
+    }
+    fclose(fp);
+    return 0;
+}
+</code></pre>
+
+                    
+                    <audio id="audio" loop="1" preload="auto" style="width: 100%;" controls="controls">
+                        <source type="audio/mpeg" src="">
+                        <a href=""></a>
+                    </audio>
+                </div>
+                <div class="comment-wrap">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="relate">
+        <ul>
+            <h3 id="prev_next">
+                <em>相 关 文 章</em>
+                <span>
+                    <a href="javascript: window.scrollTo(0, 0);">
+                    返回顶部</a>
+                    
+                        <a href="https://axcuan.github.io/posts/%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%E5%92%8C%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%96%87%E4%BB%B6%E5%88%B0%E5%BA%95%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB/" rel="prev">上一篇</a>
+                    
+                    
+                        <a href="https://axcuan.github.io/posts/fgets%E5%92%8Cfputs%E5%87%BD%E6%95%B0%E7%9A%84%E7%94%A8%E6%B3%95%E8%AF%A6%E8%A7%A3%E4%BB%A5%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%BD%A2%E5%BC%8F%E8%AF%BB%E5%86%99%E6%96%87%E4%BB%B6/" rel="next">下一篇</a>
+                    
+                </span>
+            </h3>
+            
+            
+            
+        </ul>
+    </div>
+</div>
+<p style="text-align: center;">
+  <a style="color: inherit" target="_blank" href="https://github.com/honjun/hugo-theme-diaspora"></a>
+</p>
+
+<script>
+  var siteTitle = "Some Notes";
+</script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/diaspora.js"></script>
+<script src="/js/custom.js"></script>
+<script src="/js/InsightSearch.js"></script>
+</body>
+</html>
+
