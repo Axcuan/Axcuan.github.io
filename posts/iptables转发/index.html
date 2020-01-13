@@ -47,7 +47,7 @@
                 <div class="stuff">
                     
                     <span>January 5, 2020</span>
-                    <span>字数 424</span>
+                    <span>字数 552</span>
                     
                     
                 </div>
@@ -65,10 +65,10 @@ iptables -t nat -A PREROUTING -j MY_TCP  #将MY_TCP加入到PREROUTING链
 
 <h1 id="iptables实现nat转发">iptables实现NAT转发</h1>
 
-<p>服务器A：192.168.1.7
-服务器B: 192.168.1.160</p>
+<p>服务器A：192.168.23.128
+服务器B: 192.168.23.129</p>
 
-<p>实现将本机（192.168.1.7:7410）端口流量转发给（192.168.1.160:9200）</p>
+<p>实现将本机（192.168.23.128:1080）端口流量转发给（192.168.23.129:1081）</p>
 
 <h2 id="配置">配置</h2>
 
@@ -92,23 +92,28 @@ iptables -P FORWARD ACCEPT
 <pre><code class="language-bash">iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 </code></pre></li>
 
-<li><p>端口转发流量</p>
+<li><p>A端口转发流量</p>
 
-<pre><code class="language-bash">iptables -t nat -A PREROUTING -d 192.168.1.7/32 -p tcp --dport 7410 -j DNAT --to-destination 192.168.1.160:9200;
-iptables -t nat -A POSTROUTING -d 192.168.1.160/32 -p tcp --dport 9200 -j SNAT --to-source 192.168.1.7; 
+<pre><code class="language-bash">iptables -t nat -A PREROUTING -d 192.168.23.128/32 -p tcp --dport 1080 -j DNAT --to-destination 192.168.23.129:1081;
+iptables -t nat -A POSTROUTING -d 192.168.23.129/32 -p tcp --dport 1081 -j SNAT --to-source 192.168.23.128; 
+iptables -I INPUT -p tcp --dport 1080 -j ACCEPT
 </code></pre></li>
 
 <li><p>保存</p>
 
 <pre><code>service iptables save
-service iptables restart
+service iptables restart //save后不需要restart
 </code></pre></li>
 
-<li><p>测试</p>
-
-<pre><code class="language-bash">telnet 192.168.1.7:7410 
-</code></pre></li>
+<li><p>测试</p></li>
 </ul>
+
+<p>192.168.23.129使用python监听1081端口；物理机访问<a href="http://192.168.23.128:1080，192.168.23.129查看日志（B需要开启1081端口）">http://192.168.23.128:1080，192.168.23.129查看日志（B需要开启1081端口）</a></p>
+
+<pre><code class="language-bash">curl http://192.168.23.128:1080
+</code></pre>
+
+<p><img src="https://acpictures.oss-cn-hangzhou.aliyuncs.com/img/20200113232337.png" alt="" /></p>
 
 <h1 id="iptables透明代理">iptables透明代理</h1>
 
