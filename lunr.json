@@ -440,6 +440,15 @@
         ]
     },
     {
+        "uri": "/posts/socket函数",
+        "title": "Socket函数",
+        "content": "\r\n# socket函数\r\n\r\n## Linux下的socket函数\r\n\r\nLinux 中的一切都是文件，每个文件都有一个整数类型的文件描述符；socket 也是一个文件，也有文件描述符。使用 socket() 函数创建套接字以后，返回值就是一个 int 类型的文件描述符。\r\n\r\n在 Linux 下",
+        "tags": [
+            "Clang",
+            "socket编程"
+        ]
+    },
+    {
         "uri": "/posts/只需一招彻底攻克C语言指针",
         "title": "只需一招,彻底攻克C语言指针",
         "content": "\r\n前面我们讲解了指针数组、二维数组指针、函数指针等几种较为复杂的指针，它们的定义形式分别是：\r\n\r\n```c\r\nint *p1[6];  //指针数组\r\nint *(p2[6]);  //指针数组，和上面的形式等价\r\nint (*p3)[6];  //二维数组指针\r\nint (*p4)(int, ",

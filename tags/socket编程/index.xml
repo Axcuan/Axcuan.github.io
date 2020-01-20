@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>socket编程 on Some Notes</title>
+    <link>https://axcuan.github.io/tags/socket%E7%BC%96%E7%A8%8B/</link>
+    <description>Recent content in socket编程 on Some Notes</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Sat, 18 Jan 2020 16:03:55 +0800</lastBuildDate>
+    
+	<atom:link href="https://axcuan.github.io/tags/socket%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Socket函数</title>
+      <link>https://axcuan.github.io/posts/socket%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Sat, 18 Jan 2020 16:03:55 +0800</pubDate>
+      
+      <guid>https://axcuan.github.io/posts/socket%E5%87%BD%E6%95%B0/</guid>
+      <description>socket函数 Linux下的socket函数 Linux 中的一切都是文件，每个文件都有一个整数类型的文件描述符；socket 也是一个文件，也有文件描述符。使用</description>
+    </item>
+    
+  </channel>
+</rss>
